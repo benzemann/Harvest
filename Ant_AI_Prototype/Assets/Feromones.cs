@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Feromones : MonoBehaviour {
 
     public int maxValue;
+    
     GameObject ground;
 
     Texture2D feromoneTex;
@@ -32,6 +33,9 @@ public class Feromones : MonoBehaviour {
                     int tmpLastY = (100 - (int)feromoneGrid[(int)cNCoords.x, (int)cNCoords.y].y) - 50;
                     Debug.DrawLine(new Vector3(tmpX, 0.0f, tmpY), new Vector3(tmpLastX, 0.0f, tmpLastY));
                     Debug.DrawLine(new Vector3(tmpLastX, 0.0f, tmpLastY), new Vector3(tmpLastX, 0.0f, tmpLastY) + new Vector3(0.1f, 0.0f, 0.0f));
+                    Debug.DrawLine(new Vector3(tmpLastX, 0.0f, tmpLastY), new Vector3(tmpLastX, 0.0f, tmpLastY) + new Vector3(-0.1f, 0.0f, 0.0f));
+                    Debug.DrawLine(new Vector3(tmpLastX, 0.0f, tmpLastY), new Vector3(tmpLastX, 0.0f, tmpLastY) + new Vector3(0.0f, 0.0f, 0.1f));
+                    Debug.DrawLine(new Vector3(tmpLastX, 0.0f, tmpLastY), new Vector3(tmpLastX, 0.0f, tmpLastY) + new Vector3(0.0f, 0.0f, -0.1f));
                     //Debug.Log(new Vector3(feromoneGrid[i, j].x + 50.0f, 0.0f, feromoneGrid[i, j].y - 50.0f) + " " + new Vector3(feromoneGrid[i, j].connectedNodes[0].x - 50.0f, 0.0f, feromoneGrid[i, j].connectedNodes[0].y + 50.0f));
                 }
             }
@@ -60,25 +64,55 @@ public class Feromones : MonoBehaviour {
     
     public Vector3 GetCloseFeromoneTrail(int x, int y)
     {
-        Debug.Log( x + " " + y + " " + feromoneGrid[x, y].connectedNodes.Count);
+        //Debug.Log( x + " " + y + " " + feromoneGrid[x, y].connectedNodes.Count);
         if (feromoneGrid[x,y].connectedNodes.Count > 0)
         {
-            Debug.Log("dd: " + feromoneGrid[x, y].connectedNodes.Count);
-            int largestValue = -1;
-            Vector3 largestPos = Vector3.zero;
-            foreach(Vector2 nCoords in feromoneGrid[x, y].connectedNodes)
+            Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
+            int sumValue = 0;
+            foreach (Vector2 nCoords in feromoneGrid[x, y].connectedNodes)
             {
-                if(feromoneGrid[(int)nCoords.x,(int)nCoords.y].feromoneValue > largestValue)
+                sumValue += feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue;
+            }
+            foreach (Vector2 nCoords in feromoneGrid[x, y].connectedNodes)
+            {
+                if(feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue > 0)
                 {
-                    largestValue = feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue;
-                    largestPos = GetPosFromCoords((int)nCoords.x, (int)nCoords.y);
+                    valueMapping.Add(GetPosFromCoords((int)nCoords.x, (int)nCoords.y), (float)feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue/sumValue);
                 }
             }
-            return largestPos;
+
+            float ran = Random.Range(0.0f, 1.0f);
+            foreach(Vector3 nPos in valueMapping.Keys)
+            {
+                
+                ran -= valueMapping[nPos];
+                
+                if (ran <= 0.0f)
+                {
+                    return nPos;
+                }
+            }
+
         } else
         {
-            int largestValue = 0;
-            Vector3 largestPos = Vector3.zero;
+
+            Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
+            int sumValue = 0;
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    int nX = x + i;
+                    int nY = y + j;
+                    if (nX < 0 || nX >= 100 || nY < 0 || nY >= 100)
+                    {
+                        continue;
+                    }
+                    if (i == 0 && j == 0)
+                        continue;
+                    sumValue += feromoneGrid[nX, nY].feromoneValue;
+                }
+            }
             for (int i = -1; i < 2; i++)
             {
                 for(int j = -1; j < 2; j++)
@@ -91,16 +125,23 @@ public class Feromones : MonoBehaviour {
                     }
                     if (i == 0 && j == 0)
                         continue;
-                    if(feromoneGrid[nX,nY].feromoneValue > largestValue)
+                    
+                    if (feromoneGrid[nX,nY].feromoneValue > 0)
                     {
-                        largestValue = feromoneGrid[nX, nY].feromoneValue;
-                        largestPos = GetPosFromCoords(nX, nY);
+                        valueMapping.Add(GetPosFromCoords(nX, nY), (float)feromoneGrid[nX, nY].feromoneValue / sumValue);
                     }
                 }
             }
-            if(largestValue > 0)
+            float ran = Random.Range(0.0f, 1.0f);
+            foreach (Vector3 nPos in valueMapping.Keys)
             {
-                return largestPos;
+
+                ran -= valueMapping[nPos];
+
+                if (ran <= 0.0f)
+                {
+                    return nPos;
+                }
             }
         }
 
@@ -109,7 +150,7 @@ public class Feromones : MonoBehaviour {
 
     public void AddFeromone(int x, int y, int lastX, int lastY, int value)
     {
-        Debug.Log(x + " " + y + " " + lastX + " " + lastY);
+        //Debug.Log(x + " " + y + " " + lastX + " " + lastY);
 
         feromoneGrid[x, y].feromoneValue += value;
 

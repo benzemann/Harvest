@@ -152,7 +152,7 @@ public class Ant : MonoBehaviour {
         Vector3 feromoneTrail = feromones.GetCloseFeromoneTrail(gridX, gridY);
         if(feromoneTrail.x != -1000.0f)
         {
-            Debug.Log(feromoneTrail + " " + transform.position);
+            //Debug.Log(feromoneTrail + " " + transform.position);
             seeker.StartPath(transform.position, feromoneTrail);
 
             return true;

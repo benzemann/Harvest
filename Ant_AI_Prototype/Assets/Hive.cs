@@ -5,7 +5,9 @@ public class Hive : MonoBehaviour {
 
     public GameObject ant;
     public float workerSpawnTime;
+    public int maxActiveAnts;
 
+    int activeAnts = 0;
     float timeSinceLastWorker = 0.0f;
 
 	// Use this for initialization
@@ -24,8 +26,15 @@ public class Hive : MonoBehaviour {
 
     void SpawnWorker()
     {
+        if(activeAnts < maxActiveAnts)
+        {
+            Instantiate(ant, transform.position + Vector3.up * 3.0f, Quaternion.identity);
+            activeAnts += 1;
+        } 
+    }
 
-        Instantiate(ant, transform.position + Vector3.up * 3.0f, Quaternion.identity);
-
+    public void EnterHive()
+    {
+        activeAnts -= 1;
     }
 }

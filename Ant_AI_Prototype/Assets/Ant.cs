@@ -8,6 +8,9 @@ public class Ant : MonoBehaviour {
     public float minScoutDistance;
     public float maxScoutDistance;
     public float harvestTime;
+    public float minimunScoutTime;
+    public float changeOfScoutOnStart;
+    public float harvestAmount;
 
     Feromones feromones;
     GameObject target;
@@ -19,9 +22,10 @@ public class Ant : MonoBehaviour {
     int gridX;
     int gridY;
 
+    float startScoutTime;
     float startHarvestTime;
 
-    enum State { IDLE, FOLLOWTRAIL, SCOUT, GOTORESSOURCE, HARVESTING, RETURNHOME };
+    enum State { IDLE, FOLLOWTRAIL, WORKER, SCOUT, GOTORESSOURCE, HARVESTING, RETURNHOME };
 
     State state;
 
@@ -36,7 +40,7 @@ public class Ant : MonoBehaviour {
 
     public void OnPathComplete(Path p)
     {
-        Debug.Log("Path calculated. Errors? " + p.error);
+        //Debug.Log("Path calculated. Errors? " + p.error);
     }
 
     // Update is called once per frame
@@ -47,7 +51,14 @@ public class Ant : MonoBehaviour {
             case State.IDLE:
                 if (!CheckForRessources())
                 {
-                    state = State.SCOUT;
+                    if(Random.Range(0.0f,100.0f) <= changeOfScoutOnStart)
+                    {
+                        state = State.SCOUT;
+                        startScoutTime = Time.time;
+                    } else
+                    {
+                        state = State.WORKER;
+                    }
                     PathComplete();
                 }
                 break;
@@ -67,18 +78,28 @@ public class Ant : MonoBehaviour {
                 if (CheckForRessources())
                     break;
                 break;
+            case State.WORKER:
+                if (CheckForRessources())
+                    break;
+                break;
             case State.HARVESTING:
                 if(Time.time - startHarvestTime > harvestTime)
                 {
                     feromones.GetCurrentGridCoords(transform.position, out lastX, out lastY);
                     state = State.RETURNHOME;
                     seeker.StartPath(transform.position, hive.transform.position);
+                    if (target != null)
+                    {
+                        target.GetComponent<Ressource>().ressource -= harvestAmount;
+                    }
+                    
                 }
                 break;
             case State.RETURNHOME:
                 if(Vector3.Distance(transform.position, hive.transform.position) < 0.75f)
                 {
                     Destroy(this.gameObject);
+                    hive.GetComponent<Hive>().EnterHive();
                 }
                 
                 break;
@@ -90,9 +111,22 @@ public class Ant : MonoBehaviour {
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         if (state == State.SCOUT)
         {
+            seeker.StartPath(transform.position, GetRandomNearLocation());
+            if(Time.time - startScoutTime > minimunScoutTime)
+            {
+                state = State.WORKER;
+            }
+        }
+        if (state == State.WORKER)
+        {
             //Debug.Log(SmellForFeromoneTrail());
-            if(!SmellForFeromoneTrail())
+            if (!SmellForFeromoneTrail())
+            {
                 seeker.StartPath(transform.position, GetRandomNearLocation());
+                state = State.SCOUT;
+                startScoutTime = Time.time;
+            }
+                
         }
         if( state == State.RETURNHOME)
         {
@@ -109,7 +143,7 @@ public class Ant : MonoBehaviour {
 
         //Debug.Log(gridX + " " + gridY + " last: " + lastX + " " + lastY);
 
-        if (state == State.SCOUT)
+        if (state == State.WORKER)
         {
             SmellForFeromoneTrail();
         }
@@ -127,7 +161,20 @@ public class Ant : MonoBehaviour {
             ranVector = Vector3.right;
         ranVector.Normalize();
         ranVector *= Random.Range(minScoutDistance, maxScoutDistance);
-        return transform.position + ranVector;
+
+        Vector3 ranPos = transform.position + ranVector;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ranPos + new Vector3(0.0f, 10.0f, 0.0f), Vector3.down, out hit))
+        {
+            if(hit.transform.gameObject.name != "Ground")
+            {
+                ranPos = transform.position;
+            }
+        }
+
+        return ranPos;
     }
 
     bool CheckForRessources()

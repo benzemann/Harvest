@@ -4,23 +4,45 @@ using System.Collections.Generic;
 
 public class Feromones : MonoBehaviour {
 
-    public int maxValue;
-    
+    public float maxValue;
+    public float deteriationPrSec;
     GameObject ground;
 
     Texture2D feromoneTex;
     Node[,] feromoneGrid;
 
+    float deteriationTimer;
+
     struct Node
     {
         public int x;
         public int y;
-        public int feromoneValue;
+        public float feromoneValue;
         public List<Vector2> connectedNodes;
     }
 
     void Update()
     {
+        deteriationTimer += Time.deltaTime;
+        if(deteriationTimer >= 1.0f)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                for (int j = 0; j < 100; j++)
+                {
+                    feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
+                    if(feromoneGrid[i, j].feromoneValue < 0)
+                    {
+                        feromoneGrid[i, j].feromoneValue = 0.0f;
+                        feromoneGrid[i, j].connectedNodes.Clear();
+                    }
+                    deteriationTimer = 0.0f;
+                    feromoneTex.SetPixel(i, j, new Color(0.0f, (float)feromoneGrid[i, j].feromoneValue / maxValue, 0.0f));
+                    
+                }
+            }
+            feromoneTex.Apply();
+        }
         for (int i = 0; i < 100; i++)
         {
             for (int j = 0; j < 100; j++)
@@ -68,7 +90,7 @@ public class Feromones : MonoBehaviour {
         if (feromoneGrid[x,y].connectedNodes.Count > 0)
         {
             Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
-            int sumValue = 0;
+            float sumValue = 0.0f;
             foreach (Vector2 nCoords in feromoneGrid[x, y].connectedNodes)
             {
                 sumValue += feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue;
@@ -97,7 +119,7 @@ public class Feromones : MonoBehaviour {
         {
 
             Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
-            int sumValue = 0;
+            float sumValue = 0.0f;
             for (int i = -1; i < 2; i++)
             {
                 for (int j = -1; j < 2; j++)

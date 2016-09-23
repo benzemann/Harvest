@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 public class Feromones : MonoBehaviour {
 
     public enum DeteriationType { Linear, Percentage, TimeDependent };
-
+    public enum ChoosePathType { ValuePercentage, SortedPercentage };
 
     public float maxValue;
     public DeteriationType deteriationType;
@@ -13,11 +14,16 @@ public class Feromones : MonoBehaviour {
     public float percentagePrSec;
     public float minValueForPercentage;
     public float timeUntilDeteriation;
-    
+    ChoosePathType choosePathType = ChoosePathType.ValuePercentage;
+    int[] sortedPercentages = new int[3];
+    public Font textFont;
+    public int fontSize;
     GameObject ground;
 
     Texture2D feromoneTex;
     Node[,] feromoneGrid;
+    GameObject[,] feromoneText;
+    GameObject canvas;
 
     float deteriationTimer;
 
@@ -64,7 +70,15 @@ public class Feromones : MonoBehaviour {
                     }
                     deteriationTimer = 0.0f;
                     feromoneTex.SetPixel(i, j, new Color(0.0f, (float)feromoneGrid[i, j].feromoneValue / maxValue, 0.0f));
-                    
+                    if(feromoneGrid[i, j].feromoneValue > 0.0f)
+                    {
+                        feromoneText[i, j].GetComponent<Text>().enabled = true;
+                        feromoneText[i, j].GetComponent<Text>().text = feromoneGrid[i, j].feromoneValue.ToString();
+                    } else
+                    {
+                        feromoneText[i, j].GetComponent<Text>().enabled = false;
+                    }
+                            
                 }
             }
             feromoneTex.Apply();
@@ -93,8 +107,10 @@ public class Feromones : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        canvas = GameObject.Find("Canvas");
         ground = GameObject.Find("Ground");
         feromoneGrid = new Node[100, 100];
+        feromoneText = new GameObject[100, 100];
         feromoneTex = new Texture2D(100, 100, TextureFormat.ARGB32, false);
         for(int i = 0; i < 100; i++)
         {
@@ -105,6 +121,24 @@ public class Feromones : MonoBehaviour {
                 feromoneGrid[i, j].y = j;
                 feromoneGrid[i, j].feromoneValue = 0;
                 feromoneGrid[i, j].connectedNodes = new List<Vector2>();
+
+                GameObject newTextGO = new GameObject();
+                newTextGO.transform.position = Vector3.zero;
+                newTextGO.transform.parent = canvas.transform;
+                Text text = newTextGO.AddComponent<Text>();
+                text.text = "0.0";
+                text.font = textFont;
+                text.GetComponent<RectTransform>().rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+                text.GetComponent<RectTransform>().position = new Vector3((100.0f - i) - 50.0f, 5.0f, (100.0f-j) - 50.0f);
+                text.GetComponent<RectTransform>().localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                text.color = Color.yellow;
+                text.fontSize = fontSize;
+                text.alignment = TextAnchor.MiddleCenter;
+                text.enabled = false;
+                feromoneText[i, j] = newTextGO;
+
+                
+                
             }
         }
         feromoneTex.Apply();
@@ -129,15 +163,36 @@ public class Feromones : MonoBehaviour {
                 }
             }
 
-            float ran = Random.Range(0.0f, 1.0f);
-            foreach(Vector3 nPos in valueMapping.Keys)
+            if(choosePathType == ChoosePathType.ValuePercentage)
             {
-                
-                ran -= valueMapping[nPos];
-                
-                if (ran <= 0.0f)
+                float ran = Random.Range(0.0f, 1.0f);
+                /*var myList = valueMapping.ToList();
+
+                myList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+                //Debug.Log("Sorted:");
+                foreach (KeyValuePair<Vector3, float> pair in myList)
                 {
-                    return nPos;
+                    Debug.Log(pair.Value);
+                }*/
+                foreach (Vector3 nPos in valueMapping.Keys)
+                {
+
+                    ran -= valueMapping[nPos];
+
+                    if (ran <= 0.0f)
+                    {
+                        return nPos;
+                    }
+                }
+            } else
+            {
+                var myList = valueMapping.ToList();
+
+                myList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+                Debug.Log("Sorted:");
+                foreach(KeyValuePair<Vector3,float> pair in myList)
+                {
+                    Debug.Log(pair.Value);
                 }
             }
 

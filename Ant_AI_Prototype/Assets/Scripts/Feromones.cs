@@ -4,8 +4,16 @@ using System.Collections.Generic;
 
 public class Feromones : MonoBehaviour {
 
+    public enum DeteriationType { Linear, Percentage, TimeDependent };
+
+
     public float maxValue;
+    public DeteriationType deteriationType;
     public float deteriationPrSec;
+    public float percentagePrSec;
+    public float minValueForPercentage;
+    public float timeUntilDeteriation;
+    
     GameObject ground;
 
     Texture2D feromoneTex;
@@ -19,6 +27,7 @@ public class Feromones : MonoBehaviour {
         public int y;
         public float feromoneValue;
         public List<Vector2> connectedNodes;
+        public float timeStampOnLastAdd;
     }
 
     void Update()
@@ -30,7 +39,24 @@ public class Feromones : MonoBehaviour {
             {
                 for (int j = 0; j < 100; j++)
                 {
-                    feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
+                    if(deteriationType == DeteriationType.Linear)
+                    {
+                        feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
+                    } else if (deteriationType == DeteriationType.Percentage)
+                    {
+                        feromoneGrid[i, j].feromoneValue *= (100.0f - percentagePrSec) / 100.0f;
+                        if(feromoneGrid[i, j].feromoneValue <= minValueForPercentage)
+                        {
+                            feromoneGrid[i, j].feromoneValue = 0.0f;
+                        }
+                    } else if(deteriationType == DeteriationType.TimeDependent)
+                    {
+                        if(Time.time - feromoneGrid[i, j].timeStampOnLastAdd > timeUntilDeteriation)
+                        {
+                            feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
+                        }
+                    }
+                    
                     if(feromoneGrid[i, j].feromoneValue < 0)
                     {
                         feromoneGrid[i, j].feromoneValue = 0.0f;
@@ -175,7 +201,7 @@ public class Feromones : MonoBehaviour {
         //Debug.Log(x + " " + y + " " + lastX + " " + lastY);
 
         feromoneGrid[x, y].feromoneValue += value;
-
+        feromoneGrid[x, y].timeStampOnLastAdd = Time.time;
         if (feromoneGrid[x, y].feromoneValue > maxValue)
             feromoneGrid[x, y].feromoneValue = maxValue;
         

@@ -14,8 +14,10 @@ public class Feromones : MonoBehaviour {
     public float percentagePrSec;
     public float minValueForPercentage;
     public float timeUntilDeteriation;
+    public float firstTimeDeteriationCoolDown;
     ChoosePathType choosePathType = ChoosePathType.ValuePercentage;
     int[] sortedPercentages = new int[3];
+    public bool createFeromoneText;
     public Font textFont;
     public int fontSize;
     GameObject ground;
@@ -34,6 +36,7 @@ public class Feromones : MonoBehaviour {
         public float feromoneValue;
         public List<Vector2> connectedNodes;
         public float timeStampOnLastAdd;
+        public float firstAddTimeStamp;
     }
 
     void Update()
@@ -45,24 +48,28 @@ public class Feromones : MonoBehaviour {
             {
                 for (int j = 0; j < 100; j++)
                 {
-                    if(deteriationType == DeteriationType.Linear)
+                    if (Time.time - feromoneGrid[i, j].firstAddTimeStamp > firstTimeDeteriationCoolDown)
                     {
-                        feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
-                    } else if (deteriationType == DeteriationType.Percentage)
-                    {
-                        feromoneGrid[i, j].feromoneValue *= (100.0f - percentagePrSec) / 100.0f;
-                        if(feromoneGrid[i, j].feromoneValue <= minValueForPercentage)
-                        {
-                            feromoneGrid[i, j].feromoneValue = 0.0f;
-                        }
-                    } else if(deteriationType == DeteriationType.TimeDependent)
-                    {
-                        if(Time.time - feromoneGrid[i, j].timeStampOnLastAdd > timeUntilDeteriation)
+                        if (deteriationType == DeteriationType.Linear)
                         {
                             feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
                         }
+                        else if (deteriationType == DeteriationType.Percentage)
+                        {
+                            feromoneGrid[i, j].feromoneValue *= (100.0f - percentagePrSec) / 100.0f;
+                            if (feromoneGrid[i, j].feromoneValue <= minValueForPercentage)
+                            {
+                                feromoneGrid[i, j].feromoneValue = 0.0f;
+                            }
+                        }
+                        else if (deteriationType == DeteriationType.TimeDependent)
+                        {
+                            if (Time.time - feromoneGrid[i, j].timeStampOnLastAdd > timeUntilDeteriation)
+                            {
+                                feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
+                            }
+                        }
                     }
-                    
                     if(feromoneGrid[i, j].feromoneValue < 0)
                     {
                         feromoneGrid[i, j].feromoneValue = 0.0f;
@@ -70,15 +77,19 @@ public class Feromones : MonoBehaviour {
                     }
                     deteriationTimer = 0.0f;
                     feromoneTex.SetPixel(i, j, new Color(0.0f, (float)feromoneGrid[i, j].feromoneValue / maxValue, 0.0f));
-                    if(feromoneGrid[i, j].feromoneValue > 0.0f)
+                    if (createFeromoneText)
                     {
-                        feromoneText[i, j].GetComponent<Text>().enabled = true;
-                        feromoneText[i, j].GetComponent<Text>().text = feromoneGrid[i, j].feromoneValue.ToString();
-                    } else
-                    {
-                        feromoneText[i, j].GetComponent<Text>().enabled = false;
-                    }
-                            
+                        if (feromoneGrid[i, j].feromoneValue > 0.0f)
+                        {
+                            feromoneText[i, j].GetComponent<Text>().enabled = true;
+                            int tmpValue = (int)feromoneGrid[i, j].feromoneValue;
+                            feromoneText[i, j].GetComponent<Text>().text = tmpValue.ToString();
+                        }
+                        else
+                        {
+                            feromoneText[i, j].GetComponent<Text>().enabled = false;
+                        }
+                    }       
                 }
             }
             feromoneTex.Apply();
@@ -122,23 +133,24 @@ public class Feromones : MonoBehaviour {
                 feromoneGrid[i, j].feromoneValue = 0;
                 feromoneGrid[i, j].connectedNodes = new List<Vector2>();
 
-                GameObject newTextGO = new GameObject();
-                newTextGO.transform.position = Vector3.zero;
-                newTextGO.transform.parent = canvas.transform;
-                Text text = newTextGO.AddComponent<Text>();
-                text.text = "0.0";
-                text.font = textFont;
-                text.GetComponent<RectTransform>().rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
-                text.GetComponent<RectTransform>().position = new Vector3((100.0f - i) - 50.0f, 5.0f, (100.0f-j) - 50.0f);
-                text.GetComponent<RectTransform>().localScale = new Vector3(0.01f, 0.01f, 0.01f);
-                text.color = Color.yellow;
-                text.fontSize = fontSize;
-                text.alignment = TextAnchor.MiddleCenter;
-                text.enabled = false;
-                feromoneText[i, j] = newTextGO;
-
-                
-                
+                if (createFeromoneText)
+                {
+                    GameObject newTextGO = new GameObject();
+                    newTextGO.transform.position = Vector3.zero;
+                    newTextGO.transform.parent = canvas.transform;
+                    Text text = newTextGO.AddComponent<Text>();
+                    text.text = "0.0";
+                    text.font = textFont;
+                    text.GetComponent<RectTransform>().rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+                    text.GetComponent<RectTransform>().position = new Vector3((100.0f - i) - 50.0f, 5.0f, (100.0f - j) - 50.0f);
+                    text.GetComponent<RectTransform>().localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                    text.color = Color.yellow;
+                    text.fontSize = fontSize;
+                    text.alignment = TextAnchor.MiddleCenter;
+                    text.enabled = false;
+                    newTextGO.isStatic = true;
+                    feromoneText[i, j] = newTextGO;
+                }
             }
         }
         feromoneTex.Apply();
@@ -255,8 +267,14 @@ public class Feromones : MonoBehaviour {
     {
         //Debug.Log(x + " " + y + " " + lastX + " " + lastY);
 
+        if(feromoneGrid[x, y].feromoneValue == 0.0f)
+        {
+            feromoneGrid[x, y].firstAddTimeStamp = Time.time;
+        }
+
         feromoneGrid[x, y].feromoneValue += value;
         feromoneGrid[x, y].timeStampOnLastAdd = Time.time;
+        
         if (feromoneGrid[x, y].feromoneValue > maxValue)
             feromoneGrid[x, y].feromoneValue = maxValue;
         

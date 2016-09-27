@@ -42,7 +42,7 @@ public class Ant : MonoBehaviour {
 
     public void OnPathComplete(Path p)
     {
-        //Debug.Log("Path calculated. Errors? " + p.error);
+        Debug.Log("Path calculated. Errors? " + p.error);
     }
 
     // Update is called once per frame

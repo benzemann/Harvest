@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Hive : MonoBehaviour {
 
@@ -20,6 +21,7 @@ public class Hive : MonoBehaviour {
     public int totalWorkerAnts = 0;
     public int totalWarriorAnts = 0;
     public float ressources = 0;
+    public Text ressourceText;
     Feromones feromones;
     float timeSinceLastBreed;
     float timeSinceLastSpawn;
@@ -37,13 +39,15 @@ public class Hive : MonoBehaviour {
         int x, y;
         feromones.GetCurrentGridCoords(transform.position, out x, out y);
         feromones.SetDefendFeromone(x, y, 0.0f);
+        if (ressourceText != null)
+            ressourceText.text = "Hive ressources: " + ressources.ToString();
 	}
 
     void SpawnAnts()
     {
         if(Time.time - timeSinceLastSpawn > spawnDelay)
         {
-            if(totalWorkerAnts > activeWorkerAnts.Count && (!lastSpawnWorker || (lastSpawnWorker && totalWarriorAnts <= activeWarriorAnts.Count)))
+            if(totalWorkerAnts > activeWorkerAnts.Count)
             {
                 SpawnWorker();
                 timeSinceLastSpawn = Time.time;
@@ -74,7 +78,7 @@ public class Hive : MonoBehaviour {
             {
                 if(ressources >= workerCost || totalWorkerAnts < freeWorkers)
                     BreedWorker();
-            } else
+            } else if (totalWarriorAnts < maxWarriorAnts)
             {
                 if (ressources >= warriorCost || totalWarriorAnts < freeWarriors)
                     BreedWarrior();
@@ -114,22 +118,18 @@ public class Hive : MonoBehaviour {
 
     void SpawnWorker()
     {
-        if(totalWorkerAnts < maxWorkerAnts)
-        {
-            GameObject antGO = Instantiate(ant, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
-            antGO.GetComponent<Ant>().SetHive(this.gameObject);
-            activeWorkerAnts.Add(antGO);
-        } 
+        GameObject antGO = Instantiate(ant, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
+        antGO.GetComponent<Ant>().SetHive(this.gameObject);
+        activeWorkerAnts.Add(antGO);
     }
 
     void SpawnWarrior()
     {
-        if(totalWarriorAnts < maxWarriorAnts)
-        {
-            GameObject warrior = Instantiate(warriorAnt, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
-            warrior.GetComponent<WarriorAnt>().SetHive(this.gameObject);
-            activeWarriorAnts.Add(warrior);
-        }
+
+        GameObject warrior = Instantiate(warriorAnt, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
+        warrior.GetComponent<WarriorAnt>().SetHive(this.gameObject);
+        activeWarriorAnts.Add(warrior);
+
     }
 
     public void EnterHive(float returnRessources)

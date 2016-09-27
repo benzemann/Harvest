@@ -99,9 +99,14 @@ public class Ant : MonoBehaviour {
                 }
                 break;
             case State.RETURNHOME:
-                if(Vector3.Distance(transform.position, hive.transform.position) < 0.75f)
+                if(Vector3.Distance(transform.position, hive.transform.position) < 0.60f)
                 {
                     hive.GetComponent<Hive>().EnterHive(ressource);
+                    lastX = gridX;
+                    lastY = gridY;
+                    feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
+                    if (ressource > 0)
+                        AddFeromoneTrail();
                     Destroy(this.gameObject);
                 }
                 break;
@@ -110,6 +115,7 @@ public class Ant : MonoBehaviour {
 
     public void PathComplete()
     {
+
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         if (state == State.SCOUT)
         {
@@ -161,7 +167,6 @@ public class Ant : MonoBehaviour {
             if (ressource > 0.0f)
                 AddFeromoneTrail();
         }
-            
     }
 
     Vector3 GetRandomNearLocation()

@@ -9,6 +9,7 @@ public class Feromones : MonoBehaviour {
     public enum ChoosePathType { ValuePercentage, SortedPercentage };
 
     public float maxValue;
+    public float maxDefendValue;
     public DeteriationType deteriationType;
     public float deteriationPrSec;
     public float percentagePrSec;
@@ -23,6 +24,7 @@ public class Feromones : MonoBehaviour {
     GameObject ground;
 
     Texture2D feromoneTex;
+    Texture2D defendTex;
     Node[,] feromoneGrid;
     GameObject[,] feromoneText;
     GameObject canvas;
@@ -34,7 +36,9 @@ public class Feromones : MonoBehaviour {
         public int x;
         public int y;
         public float feromoneValue;
+        public float defendValue;
         public List<Vector2> connectedNodes;
+        public List<Vector2> backConnectedNodes;
         public float timeStampOnLastAdd;
         public float firstAddTimeStamp;
     }
@@ -53,13 +57,18 @@ public class Feromones : MonoBehaviour {
                         if (deteriationType == DeteriationType.Linear)
                         {
                             feromoneGrid[i, j].feromoneValue -= deteriationPrSec;
+                            feromoneGrid[i, j].defendValue -= deteriationPrSec;
                         }
                         else if (deteriationType == DeteriationType.Percentage)
                         {
                             feromoneGrid[i, j].feromoneValue *= (100.0f - percentagePrSec) / 100.0f;
+                            feromoneGrid[i, j].defendValue *= (100.0f - percentagePrSec) / 100.0f;
                             if (feromoneGrid[i, j].feromoneValue <= minValueForPercentage)
                             {
                                 feromoneGrid[i, j].feromoneValue = 0.0f;
+                                feromoneGrid[i, j].defendValue = 0.0f;
+                                feromoneGrid[i, j].connectedNodes.Clear();
+                                feromoneGrid[i, j].backConnectedNodes.Clear();
                             }
                         }
                         else if (deteriationType == DeteriationType.TimeDependent)
@@ -74,9 +83,15 @@ public class Feromones : MonoBehaviour {
                     {
                         feromoneGrid[i, j].feromoneValue = 0.0f;
                         feromoneGrid[i, j].connectedNodes.Clear();
+                        feromoneGrid[i, j].backConnectedNodes.Clear();
+                    }
+                    if(feromoneGrid[i,j].defendValue < 0)
+                    {
+                        feromoneGrid[i, j].defendValue = 0.0f;
                     }
                     deteriationTimer = 0.0f;
                     feromoneTex.SetPixel(i, j, new Color(0.0f, (float)feromoneGrid[i, j].feromoneValue / maxValue, 0.0f));
+                    defendTex.SetPixel(i, j, new Color(0.0f, 0.0f, (float)feromoneGrid[i, j].defendValue / maxDefendValue));
                     if (createFeromoneText)
                     {
                         if (feromoneGrid[i, j].feromoneValue > 0.0f)
@@ -93,12 +108,13 @@ public class Feromones : MonoBehaviour {
                 }
             }
             feromoneTex.Apply();
+            defendTex.Apply();
         }
         for (int i = 0; i < 100; i++)
         {
             for (int j = 0; j < 100; j++)
             {
-                foreach (Vector2 cNCoords in feromoneGrid[i, j].connectedNodes)
+                foreach (Vector2 cNCoords in feromoneGrid[i, j].backConnectedNodes)
                 {
                     int tmpX = (100 - feromoneGrid[i, j].x) - 50;
                     int tmpY = (100 - feromoneGrid[i, j].y) - 50;
@@ -113,6 +129,14 @@ public class Feromones : MonoBehaviour {
                 }
             }
         }
+        if (Input.GetKeyDown("1"))
+        {
+            ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
+        }
+        if (Input.GetKeyDown("2"))
+        {
+            ground.GetComponent<Renderer>().material.mainTexture = defendTex;
+        }
     }
 
     // Use this for initialization
@@ -123,16 +147,19 @@ public class Feromones : MonoBehaviour {
         feromoneGrid = new Node[100, 100];
         feromoneText = new GameObject[100, 100];
         feromoneTex = new Texture2D(100, 100, TextureFormat.ARGB32, false);
+        defendTex = new Texture2D(100, 100, TextureFormat.ARGB32, false);
+
         for(int i = 0; i < 100; i++)
         {
             for(int j = 0; j < 100; j++)
             {
                 feromoneTex.SetPixel(i, j, Color.black);
+                defendTex.SetPixel(i, j, Color.black);
                 feromoneGrid[i, j].x = i;
                 feromoneGrid[i, j].y = j;
                 feromoneGrid[i, j].feromoneValue = 0;
                 feromoneGrid[i, j].connectedNodes = new List<Vector2>();
-
+                feromoneGrid[i, j].backConnectedNodes = new List<Vector2>();
                 if (createFeromoneText)
                 {
                     GameObject newTextGO = new GameObject();
@@ -154,6 +181,77 @@ public class Feromones : MonoBehaviour {
             }
         }
         feromoneTex.Apply();
+        ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
+    }
+
+    public Vector3 GetProtectionOfFeromoneTrail(int x, int y, bool goingOut)
+    {
+        List<Vector2> nodes = new List<Vector2>();
+        if (goingOut)
+            nodes = feromoneGrid[x, y].connectedNodes;
+        else
+            nodes = feromoneGrid[x, y].backConnectedNodes;
+        if (nodes.Count > 0 || !goingOut)
+        {
+            Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
+            foreach (Vector2 nCoords in nodes)
+            {
+                if (feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue > 0)
+                {
+
+                    valueMapping.Add(GetPosFromCoords((int)nCoords.x, (int)nCoords.y), (float)feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue - feromoneGrid[(int)nCoords.x, (int)nCoords.y].defendValue);
+
+                }
+            }
+
+            Vector3 largestPos = new Vector3(-1000.0f,-1000.0f,-1000.0f);
+            float largestValue = -1000.0f;
+            foreach(Vector3 pos in valueMapping.Keys)
+            {
+                Debug.Log(valueMapping[pos]);
+                if(valueMapping[pos] > largestValue)
+                {
+                    largestPos = pos;
+                    largestValue = valueMapping[pos];
+                }
+            }
+            return largestPos;
+        }
+        else
+        {
+
+            Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    int nX = x + i;
+                    int nY = y + j;
+                    if (nX < 0 || nX >= 100 || nY < 0 || nY >= 100)
+                    {
+                        continue;
+                    }
+                    if (i == 0 && j == 0)
+                        continue;
+
+                    if (feromoneGrid[nX, nY].feromoneValue > 0)
+                    {
+                        valueMapping.Add(GetPosFromCoords(nX, nY), (float)feromoneGrid[nX, nY].feromoneValue - feromoneGrid[nX, nY].defendValue);
+                    }
+                }
+            }
+            Vector3 largestPos = new Vector3(-1000.0f, -1000.0f, -1000.0f);
+            float largestValue = 0.0f;
+            foreach (Vector3 pos in valueMapping.Keys)
+            {
+                if (valueMapping[pos] > largestValue)
+                {
+                    largestPos = pos;
+                    largestValue = valueMapping[pos];
+                }
+            }
+            return largestPos;
+        }
     }
     
     public Vector3 GetCloseFeromoneTrail(int x, int y)
@@ -280,11 +378,26 @@ public class Feromones : MonoBehaviour {
         
         feromoneTex.SetPixel(x, y, new Color(0.0f, (float)feromoneGrid[x, y].feromoneValue / maxValue, 0.0f));
         feromoneTex.Apply();
-        ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
+        
         if (x == lastX && y == lastY)
             return;
         if(!feromoneGrid[x, y].connectedNodes.Contains(new Vector2(lastX, lastY)))
             feromoneGrid[x, y].connectedNodes.Add(new Vector2(lastX,lastY));
+        if (!feromoneGrid[lastX, lastY].backConnectedNodes.Contains(new Vector2(x, y)))
+            feromoneGrid[lastX, lastY].backConnectedNodes.Add(new Vector2(x, y));
+    }
+
+    public void AddDefendTrail(int x, int y, float value)
+    {
+
+        feromoneGrid[x, y].defendValue += value;
+
+        if (feromoneGrid[x, y].defendValue > maxDefendValue)
+            feromoneGrid[x, y].defendValue = maxDefendValue;
+
+        defendTex.SetPixel(x, y, new Color(0.0f,0.0f, (float)feromoneGrid[x, y].defendValue / maxDefendValue));
+        defendTex.Apply();
+
     }
 
     public void GetCurrentGridCoords(Vector3 pos, out int x, out int y)
@@ -302,5 +415,10 @@ public class Feromones : MonoBehaviour {
         tmpX -= 50;
         tmpY -= 50;
         return new Vector3(tmpX, 0.0f, tmpY);
+    }
+
+    public void SetDefendFeromone(int x, int y, float value)
+    {
+        feromoneGrid[x, y].defendValue = value;
     }
 }

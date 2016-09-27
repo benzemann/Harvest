@@ -70,7 +70,7 @@ public class Hive : MonoBehaviour {
             else
                 ratio = totalWorkerAnts / totalWarriorAnts;
 
-            if(ratio <= workerWarriorRatio && totalWorkerAnts < maxWorkerAnts)
+            if(ratio < workerWarriorRatio && totalWorkerAnts < maxWorkerAnts)
             {
                 if(ressources >= workerCost || totalWorkerAnts < freeWorkers)
                     BreedWorker();

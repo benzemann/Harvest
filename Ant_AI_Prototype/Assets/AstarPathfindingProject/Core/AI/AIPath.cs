@@ -249,8 +249,16 @@ public class AIPath : MonoBehaviour {
         //add it here
         //You can also create a new script which inherits from this one
         //and override the function in that script
-        Ant a = GetComponent<Ant>();
-        a.PathComplete();
+        if (GetComponent<Ant>() != null)
+        {
+            Ant a = GetComponent<Ant>();
+            a.PathComplete();
+        }
+        else
+        {
+            WarriorAnt a = GetComponent<WarriorAnt>();
+            a.PathComplete();
+        }
     }
 
 	/** Called when a requested path has finished calculation.
@@ -383,8 +391,15 @@ public class AIPath : MonoBehaviour {
 				if (dist < pickNextWaypointDist*pickNextWaypointDist) {
 					lastFoundWaypointPosition = currentPosition;
 					lastFoundWaypointTime = Time.time;
-                    Ant a = GetComponent<Ant>();
-                    a.NextWaypoint();
+                    if(GetComponent<Ant>() != null)
+                    {
+                        Ant a = GetComponent<Ant>();
+                        a.NextWaypoint();
+                    } else {
+                        WarriorAnt a = GetComponent<WarriorAnt>();
+                        a.NextWaypoint();
+                    }
+                    
 					currentWaypointIndex++;
 				} else {
 					break;

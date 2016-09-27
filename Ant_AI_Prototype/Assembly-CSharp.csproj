@@ -130,6 +130,17 @@
      <Compile Include="Assets\Scripts\Hive.cs" />
      <Compile Include="Assets\Scripts\Ressource.cs" />
      <Compile Include="Assets\Scripts\WarriorAnt.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\CrossPlatformInputManager.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\PlatformSpecific\MobileInput.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\PlatformSpecific\StandaloneInput.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\VirtualInput.cs" />
+     <Compile Include="Assets\WarZone\Scripts\DestroyObject.cs" />
+     <Compile Include="Assets\WarZone\Scripts\GunController.cs" />
+     <Compile Include="Assets\WarZone\Scripts\TurretController.cs" />
+     <Compile Include="Assets\WarZone\Vehicles\Car\Scripts\CarAudio.cs" />
+     <Compile Include="Assets\WarZone\Vehicles\Car\Scripts\CarController.cs" />
+     <Compile Include="Assets\WarZone\Vehicles\Car\Scripts\CarUserControl.cs" />
+     <Compile Include="Assets\WarZone\Vehicles\Car\Scripts\WheelEffects.cs" />
      <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\DotNetZip\DotNetZipLicense.txt" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\Projector Multiply.shader" />
@@ -139,6 +150,7 @@
      <None Include="Assets\AstarPathfindingProject\Readme_upgrading.txt" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\Projector Light.shader" />
      <None Include="Assets\AstarPathfindingProject\Readme.txt" />
+     <None Include="Assets\WarZone\Vehicles\Car\CarGuidelines.txt" />
      <None Include="Assets\AstarPathfindingProject\Plugins\JsonFx\JsonFxLicense.txt" />
      <None Include="Assets\AstarPathfindingProject\Plugins\JsonFx\Readme.txt" />
      <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\NavmeshOutline.shader" />

@@ -64,4 +64,9 @@ public class Hive : MonoBehaviour {
         activeAnts -= 1;
         ressources += returnRessources;
     }
+
+    public void EnterWarriorHive()
+    {
+        activeWarriors -= 1;
+    }
 }

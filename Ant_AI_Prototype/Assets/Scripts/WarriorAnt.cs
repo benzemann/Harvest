@@ -48,6 +48,7 @@ public class WarriorAnt : MonoBehaviour {
             case State.RETURNHOME:
                 if (Vector3.Distance(transform.position, hive.transform.position) < 0.60f)
                 {
+                    hive.GetComponent<Hive>().EnterWarriorHive();
                     Destroy(this.gameObject);
                 }
                 break;

@@ -36,6 +36,10 @@ public class WarriorAnt : MonoBehaviour {
                 if (CheckForProtectionTrail())
                 {
                     state = State.PATROLING;
+                } else
+                {
+                    state = State.RETURNHOME;
+                    seeker.StartPath(transform.position, hive.transform.position);
                 }
                 break;
             case State.PATROLING:
@@ -74,8 +78,7 @@ public class WarriorAnt : MonoBehaviour {
                 AddDefendTrail();
                 if (!CheckForProtectionTrail())
                 {
-                    state = State.RETURNHOME;
-                    seeker.StartPath(transform.position, hive.transform.position);
+                    state = State.IDLE;
                 } 
             }
         }

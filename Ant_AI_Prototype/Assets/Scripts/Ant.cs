@@ -12,6 +12,11 @@ public class Ant : MonoBehaviour {
     public float maxScoutTime;
     public float changeOfScoutOnStart;
     public float harvestAmount;
+    public float distressDistance;
+    public float beaconFleeingDistance;
+    public float maxHealth;
+    float health;
+    bool fleeing = false;
 
     Feromones feromones;
     GameObject target;
@@ -38,6 +43,7 @@ public class Ant : MonoBehaviour {
         feromones = GameObject.Find("FeromoneHandler").GetComponent<Feromones>();
         seeker = GetComponent<Seeker>();
         state = State.IDLE;
+        health = maxHealth;
     }
 
     public void OnPathComplete(Path p)
@@ -52,6 +58,10 @@ public class Ant : MonoBehaviour {
         switch (state)
         {
             case State.IDLE:
+                if (LookForEnemies())
+                {
+                    break;
+                }
                 if (!CheckForRessources())
                 {
                     if(Random.Range(0.0f,100.0f) <= changeOfScoutOnStart)
@@ -66,6 +76,10 @@ public class Ant : MonoBehaviour {
                 }
                 break;
             case State.GOTORESSOURCE:
+                if (LookForEnemies())
+                {
+                    break;
+                }
                 if (target == null)
                 {
                     state = State.IDLE;
@@ -78,10 +92,18 @@ public class Ant : MonoBehaviour {
                 }
                 break;
             case State.SCOUT:
+                if (LookForEnemies())
+                {
+                    break;
+                }
                 if (CheckForRessources())
                     break;
                 break;
             case State.WORKER:
+                if (LookForEnemies())
+                {
+                    break;
+                }
                 if (CheckForRessources())
                     break;
                 break;
@@ -99,7 +121,11 @@ public class Ant : MonoBehaviour {
                 }
                 break;
             case State.RETURNHOME:
-                if(Vector3.Distance(transform.position, hive.transform.position) < 0.60f)
+                if (LookForEnemies())
+                {
+                    break;
+                }
+                if (Vector3.Distance(transform.position, hive.transform.position) < 0.60f)
                 {
                     hive.GetComponent<Hive>().EnterHive(ressource);
                     lastX = gridX;
@@ -232,4 +258,38 @@ public class Ant : MonoBehaviour {
         hive = h;
     }
     
+    bool LookForEnemies()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject enemy in enemies)
+        {
+            if(Vector3.Distance(transform.position, enemy.transform.position) < distressDistance && fleeing == false)
+            {
+                hive.GetComponent<Hive>().PutDownDistressBeacon(enemy.transform.position);
+                fleeing = true;
+                state = State.RETURNHOME;
+                seeker.StartPath(transform.position, hive.transform.position);
+                return true;
+            }
+        }
+        foreach(GameObject beacon in hive.GetComponent<Hive>().GetDistressBeacons())
+        {
+            if(Vector3.Distance(transform.position, beacon.transform.position) < beaconFleeingDistance && fleeing == false)
+            {
+                fleeing = true;
+                state = State.RETURNHOME;
+                seeker.StartPath(transform.position, hive.transform.position);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void Damage(float d)
+    {
+        health -= d;
+        if (health <= 0f)
+            Destroy(this.gameObject);
+    }
+
 }

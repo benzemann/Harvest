@@ -7,9 +7,11 @@ public class Hive : MonoBehaviour {
 
     public GameObject ant;
     public GameObject warriorAnt;
+    public GameObject distressBeacon;
     public float breedingDelay;
     public float spawnDelay;
     public float workerWarriorRatio;
+    public float mustersPatrolingRatio;
     public float workerCost;
     public float warriorCost;
     public int maxWorkerAnts;
@@ -20,12 +22,15 @@ public class Hive : MonoBehaviour {
     List<GameObject> activeWarriorAnts = new List<GameObject>();
     public int totalWorkerAnts = 0;
     public int totalWarriorAnts = 0;
+    public int musteredWarriors = 0;
     public float ressources = 0;
     public Text ressourceText;
     Feromones feromones;
     float timeSinceLastBreed;
     float timeSinceLastSpawn;
     bool lastSpawnWorker;
+    List<GameObject> distressBeacons = new List<GameObject>();
+
 	// Use this for initialization
 	void Start () {
         feromones = GameObject.Find("FeromoneHandler").GetComponent<Feromones>();
@@ -35,6 +40,8 @@ public class Hive : MonoBehaviour {
 	void Update () {
         CheckAntsStatus();
         BreedAnts();
+        MusterWarriors();
+        SendOutAttackers();
         SpawnAnts();
         int x, y;
         feromones.GetCurrentGridCoords(transform.position, out x, out y);
@@ -43,18 +50,67 @@ public class Hive : MonoBehaviour {
             ressourceText.text = "Hive ressources: " + ressources.ToString();
 	}
 
+    void SendOutAttackers()
+    {
+        foreach(GameObject beacon in distressBeacons)
+        {
+            if (musteredWarriors >= beacon.GetComponent<DistressBeacon>().GetDistressLevel())
+            {
+                for(int i = 0; i < beacon.GetComponent<DistressBeacon>().GetDistressLevel(); i++)
+                {
+                    GameObject attacker = Instantiate(warriorAnt, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
+                    attacker.GetComponent<WarriorAnt>().init();
+                    attacker.GetComponent<WarriorAnt>().SetHive(this.gameObject);
+                    attacker.GetComponent<WarriorAnt>().SetStateToGoingToBeacon(beacon.transform.position);
+                    activeWarriorAnts.Add(attacker);
+                    musteredWarriors -= 1;
+                    if (musteredWarriors <= 0)
+                        break;
+                }
+                beacon.GetComponent<DistressBeacon>().IncrementDistressLevel();
+            }
+        }
+    }
+
+    void MusterWarriors()
+    {
+        if(distressBeacons.Count > 0)
+        {
+            int sumOfDistressLevel = 0;
+            foreach(GameObject beacon in distressBeacons)
+            {
+                sumOfDistressLevel += beacon.GetComponent<DistressBeacon>().GetDistressLevel();
+            }
+            float ratio = 0.0f;
+            if (activeWarriorAnts.Count != 0)
+                ratio = musteredWarriors / activeWarriorAnts.Count;
+            
+            int availableWarriors = totalWarriorAnts - activeWarriorAnts.Count - musteredWarriors;
+            
+            while (availableWarriors > 0 && musteredWarriors <= sumOfDistressLevel && ratio < mustersPatrolingRatio)
+            {
+                availableWarriors -= 1;
+                musteredWarriors += 1;
+                if (activeWarriorAnts.Count != 0)
+                    ratio = musteredWarriors / activeWarriorAnts.Count;
+            }
+        }
+    }
+
     void SpawnAnts()
     {
         if(Time.time - timeSinceLastSpawn > spawnDelay)
         {
-            if(totalWorkerAnts > activeWorkerAnts.Count)
+            
+            if (totalWorkerAnts > activeWorkerAnts.Count)
             {
                 SpawnWorker();
                 timeSinceLastSpawn = Time.time;
                 lastSpawnWorker = true;
                 return;
             }
-            if(totalWarriorAnts > activeWarriorAnts.Count)
+            int availableWarriors = totalWarriorAnts - (activeWarriorAnts.Count + musteredWarriors);
+            if (availableWarriors > 0)
             {
                 SpawnWarrior();
                 timeSinceLastSpawn = Time.time;
@@ -140,5 +196,26 @@ public class Hive : MonoBehaviour {
     public void EnterWarriorHive()
     {
         
+    }
+
+    public void PutDownDistressBeacon(Vector3 pos)
+    {
+        foreach (GameObject b in distressBeacons)
+            if (Vector3.Distance(b.transform.position, pos) < 2.0f)
+                return;
+        GameObject beacon = Instantiate(distressBeacon, pos, Quaternion.identity) as GameObject;
+        beacon.GetComponent<DistressBeacon>().SetHive(this.gameObject);
+        distressBeacons.Add(beacon);
+    }
+
+    public void RemoveDistressBeacon(GameObject beacon)
+    {
+        distressBeacons.Remove(beacon);
+        Destroy(beacon);
+    }
+
+    public List<GameObject> GetDistressBeacons()
+    {
+        return distressBeacons;
     }
 }

@@ -437,8 +437,35 @@ public class AIPath : MonoBehaviour {
 		if (Time.deltaTime > 0) {
 			sp = Mathf.Clamp(sp, 0, targetDist/(Time.deltaTime*2));
 		}
-		return forward*sp;
+
+        Vector3 velocity = forward * sp;
+        velocity += GetLocalAvoidance(velocity);
+
+        return velocity;
 	}
+
+    Vector3 GetLocalAvoidance(Vector3 velocity)
+    {
+
+        RaycastHit hit;
+
+        if(Physics.Raycast(transform.position, velocity, out hit, 1.0f))
+        {
+            Vector3 avoidanceVec = (transform.position + (velocity.normalized * 0.5f)) - hit.transform.position;
+            avoidanceVec = avoidanceVec.normalized;
+            if (Vector3.Dot(avoidanceVec.normalized, velocity.normalized) == -1)
+            {
+                Debug.Log(velocity.normalized + " " + Vector3.Cross(avoidanceVec.normalized, velocity.normalized));
+                return Vector3.Cross(avoidanceVec.normalized, velocity.normalized) * .5f;
+            }
+            //Debug.Log("Avoidance: " + avoidanceVec * 2.0f);
+            //Debug.DrawLine(transform.position, transform.position + avoidanceVec * 0.5f, Color.red);
+            //Debug.DrawLine(transform.position, transform.position + velocity.normalized * 0.5f, Color.magenta);
+            return avoidanceVec * .5f;
+        }
+
+        return Vector3.zero;
+    }
 
 	/** Rotates in the specified direction.
 	 * Rotates around the Y-axis.

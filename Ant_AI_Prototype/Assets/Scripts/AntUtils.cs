@@ -18,7 +18,7 @@ public class AntUtils : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown("a"))
+        if (Input.GetKeyDown("z"))
         {
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -32,7 +32,7 @@ public class AntUtils : MonoBehaviour {
                 }
             }
         }
-        if (Input.GetKeyDown("w"))
+        if (Input.GetKeyDown("x"))
         {
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -46,7 +46,7 @@ public class AntUtils : MonoBehaviour {
                 }
             }
         }
-        if (Input.GetKeyDown("r"))
+        if (Input.GetKeyDown("c"))
         {
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);

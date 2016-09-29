@@ -129,6 +129,7 @@
      <Compile Include="Assets\Scripts\AntUtils.cs" />
      <Compile Include="Assets\Scripts\Building.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
+     <Compile Include="Assets\Scripts\CameraRTS.cs" />
      <Compile Include="Assets\Scripts\DistressBeacon.cs" />
      <Compile Include="Assets\Scripts\Feromones.cs" />
      <Compile Include="Assets\Scripts\Hive.cs" />

@@ -448,21 +448,27 @@ public class AIPath : MonoBehaviour {
     {
 
         RaycastHit hit;
-
-        if(Physics.Raycast(transform.position, velocity, out hit, 1.0f))
+        
+        if(Physics.Raycast(transform.position, velocity, out hit, 0.25f))
         {
-            Vector3 avoidanceVec = (transform.position + (velocity.normalized * 0.5f)) - hit.transform.position;
+            
+            Vector3 avoidanceVec = (hit.point) - hit.transform.position;
             avoidanceVec = avoidanceVec.normalized;
-            if (Vector3.Dot(avoidanceVec.normalized, velocity.normalized) == -1)
+            if (Vector3.Dot(avoidanceVec.normalized, velocity.normalized) < -0.99f 
+                || Vector3.Dot(avoidanceVec.normalized, velocity.normalized) > 0.99f)
             {
-                Debug.Log(velocity.normalized + " " + Vector3.Cross(avoidanceVec.normalized, velocity.normalized));
-                return Vector3.Cross(avoidanceVec.normalized, velocity.normalized) * .5f;
+                Vector3 v_n = velocity.normalized;
+                //Debug.DrawLine(transform.position, transform.position + new Vector3(-v_n.z,0f,v_n.x).normalized * 2f, Color.yellow);
+                //Debug.DrawLine(transform.position, transform.position + velocity.normalized * 1f, Color.magenta);
+                return new Vector3(-v_n.z, 0f, v_n.x).normalized * 2f;
             }
             //Debug.Log("Avoidance: " + avoidanceVec * 2.0f);
-            //Debug.DrawLine(transform.position, transform.position + avoidanceVec * 0.5f, Color.red);
-            //Debug.DrawLine(transform.position, transform.position + velocity.normalized * 0.5f, Color.magenta);
-            return avoidanceVec * .5f;
+            //Debug.DrawLine(transform.position, transform.position + avoidanceVec * 2f, Color.red);
+            //Debug.DrawLine(transform.position, transform.position + velocity.normalized * 1f, Color.magenta);
+            return avoidanceVec * 2f;
         }
+
+        
 
         return Vector3.zero;
     }

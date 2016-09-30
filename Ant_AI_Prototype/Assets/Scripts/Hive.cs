@@ -107,7 +107,6 @@ public class Hive : MonoBehaviour {
                 SpawnWorker();
                 timeSinceLastSpawn = Time.time;
                 lastSpawnWorker = true;
-                return;
             }
             int availableWarriors = totalWarriorAnts - (activeWarriorAnts.Count + musteredWarriors);
             if (availableWarriors > 0)

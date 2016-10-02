@@ -208,7 +208,6 @@ public class Feromones : MonoBehaviour {
             float largestValue = -1000.0f;
             foreach(Vector3 pos in valueMapping.Keys)
             {
-                Debug.Log(valueMapping[pos]);
                 if(valueMapping[pos] > largestValue)
                 {
                     largestPos = pos;

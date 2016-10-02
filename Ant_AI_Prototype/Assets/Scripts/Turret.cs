@@ -7,16 +7,21 @@ public class Turret : MonoBehaviour {
     public float rotationSpeed;
     public float damage;
     public float fireCoolDownTime;
-    public float health;
+    public float maxHealth;
+    public enum TurretType { Phasma, Fire };
+    public TurretType turretType;
+    float health;
     GameObject target;
     public GameObject turretHead;
     public Transform barrelExit;
     public GameObject bullet;
+    public GameObject fireCollider;
     float timeSinceLastShot;
 
 	// Use this for initialization
 	void Start () {
-	
+        health = maxHealth;
+        GameObject.Find("A*").GetComponent<AstarPath>().Scan();
 	}
 	
 	// Update is called once per frame
@@ -47,7 +52,28 @@ public class Turret : MonoBehaviour {
         Bullet b = bulletGO.GetComponent<Bullet>();
         if(b != null)
         {
-            b.Seek(target,damage);
+            if (turretType == TurretType.Phasma)
+                b.Seek(target, damage);
+            else
+            {
+                b.Seek(transform.GetChild(0).GetChild(1).gameObject, 0.0f);
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Ants");
+                foreach(GameObject enemy in enemies)
+                {
+                    if (fireCollider.GetComponent<Collider>().bounds.Contains(enemy.transform.position))
+                    {
+                        if(enemy.GetComponent<Ant>() != null)
+                        {
+                            enemy.GetComponent<Ant>().Damage(damage);
+                        } else if (enemy.GetComponent<WarriorAnt>() != null)
+                        {
+                            enemy.GetComponent<WarriorAnt>().Damage(damage);
+                        }
+                    }
+                }
+                
+            }
+                
         }
     }
 
@@ -85,5 +111,20 @@ public class Turret : MonoBehaviour {
         health -= d;
         if (health <= 0)
             Destroy(this.gameObject);
+    }
+
+    public string[] InfoText()
+    {
+        string[] infoText = new string[2];
+        infoText[0] = "Turret";
+        infoText[1] = "Health : " + health + "/" + maxHealth;
+        return infoText;
+    }
+
+    public void Repair(float amount)
+    {
+        health += amount;
+        if (health > maxHealth)
+            health = maxHealth;
     }
 }

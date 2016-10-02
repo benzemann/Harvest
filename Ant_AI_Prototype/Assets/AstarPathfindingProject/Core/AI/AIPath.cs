@@ -254,7 +254,7 @@ public class AIPath : MonoBehaviour {
             Ant a = GetComponent<Ant>();
             a.PathComplete();
         }
-        else
+        else if(GetComponent<WarriorAnt>() != null)
         {
             WarriorAnt a = GetComponent<WarriorAnt>();
             a.PathComplete();
@@ -395,7 +395,7 @@ public class AIPath : MonoBehaviour {
                     {
                         Ant a = GetComponent<Ant>();
                         a.NextWaypoint();
-                    } else {
+                    } else if(GetComponent<WarriorAnt>() != null) {
                         WarriorAnt a = GetComponent<WarriorAnt>();
                         a.NextWaypoint();
                     }
@@ -451,7 +451,8 @@ public class AIPath : MonoBehaviour {
         
         if(Physics.Raycast(transform.position, velocity, out hit, 0.25f))
         {
-            
+            if (hit.transform.gameObject.name == "Hive" || hit.transform.gameObject.name == "FireDamager")
+                return Vector3.zero;
             Vector3 avoidanceVec = (hit.point) - hit.transform.position;
             avoidanceVec = avoidanceVec.normalized;
             if (Vector3.Dot(avoidanceVec.normalized, velocity.normalized) < -0.99f 

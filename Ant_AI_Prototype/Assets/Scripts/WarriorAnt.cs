@@ -5,6 +5,7 @@ public class WarriorAnt : MonoBehaviour {
 
     Feromones feromones;
     GameObject target;
+    Vector3 targetLastPos;
     Seeker seeker;
     GameObject hive;
 
@@ -91,7 +92,19 @@ public class WarriorAnt : MonoBehaviour {
                         if(Time.time - timeSinceLastAttack >= 1.0f)
                         {
                             timeSinceLastAttack = Time.time;
-                            target.GetComponent<Turret>().Damage(damagePrSec);
+                            if (target.GetComponent<Turret>() != null)
+                                target.GetComponent<Turret>().Damage(damagePrSec);
+                            else if (target.GetComponent<Harvester>())
+                                target.GetComponent<Harvester>().Damage(damagePrSec);
+                            else
+                                target.GetComponent<Refinery>().Damage(damagePrSec);
+                        }
+                    } else
+                    {
+                        if(Vector3.Distance(target.transform.position, targetLastPos) > 1.0f)
+                        {
+                            seeker.StartPath(transform.position, target.transform.position);
+                            targetLastPos = target.transform.position;
                         }
                         
                     }
@@ -244,9 +257,8 @@ public class WarriorAnt : MonoBehaviour {
             if (Vector3.Distance(transform.position, enemy.transform.position) < distressDistance && fleeing == false && state != State.GOINGTOBEACON)
             {
                 hive.GetComponent<Hive>().PutDownDistressBeacon(enemy.transform.position);
-                fleeing = true;
-                state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
+                state = State.GOINGTOBEACON;
+                beaconPos = enemy.transform.position;
                 return true;
             }
         }
@@ -254,9 +266,8 @@ public class WarriorAnt : MonoBehaviour {
         {
             if (Vector3.Distance(transform.position, beacon.transform.position) < beaconFleeingDistance && fleeing == false && state != State.GOINGTOBEACON)
             {
-                fleeing = true;
-                state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
+                state = State.GOINGTOBEACON;
+                beaconPos = beacon.transform.position;
                 return true;
             }
         }
@@ -264,8 +275,47 @@ public class WarriorAnt : MonoBehaviour {
     }
     public void Damage(float d)
     {
+        if(target != null)
+        {
+            if(target.name == "Harvester")
+            {
+                target = null;
+                // try to get new target
+                GetNewTarget();
+            }
+        }
         health -= d;
         if (health <= 0f)
+        {
+            hive.GetComponent<Hive>().KillWarrior();
             Destroy(this.gameObject);
+        }
+            
+    }
+
+    public string[] InfoText()
+    {
+        string[] infoText = new string[3];
+        infoText[0] = "Warrior ant";
+        infoText[1] = "Health: " + health + "/" + maxHealth;
+        switch (state)
+        {
+            case State.IDLE:
+                infoText[0] = "State: Idle";
+                break;
+            case State.GOINGTOBEACON:
+                infoText[0] = "State: GointToBeacon";
+                break;
+            case State.ATTACKING:
+                infoText[0] = "State: Attacking";
+                break;
+            case State.PATROLING:
+                infoText[0] = "State: Patroling";
+                break;
+            case State.RETURNHOME:
+                infoText[0] = "State: ReturnHome";
+                break;
+        }
+        return infoText;
     }
 }

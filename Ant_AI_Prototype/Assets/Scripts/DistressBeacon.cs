@@ -22,8 +22,8 @@ public class DistressBeacon : MonoBehaviour {
         timeSinceStart += Time.deltaTime;
         if (timeSinceStart >= maxDistressTime)
             hive.GetComponent<Hive>().RemoveDistressBeacon(this.gameObject);
-        if (!LookForEnemies())
-            hive.GetComponent<Hive>().RemoveDistressBeacon(this.gameObject);
+        //if (!LookForEnemies())
+          //  hive.GetComponent<Hive>().RemoveDistressBeacon(this.gameObject);
 	}
 
     public void SetHive(GameObject h)

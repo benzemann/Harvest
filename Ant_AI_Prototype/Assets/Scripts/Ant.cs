@@ -125,7 +125,7 @@ public class Ant : MonoBehaviour {
                 {
                     break;
                 }
-                if (Vector3.Distance(transform.position, hive.transform.position) < 0.60f)
+                if (Vector3.Distance(transform.position, hive.transform.position) < 0.85f)
                 {
                     hive.GetComponent<Hive>().EnterHive(ressource);
                     lastX = gridX;
@@ -289,7 +289,45 @@ public class Ant : MonoBehaviour {
     {
         health -= d;
         if (health <= 0f)
+        {
+            hive.GetComponent<Hive>().KillWorker();
             Destroy(this.gameObject);
+        }
+            
+    }
+
+    public string[] InfoText()
+    {
+        string[] infoText = new string[4];
+        infoText[0] = "Worker ant";
+        infoText[1] = "Health: " + health + "/" + maxHealth;
+        infoText[2] = "Ressources: " + ressource;
+        //enum State { IDLE, FOLLOWTRAIL, WORKER, SCOUT, GOTORESSOURCE, HARVESTING, RETURNHOME };
+        switch (state)
+        {
+            case State.IDLE:
+                infoText[3] = "State: Idle"; 
+                break;
+            case State.FOLLOWTRAIL:
+                infoText[3] = "State: FollowTrail";
+                break;
+            case State.WORKER:
+                infoText[3] = "State: Worker";
+                break;
+            case State.SCOUT:
+                infoText[3] = "State: Scout";
+                break;
+            case State.GOTORESSOURCE:
+                infoText[3] = "State: GoToRessource";
+                break;
+            case State.HARVESTING:
+                infoText[3] = "State: Harvesting";
+                break;
+            case State.RETURNHOME:
+                infoText[3] = "State: ReturnHome";
+                break;
+        }
+        return infoText;
     }
 
 }

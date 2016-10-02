@@ -129,13 +129,13 @@ public class Hive : MonoBehaviour {
             else
                 ratio = totalWorkerAnts / totalWarriorAnts;
 
-            if(ratio < workerWarriorRatio && totalWorkerAnts < maxWorkerAnts)
+            if((ratio < workerWarriorRatio && totalWorkerAnts < maxWorkerAnts) || totalWorkerAnts < freeWorkers)
             {
                 if(ressources >= workerCost || totalWorkerAnts < freeWorkers)
                     BreedWorker();
             } else if (totalWarriorAnts < maxWarriorAnts)
             {
-                if (ressources >= warriorCost || totalWarriorAnts < freeWarriors)
+                if ((ressources >= warriorCost || totalWarriorAnts < freeWarriors) || totalWarriorAnts < freeWarriors)
                     BreedWarrior();
             }
         }
@@ -146,12 +146,18 @@ public class Hive : MonoBehaviour {
         for(int i = 0; i < activeWorkerAnts.Count; i++)
         {
             if (activeWorkerAnts[i] == null)
+            {
                 activeWorkerAnts.RemoveAt(i);
+            }
+                
         }
         for (int i = 0; i < activeWarriorAnts.Count; i++)
         {
             if (activeWarriorAnts[i] == null)
+            {
                 activeWarriorAnts.RemoveAt(i);
+            }
+                
         }
     }
 
@@ -216,5 +222,30 @@ public class Hive : MonoBehaviour {
     public List<GameObject> GetDistressBeacons()
     {
         return distressBeacons;
+    }
+
+    public string[] InfoText()
+    {
+        string[] infoText = new string[5];
+        infoText[0] = "Hive";
+        infoText[1] = "Worker ants : " + totalWorkerAnts + "/" + maxWorkerAnts;
+        infoText[2] = "Warrior ant : " + totalWarriorAnts + "/" + maxWarriorAnts;
+        infoText[3] = "    Mustered warrior ants : " + musteredWarriors;
+        infoText[4] = "Ressources : " + ressources;
+        return infoText;
+    }
+
+    public void KillWorker()
+    {
+        if (totalWorkerAnts <= 0)
+            return;
+        totalWorkerAnts -= 1;
+    }
+
+    public void KillWarrior()
+    {
+        if (totalWarriorAnts <= 0)
+            return;
+        totalWarriorAnts -= 1;
     }
 }

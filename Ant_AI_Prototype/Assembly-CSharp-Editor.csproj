@@ -62,6 +62,7 @@
      <Compile Include="Assets\AstarPathfindingProject\Editor\ModifierEditors\SmoothModifierEditor.cs" />
      <Compile Include="Assets\AstarPathfindingProject\Editor\SeekerEditor.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Editor\PyroParticlesEditor.cs" />
+     <Compile Include="Assets\Scripts\Editor\CreateCone.cs" />
      <Compile Include="Assets\VolumetricLines\Scripts\Editor\ExposeProperties.cs" />
      <Compile Include="Assets\VolumetricLines\Scripts\Editor\VolumetricLineBehaviorEditor.cs" />
      <Compile Include="Assets\VolumetricLines\Scripts\Editor\VolumetricLineStripBehaviorEditor.cs" />

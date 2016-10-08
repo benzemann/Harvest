@@ -139,9 +139,15 @@
      <Compile Include="Assets\Scripts\CameraRTS.cs" />
      <Compile Include="Assets\Scripts\DistressBeacon.cs" />
      <Compile Include="Assets\Scripts\Feromones.cs" />
+     <Compile Include="Assets\Scripts\FireCollision.cs" />
+     <Compile Include="Assets\Scripts\Harvester.cs" />
      <Compile Include="Assets\Scripts\Hive.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\Refinery.cs" />
      <Compile Include="Assets\Scripts\Ressource.cs" />
+     <Compile Include="Assets\Scripts\RessourceRespawn.cs" />
      <Compile Include="Assets\Scripts\Turret.cs" />
+     <Compile Include="Assets\Scripts\TurretSpot.cs" />
      <Compile Include="Assets\Scripts\WarriorAnt.cs" />
      <Compile Include="Assets\VolumetricLines\ExampleScenes\ExampleScripts\CannonBehavior.cs" />
      <Compile Include="Assets\VolumetricLines\ExampleScenes\ExampleScripts\CreateSinShapedLineStrip.cs" />

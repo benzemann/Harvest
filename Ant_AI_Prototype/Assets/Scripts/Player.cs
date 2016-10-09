@@ -48,13 +48,13 @@ public class Player : MonoBehaviour {
                         parentHit.tag == "TurretSpot" ||
                         parentHit.tag == "Ants")
                     {
-                        CancleRepair();
+                        //CancleRepair();
                         CancleBuild();
                         selection = parentHit.transform.gameObject;
                         if (selection.tag == "TurretSpot")
                             ShowBuildButtons();
                         CreateSelectionPlane();
-                        ShowRepairButtons(); // Will only show if turret!
+                        //ShowRepairButtons(); // Will only show if turret!
                     } 
                 }
             }
@@ -77,18 +77,18 @@ public class Player : MonoBehaviour {
                         parentHit.tag == "TurretSpot" ||
                         parentHit.tag == "Ants")
                     {
-                        CancleRepair();
+                        //CancleRepair();
                         CancleBuild();
                         selection = parentHit;
                         if (selection.tag == "TurretSpot")
                             ShowBuildButtons();
                         CreateSelectionPlane();
-                        ShowRepairButtons(); // Will only show if turret or refinery!
+                        //ShowRepairButtons(); // Will only show if turret or refinery!
                         return;
                     } else if (!EventSystem.current.IsPointerOverGameObject())
                     {
                         selection = null;
-                        CancleRepair();
+                        //CancleRepair();
                         CancleBuild();
                     }
                 }
@@ -276,6 +276,18 @@ public class Player : MonoBehaviour {
                 ressources -= 1;
                 selection.GetComponent<Refinery>().Repair(5.0f);
             }
+        }
+    }
+
+    public bool Pay(float amount)
+    {
+        if(ressources >= amount)
+        {
+            ressources -= amount;
+            return true;
+        } else
+        {
+            return false;
         }
     }
 }

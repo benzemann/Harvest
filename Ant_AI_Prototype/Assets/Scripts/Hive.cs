@@ -52,8 +52,9 @@ public class Hive : MonoBehaviour {
 
     void SendOutAttackers()
     {
-        foreach(GameObject beacon in distressBeacons)
+        for(int j = 0; j < distressBeacons.Count; j++)
         {
+            GameObject beacon = distressBeacons[j];
             if (musteredWarriors >= beacon.GetComponent<DistressBeacon>().GetDistressLevel())
             {
                 for(int i = 0; i < beacon.GetComponent<DistressBeacon>().GetDistressLevel(); i++)

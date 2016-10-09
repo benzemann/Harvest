@@ -31,6 +31,8 @@ public class Ant : MonoBehaviour {
     float startScoutTime;
     float timeSinceLastTrail;
     float startHarvestTime;
+    float timeSinceLastMove;
+    Vector3 lastPos;
 
     public float ressource = 0.0f;
 
@@ -172,6 +174,22 @@ public class Ant : MonoBehaviour {
         {
             if(ressource > 0.0f)
                 AddFeromoneTrail();
+        }
+        if(state != State.HARVESTING)
+        {
+            timeSinceLastMove += Time.deltaTime;
+            if(Vector3.Distance(transform.position, lastPos) > 0.5f)
+            {
+                lastPos = transform.position;
+                timeSinceLastMove = 0f;
+            }
+            if(timeSinceLastMove > 15f)
+            {
+                Debug.LogError("Ant not moving! Go home!");
+                state = State.RETURNHOME;
+                seeker.StartPath(transform.position, hive.transform.position);
+                timeSinceLastMove = 0f;
+            } 
         }
     }
 

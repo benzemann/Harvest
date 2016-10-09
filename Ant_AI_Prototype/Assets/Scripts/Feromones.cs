@@ -25,6 +25,8 @@ public class Feromones : MonoBehaviour {
 
     Texture2D feromoneTex;
     Texture2D defendTex;
+    public Material debugMat;
+    public Material groundMat;
     Node[,] feromoneGrid;
     GameObject[,] feromoneText;
     GameObject canvas;
@@ -114,8 +116,9 @@ public class Feromones : MonoBehaviour {
         {
             for (int j = 0; j < 100; j++)
             {
-                foreach (Vector2 cNCoords in feromoneGrid[i, j].backConnectedNodes)
+                foreach (Vector2 cNCoords in feromoneGrid[i, j].connectedNodes)
                 {
+                    
                     int tmpX = (100 - feromoneGrid[i, j].x) - 50;
                     int tmpY = (100 - feromoneGrid[i, j].y) - 50;
                     int tmpLastX = (100 - (int)feromoneGrid[(int)cNCoords.x, (int)cNCoords.y].x) - 50;
@@ -131,11 +134,17 @@ public class Feromones : MonoBehaviour {
         }
         if (Input.GetKeyDown("1"))
         {
+            ground.GetComponent<Renderer>().material = debugMat;
             ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
         }
         if (Input.GetKeyDown("2"))
         {
+            ground.GetComponent<Renderer>().material = debugMat;
             ground.GetComponent<Renderer>().material.mainTexture = defendTex;
+        }
+        if (Input.GetKeyDown("3"))
+        {
+            ground.GetComponent<Renderer>().material = groundMat;
         }
     }
 
@@ -181,6 +190,7 @@ public class Feromones : MonoBehaviour {
             }
         }
         feromoneTex.Apply();
+        ground.GetComponent<Renderer>().material = debugMat;
         ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
     }
 

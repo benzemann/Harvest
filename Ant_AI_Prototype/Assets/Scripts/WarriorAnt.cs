@@ -25,6 +25,8 @@ public class WarriorAnt : MonoBehaviour {
     int gridY;
     bool goingOut = true;
     float timeSinceLastAttack;
+    float timeSinceLastMove;
+    Vector3 lastPos;
 
     enum State { IDLE, PATROLING, RETURNHOME, ATTACKING, GOINGTOBEACON };
 
@@ -119,10 +121,27 @@ public class WarriorAnt : MonoBehaviour {
                 }
                 break;
         }
-	}
+        if (state != State.ATTACKING)
+        {
+            timeSinceLastMove += Time.deltaTime;
+            if (Vector3.Distance(transform.position, lastPos) > 0.5f)
+            {
+                lastPos = transform.position;
+                timeSinceLastMove = 0f;
+            }
+            if (timeSinceLastMove > 15f)
+            {
+                Debug.LogError("Ant not moving! Go home!");
+                state = State.RETURNHOME;
+                seeker.StartPath(transform.position, hive.transform.position);
+                timeSinceLastMove = 0f;
+            }
+        }
+    }
 
     bool CheckForProtectionTrail()
     {
+        feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         Vector3 protectionTrail = feromones.GetProtectionOfFeromoneTrail(gridX, gridY, goingOut);
         //Debug.Log(protectionTrail + " " + gridX + " " + gridY);
         if(protectionTrail.x != -1000.0f)

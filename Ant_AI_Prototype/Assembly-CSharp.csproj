@@ -138,6 +138,7 @@
      <Compile Include="Assets\Scripts\Bullet.cs" />
      <Compile Include="Assets\Scripts\CameraRTS.cs" />
      <Compile Include="Assets\Scripts\DistressBeacon.cs" />
+     <Compile Include="Assets\Scripts\FPSCounter.cs" />
      <Compile Include="Assets\Scripts\Feromones.cs" />
      <Compile Include="Assets\Scripts\FireCollision.cs" />
      <Compile Include="Assets\Scripts\Harvester.cs" />

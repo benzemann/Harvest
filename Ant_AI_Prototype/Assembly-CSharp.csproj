@@ -159,9 +159,16 @@
      <Compile Include="Assets\VolumetricLines\Scripts\VolumetricLineBehavior.cs" />
      <Compile Include="Assets\VolumetricLines\Scripts\VolumetricLineStripBehavior.cs" />
      <Compile Include="Assets\VolumetricLines\Scripts\VolumetricMultiLineBehavior.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\AxisTouchButton.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\ButtonHandler.cs" />
      <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\CrossPlatformInputManager.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\InputAxisScrollbar.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\Joystick.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\MobileControlRig.cs" />
      <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\PlatformSpecific\MobileInput.cs" />
      <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\PlatformSpecific\StandaloneInput.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\TiltInput.cs" />
+     <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\TouchPad.cs" />
      <Compile Include="Assets\WarZone\CrossPlatformInput\Scripts\VirtualInput.cs" />
      <Compile Include="Assets\WarZone\Scripts\DestroyObject.cs" />
      <Compile Include="Assets\WarZone\Scripts\GunController.cs" />

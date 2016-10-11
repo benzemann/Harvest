@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public float plateCost;
     public float phasmaTurretCosts;
     public float flameTurretCosts;
+    public float sniperTurretCosts;
     public float startRessources;
     GameObject selection;
     public Material selectionMat;
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour {
     public GameObject repairButtons;
     public GameObject phasmaTurret;
     public GameObject flameTurret;
+    public GameObject sniperTurret;
     float ressources;
 
 	// Use this for initialization
@@ -248,6 +250,18 @@ public class Player : MonoBehaviour {
             ressources -= flameTurretCosts;
         }
 
+    }
+
+    public void BuildSniperTurret()
+    {
+        buildButtons.SetActive(false);
+        if (selection.GetComponent<TurretSpot>() == null)
+            return;
+        if (ressources >= sniperTurretCosts)
+        {
+            Instantiate(sniperTurret, selection.transform.position, Quaternion.identity);
+            ressources -= sniperTurretCosts;
+        }
     }
 
     public void CancleBuild()

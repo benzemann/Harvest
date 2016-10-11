@@ -80,6 +80,7 @@
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\DiffuseAlwaysVisible.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\dependencies.txt" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\_Example Scenes.txt" />
+     <None Include="Assets\Missile Systems\instructions.txt" />
      <None Include="Assets\BasicBeamShot\sh\Sprite_Add_sh.shader" />
      <None Include="Assets\BasicBeamShot\sh\GeroBeam_sh.shader" />
      <None Include="Assets\BasicBeamShot\sh\BeamLine_sh.shader" />

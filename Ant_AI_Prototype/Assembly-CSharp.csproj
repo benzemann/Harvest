@@ -124,6 +124,13 @@
      <Compile Include="Assets\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
      <Compile Include="Assets\AstarPathfindingProject\changelog.cs" />
      <Compile Include="Assets\Lava_Flowing_Shader\Scripts\ScrollingUVs_Layers.cs" />
+     <Compile Include="Assets\Missile Systems\Improved Tracer\Improved_Tracer.cs" />
+     <Compile Include="Assets\Missile Systems\Improved Tracer\ShootImprovedTracer.cs" />
+     <Compile Include="Assets\Missile Systems\Missile\Missile.cs" />
+     <Compile Include="Assets\Missile Systems\Missile\ShootObject.cs" />
+     <Compile Include="Assets\Missile Systems\ParticleDespawn.cs" />
+     <Compile Include="Assets\Missile Systems\Tracer\ShootTracer.cs" />
+     <Compile Include="Assets\Missile Systems\Tracer\Tracer.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\FireBaseScript.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\FireCollisionForwardScript.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\FireConstantBaseScript.cs" />
@@ -191,6 +198,7 @@
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\DiffuseAlwaysVisible.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\dependencies.txt" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\_Example Scenes.txt" />
+     <None Include="Assets\Missile Systems\instructions.txt" />
      <None Include="Assets\BasicBeamShot\sh\Sprite_Add_sh.shader" />
      <None Include="Assets\BasicBeamShot\sh\GeroBeam_sh.shader" />
      <None Include="Assets\BasicBeamShot\sh\BeamLine_sh.shader" />

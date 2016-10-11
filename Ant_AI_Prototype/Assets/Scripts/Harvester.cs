@@ -118,26 +118,6 @@ public class Harvester : MonoBehaviour {
         {
             if (Vector3.Distance(transform.position, refinery.transform.GetChild(0).transform.position) < 1.5f)
             {
-                if (Time.time - timeSinceLastUnload > unloadTime)
-                {
-                    if (health < maxHealth)
-                        health += 0.5f;
-                    if (ressources <= 0)
-                    {
-                        state = State.Driving;
-                        return;
-                    }
-                    ressources -= 1;
-                    GameObject player = GameObject.Find("Player");
-                    player.GetComponent<Player>().AddRessources(1);
-                    timeSinceLastUnload = Time.time;
-                }
-            }
-        }
-        if (refinery != null)
-        {
-            if (Vector3.Distance(transform.position, refinery.transform.GetChild(0).transform.position) < 1.5f)
-            {
                 if (Time.time - timeSinceLastRepair > 1f)
                 {
                     if (health < maxHealth)

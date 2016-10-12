@@ -108,7 +108,7 @@ public class Turret : MonoBehaviour {
                 b.Seek(target, damage);
             else
             {
-                b.Seek(transform.GetChild(0).GetChild(1).gameObject, 0.0f);
+				b.Seek(fireCollider.transform.GetChild(0).gameObject, 0.0f);
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Ants");
                 foreach(GameObject enemy in enemies)
                 {

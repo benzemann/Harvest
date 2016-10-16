@@ -177,7 +177,10 @@ public class Player : MonoBehaviour {
         foreach(GameObject upgrade in upgrades)
         {
             if (upgrade.GetComponent<Upgrade>().hasBeenApplied)
+            {
+                i++;
                 continue;
+            }
             GameObject newButton = Instantiate(upgradeButton, transform.position, Quaternion.identity) as GameObject;
             newButton.transform.parent = layoutGroup.transform;
             newButton.transform.GetChild(0).GetComponent<Text>().text = upgrade.GetComponent<Upgrade>().textOnButton;

@@ -12,6 +12,12 @@ public class Turret : MonoBehaviour {
     public float repairAmount;
     public float repairCosts;
     public float buildTime;
+    public float scaffoldUpTime;
+    public float scaffoldDownTime;
+    public float scaffoldStartHeight;
+    public float scaffoldEndHeight;
+    public float turretStartHeight;
+    public float turretEndHeight;
     public enum TurretType { Phasma, Fire };
     public TurretType turretType;
     float health;
@@ -81,16 +87,21 @@ public class Turret : MonoBehaviour {
         } else
         {
             timeBuilding += Time.deltaTime;
-            if(timeBuilding < buildTime * 0.25f)
+            if(timeBuilding <= scaffoldUpTime)
             {
-                scaffoldGO.transform.position = new Vector3(transform.position.x, startPos.y + height * (timeBuilding / (buildTime * 0.25f)), transform.position.z);
+                scaffoldGO.transform.position = new Vector3(transform.position.x, (1.0f-(timeBuilding / scaffoldUpTime)) * scaffoldStartHeight + (timeBuilding/scaffoldUpTime) * scaffoldEndHeight, transform.position.z);
             }
-            if(timeBuilding > buildTime * 0.75f)
+            if(timeBuilding > scaffoldUpTime && timeBuilding <= (scaffoldUpTime + buildTime))
             {
-                scaffoldGO.transform.position = new Vector3(transform.position.x, startPos.y + height * (1.0f - (timeBuilding - buildTime*0.75f) / (buildTime * 0.25f)), transform.position.z);
+                float percentage = (timeBuilding - scaffoldUpTime) / (buildTime);
+                transform.position = new Vector3(transform.position.x, (1.0f - percentage) * turretStartHeight + percentage * turretEndHeight, transform.position.z);
             }
-            transform.position = new Vector3(transform.position.x, startPos.y + height * (timeBuilding / buildTime), transform.position.z);
-            if(timeBuilding >= buildTime)
+            if(timeBuilding <= (scaffoldUpTime + buildTime + scaffoldDownTime) && timeBuilding > scaffoldUpTime + buildTime)
+            {
+                float percentage = (timeBuilding - (scaffoldUpTime + buildTime)) / (scaffoldDownTime);
+                scaffoldGO.transform.position = new Vector3(transform.position.x, (1.0f - percentage) * scaffoldEndHeight + percentage * scaffoldStartHeight, transform.position.z);
+            }
+            if(timeBuilding >= buildTime + scaffoldUpTime + scaffoldDownTime)
             {
                 Destroy(scaffoldGO);
                 isReady = true;

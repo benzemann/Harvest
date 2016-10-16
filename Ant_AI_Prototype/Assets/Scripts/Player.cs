@@ -129,7 +129,7 @@ public class Player : MonoBehaviour {
         }
         UpdateSelectionPlane();
         UpdateSelectionText();
-        ressourcesText.text = "Ressources : " + ressources;
+        ressourcesText.text = ressources.ToString();
     }
 
     void ShowBuildButtons()

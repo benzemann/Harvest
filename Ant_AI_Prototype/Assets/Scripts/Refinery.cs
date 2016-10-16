@@ -38,6 +38,11 @@ public class Refinery : MonoBehaviour {
         GameObject h = Instantiate(harvesterPrefab, transform.position, Quaternion.identity) as GameObject;
         h.name = "Harvester";
         harvester = h;
+        GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
+        foreach (GameObject upgrade in upgrades)
+        {
+            upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(h);
+        }
         spawningNewHarvester = false;
     }
 

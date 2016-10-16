@@ -40,9 +40,9 @@ public class Turret : MonoBehaviour {
 	void Start () {
         health = maxHealth;
         GameObject.Find("A*").GetComponent<AstarPath>().Scan();
-        startPos = new Vector3(transform.position.x, transform.position.y - (transform.localScale.y / 2f), transform.position.z);
+        startPos = new Vector3(transform.position.x, turretStartHeight, transform.position.z);
         transform.position = startPos;
-        scaffoldGO = Instantiate(scaffold, transform.position, Quaternion.identity) as GameObject; 
+        scaffoldGO = Instantiate(scaffold, new Vector3( transform.position.x, scaffoldStartHeight, transform.position.z ), Quaternion.identity) as GameObject; 
         height = (transform.localScale.y / 2f);
     }
 	

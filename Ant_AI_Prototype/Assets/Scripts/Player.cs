@@ -21,6 +21,9 @@ public class Player : MonoBehaviour {
     public GameObject phasmaTurret;
     public GameObject flameTurret;
     public GameObject sniperTurret;
+    public GameObject[] buildings;
+    public GameObject upgradeButton;
+    public GameObject layoutGroup;
     float ressources;
 
 	// Use this for initialization
@@ -48,13 +51,19 @@ public class Player : MonoBehaviour {
                     if (parentHit.tag == "Player" ||
                         parentHit.name == "Hive" ||
                         parentHit.tag == "TurretSpot" ||
-                        parentHit.tag == "Ants")
+                        parentHit.tag == "Ants" ||
+                        parentHit.tag == "BuildingSpot" ||
+                        parentHit.tag == "Building")
                     {
                         //CancleRepair();
                         CancleBuild();
                         selection = parentHit.transform.gameObject;
                         if (selection.tag == "TurretSpot")
                             ShowBuildButtons();
+                        if (selection.tag == "BuildingSpot")
+                            ShowBuildingButtons();
+                        if (selection.tag == "Building")
+                            ShowUpgradeButtons();
                         CreateSelectionPlane();
                         //ShowRepairButtons(); // Will only show if turret!
                     } 
@@ -75,15 +84,21 @@ public class Player : MonoBehaviour {
                         parentHit = parentHit.transform.parent.gameObject;
                     }
                     if (parentHit.tag == "Player" ||
-                        parentHit.name == "Hive" || 
+                        parentHit.name == "Hive" ||
                         parentHit.tag == "TurretSpot" ||
-                        parentHit.tag == "Ants")
+                        parentHit.tag == "Ants" ||
+                        parentHit.tag == "BuildingSpot" ||
+                        parentHit.tag == "Building")
                     {
                         //CancleRepair();
                         CancleBuild();
                         selection = parentHit;
                         if (selection.tag == "TurretSpot")
                             ShowBuildButtons();
+                        if (selection.tag == "BuildingSpot")
+                            ShowBuildingButtons();
+                        if (selection.tag == "Building")
+                            ShowUpgradeButtons();
                         CreateSelectionPlane();
                         //ShowRepairButtons(); // Will only show if turret or refinery!
                         return;
@@ -134,8 +149,63 @@ public class Player : MonoBehaviour {
 
     void ShowBuildButtons()
     {
-        if(selection.GetComponent<TurretSpot>().HasPlate())
+        if(selection.GetComponent<TurretSpot>().HasPlate() && !selection.GetComponent<TurretSpot>().hasTurret)
             buildButtons.SetActive(true);
+    }
+
+    void ShowBuildingButtons()
+    {
+        if (!selection.GetComponent<BuildingSpot>().hasBuilding)
+        {
+            int i = 0;
+            foreach(GameObject b in buildings)
+            {
+                GameObject newButton = Instantiate(upgradeButton, transform.position, Quaternion.identity) as GameObject;
+                newButton.transform.parent = layoutGroup.transform;
+                newButton.transform.GetChild(0).GetComponent<Text>().text = b.GetComponent<Building>().textOnButton;
+                int x = i;
+                newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; BuildBuilding(y); } );
+                i++;
+            }
+        }
+    }
+
+    void ShowUpgradeButtons()
+    {
+        GameObject[] upgrades = selection.GetComponent<Building>().upgrades;
+        int i = 0;
+        foreach(GameObject upgrade in upgrades)
+        {
+            if (upgrade.GetComponent<Upgrade>().hasBeenApplied)
+                continue;
+            GameObject newButton = Instantiate(upgradeButton, transform.position, Quaternion.identity) as GameObject;
+            newButton.transform.parent = layoutGroup.transform;
+            newButton.transform.GetChild(0).GetComponent<Text>().text = upgrade.GetComponent<Upgrade>().textOnButton;
+            int x = i;
+            newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; ApplyUpgrade(y); });
+            i++;
+        }
+    }
+
+    void ApplyUpgrade(int index)
+    {
+        if(selection == null)
+        {
+            return;
+        }
+        
+        if(ressources >= selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().costs)
+        {
+            ressources -= selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().costs;
+            selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().ApplyUpgrade();
+        }
+        CancleBuild();
+    }
+    
+
+    void HideUpgradeButtons()
+    {
+
     }
 
     void ShowRepairButtons()
@@ -233,7 +303,14 @@ public class Player : MonoBehaviour {
             return;
         if(ressources >= phasmaTurretCosts)
         {
-            Instantiate(phasmaTurret, selection.transform.position, Quaternion.identity);
+            selection.GetComponent<TurretSpot>().hasTurret = true;
+            GameObject t = Instantiate(phasmaTurret, selection.transform.position, Quaternion.identity) as GameObject;
+            selection.GetComponent<TurretSpot>().SetTurret(t);
+            GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
+            foreach(GameObject upgrade in upgrades)
+            {
+                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(t);
+            }
             ressources -= phasmaTurretCosts;
         }
         
@@ -246,7 +323,14 @@ public class Player : MonoBehaviour {
             return;
         if (ressources >= flameTurretCosts)
         {
-            Instantiate(flameTurret, selection.transform.position, Quaternion.identity);
+            selection.GetComponent<TurretSpot>().hasTurret = true;
+            GameObject t = Instantiate(flameTurret, selection.transform.position, Quaternion.identity) as GameObject;
+            selection.GetComponent<TurretSpot>().SetTurret(t);
+            GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
+            foreach (GameObject upgrade in upgrades)
+            {
+                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(t);
+            }
             ressources -= flameTurretCosts;
         }
 
@@ -259,14 +343,42 @@ public class Player : MonoBehaviour {
             return;
         if (ressources >= sniperTurretCosts)
         {
-            Instantiate(sniperTurret, selection.transform.position, Quaternion.identity);
+            selection.GetComponent<TurretSpot>().hasTurret = true;
+            GameObject t = Instantiate(sniperTurret, selection.transform.position, Quaternion.identity) as GameObject;
+            selection.GetComponent<TurretSpot>().SetTurret(t);
+            GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
+            foreach (GameObject upgrade in upgrades)
+            {
+                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(t);
+            }
             ressources -= sniperTurretCosts;
         }
+    }
+
+    public void BuildBuilding(int buildingIndex)
+    {
+        Debug.Log(buildingIndex);
+        if(buildings.Length > buildingIndex)
+        {
+            if(ressources >= buildings[buildingIndex].GetComponent<Building>().costs)
+            {
+                selection.GetComponent<BuildingSpot>().hasBuilding = true;
+                ressources -= buildings[buildingIndex].GetComponent<Building>().costs;
+                GameObject b = Instantiate(buildings[buildingIndex], selection.transform.position, Quaternion.identity) as GameObject;
+
+            }
+        }
+        CancleBuild();
+
     }
 
     public void CancleBuild()
     {
         buildButtons.SetActive(false);
+        for(int i = 0; i < layoutGroup.transform.childCount; i++)
+        {
+            Destroy(layoutGroup.transform.GetChild(i).gameObject);
+        }
     }
 
     public void CancleRepair()

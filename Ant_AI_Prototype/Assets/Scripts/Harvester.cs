@@ -4,6 +4,7 @@ using System.Collections;
 public class Harvester : MonoBehaviour {
 
     public float maxHealth;
+    public float repairPrSec;
     [Tooltip("The time to harvest 1 ressource")]
     public float harvestTime;
     [Tooltip("The time to unload 1 ressource")]
@@ -62,6 +63,7 @@ public class Harvester : MonoBehaviour {
                 else if (goHomeIfNoRes)
                 {
                     GoHome();
+                    lastRessourcePos = transform.position;
                 }
                 else
                 {
@@ -99,6 +101,7 @@ public class Harvester : MonoBehaviour {
                         } else if(goHomeIfNoRes)
                         {
                             GoHome();
+                            lastRessourcePos = transform.position;
                         }
                     }
                 }
@@ -169,7 +172,7 @@ public class Harvester : MonoBehaviour {
                 if (Time.time - timeSinceLastRepair > 1f)
                 {
                     if (health < maxHealth)
-                        health += 0.5f;
+                        health += repairPrSec;
 
                     timeSinceLastRepair = Time.time;
                 }
@@ -226,6 +229,11 @@ public class Harvester : MonoBehaviour {
         health -= d;
         if (health <= 0f)
             Destroy(this.gameObject);
+    }
+
+    public void AddHealth(float h)
+    {
+        health += h;
     }
 
     public string[] InfoText()

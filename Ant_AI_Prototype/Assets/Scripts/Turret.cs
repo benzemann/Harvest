@@ -89,6 +89,7 @@ public class Turret : MonoBehaviour {
             timeBuilding += Time.deltaTime;
             if(timeBuilding <= scaffoldUpTime)
             {
+                transform.position = new Vector3(transform.position.x, turretStartHeight, transform.position.z);
                 scaffoldGO.transform.position = new Vector3(transform.position.x, (1.0f-(timeBuilding / scaffoldUpTime)) * scaffoldStartHeight + (timeBuilding/scaffoldUpTime) * scaffoldEndHeight, transform.position.z);
             }
             if(timeBuilding > scaffoldUpTime && timeBuilding <= (scaffoldUpTime + buildTime))

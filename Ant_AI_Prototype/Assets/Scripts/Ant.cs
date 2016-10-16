@@ -117,7 +117,7 @@ public class Ant : MonoBehaviour {
                     seeker.StartPath(transform.position, hive.transform.position);
                     if (target != null)
                     {
-                        if(target.GetComponent<Ressource>().Harvest(harvestAmount))
+                        if(target.transform.GetChild(0).gameObject.GetComponent<Ressource>().Harvest(harvestAmount))
                             ressource += harvestAmount;
                     }
                 }

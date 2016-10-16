@@ -10,12 +10,15 @@ public class Harvester : MonoBehaviour {
     public float unloadTime;
     public float ressourceCapacity;
     public float ressources;
+    public float ressourceSearchArea;
+    public bool goHomeIfNoRes;
     float health;
     float timeSinceLastHarvest;
     float timeSinceLastUnload;
     float timeSinceLastRepair;
+    Vector3 lastRessourcePos;
 
-    enum State { Driving, GoToRessource, Harvest, ReturnHome, PlacingPlate };
+    enum State { Driving, GoToRessource, Harvest, ReturnHome, PlacingPlate, ReturnToRessource };
 
     State state;
     GameObject target;
@@ -49,7 +52,21 @@ public class Harvester : MonoBehaviour {
         {
             if(target == null)
             {
-                state = State.Driving;
+                GameObject closeRes = LookForRessources();
+                if (closeRes != null)
+                {
+                    seeker.StartPath(transform.position, closeRes.transform.position);
+                    target = closeRes;
+                    state = State.GoToRessource;
+                }
+                else if (goHomeIfNoRes)
+                {
+                    GoHome();
+                }
+                else
+                {
+                    state = State.Driving;
+                }
                 return;
             }
             if(Time.time - timeSinceLastHarvest > harvestTime)
@@ -62,16 +79,42 @@ public class Harvester : MonoBehaviour {
                 timeSinceLastHarvest = Time.time;
                 if(ressources < ressourceCapacity)
                 {
-                    target.GetComponent<Ressource>().Harvest(1);
-                    ressources += 1;
-                    if(ressources >= ressourceCapacity)
+                    if (target.transform.GetChild(0).gameObject.GetComponent<Ressource>().Harvest(1)) {
+                        ressources += 1;
+                        if (ressources >= ressourceCapacity)
+                        {
+                            if (refinery == null)
+                                return;
+                            GoHome();
+                            lastRessourcePos = transform.position;
+                        }
+                    } else
                     {
-                        if (refinery == null)
-                            return;
-                        GoHome();
+                        GameObject closeRes = LookForRessources();
+                        if(closeRes != null)
+                        {
+                            seeker.StartPath(transform.position, closeRes.transform.position);
+                            state = State.GoToRessource;
+                            target = closeRes;
+                        } else if(goHomeIfNoRes)
+                        {
+                            GoHome();
+                        }
                     }
                 }
             }
+        }
+        if(state == State.ReturnToRessource)
+        {
+            if(Vector3.Distance(transform.position, lastRessourcePos) < 1.0f)
+            {
+                GameObject closeRes = LookForRessources();
+                if (closeRes != null)
+                {
+                    seeker.StartPath(transform.position, closeRes.transform.position);
+                    state = State.GoToRessource;
+                }
+            }   
         }
         if(state == State.ReturnHome)
         {
@@ -84,6 +127,11 @@ public class Harvester : MonoBehaviour {
                         if (ressources <= 0)
                         {
                             state = State.Driving;
+                            if(lastRessourcePos != null)
+                            {
+                                state = State.ReturnToRessource;
+                                seeker.StartPath(transform.position, lastRessourcePos);
+                            }
                             return;
                         }
                         ressources -= 1;
@@ -127,6 +175,23 @@ public class Harvester : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public GameObject LookForRessources()
+    {
+        GameObject[] ressourceGOs = GameObject.FindGameObjectsWithTag("Ressources");
+        float shortestDis = float.MaxValue;
+        GameObject closestRes = null;
+        foreach(GameObject resGO in ressourceGOs)
+        {
+            float dis = Vector3.Distance(resGO.transform.position, transform.position);
+            if (dis < ressourceSearchArea && dis < shortestDis)
+            {
+                shortestDis = dis;
+                closestRes = resGO;
+            }
+        }
+        return closestRes;
     }
 
     public void GoPlacePlate(GameObject turretSpot)

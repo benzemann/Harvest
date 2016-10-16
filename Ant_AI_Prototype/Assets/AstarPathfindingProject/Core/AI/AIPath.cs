@@ -451,7 +451,7 @@ public class AIPath : MonoBehaviour {
         
         if(Physics.Raycast(transform.position, velocity, out hit, 0.25f))
         {
-            if (hit.transform.gameObject.name == "Hive" || hit.transform.gameObject.name == "FireDamager")
+            if (hit.transform.gameObject.name == "Hive" || hit.transform.gameObject.name == "FireDamager" || hit.transform.gameObject.tag == "Ressources")
                 return Vector3.zero;
             Vector3 avoidanceVec = (hit.point) - hit.transform.position;
             avoidanceVec = avoidanceVec.normalized;

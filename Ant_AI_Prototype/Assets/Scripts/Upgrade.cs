@@ -4,7 +4,7 @@ using System.Collections;
 public class Upgrade : MonoBehaviour {
 
     public float costs;
-    public enum UpgradeType { Harvester, Turret };
+    public enum UpgradeType { Harvester, Turret, Phasma, Fire, Missile };
     public enum Upgrades { health, healthRegen, Damage }
     public UpgradeType upgradeType;
     public Upgrades upgrade;
@@ -17,9 +17,8 @@ public class Upgrade : MonoBehaviour {
 	}
     public void ApplyUpradeToThis(GameObject g)
     {
-        //if (!hasBeenApplied)
-        //return;
-        Debug.Log(upgradeType);
+        if (!hasBeenApplied)
+            return;
         switch (upgradeType)
         {
             case UpgradeType.Harvester:
@@ -79,66 +78,119 @@ public class Upgrade : MonoBehaviour {
                         break;
                 }
                 break;
-        }
-    }
-    public void ApplyUpgrade()
-    {
-        hasBeenApplied = true;
-        switch (upgradeType)
-        {
-            case UpgradeType.Harvester:
-                GameObject harvester = GameObject.Find("Harvester");
+            case UpgradeType.Phasma:
+                if (g.GetComponent<Turret>() == null)
+                    return;
                 switch (upgrade)
                 {
                     case Upgrades.health:
-                        if(harvester != null)
+
+                        if (g.GetComponent<Turret>() != null)
                         {
-                            harvester.GetComponent<Harvester>().maxHealth += upgradeAmount;
-                            harvester.GetComponent<Harvester>().AddHealth(upgradeAmount);
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
+                                return;
+                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                            g.GetComponent<Turret>().Repair(upgradeAmount);
                         }
+
                         break;
                     case Upgrades.healthRegen:
-                        if (harvester != null)
+
+                        if (g.GetComponent<Turret>() != null)
                         {
-                            harvester.GetComponent<Harvester>().repairPrSec += upgradeAmount;
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
+                                return;
+                            g.GetComponent<Turret>().repairAmount += upgradeAmount;
                         }
+
+                        break;
+                    case Upgrades.Damage:
+                        if (g.GetComponent<Turret>() != null)
+                        {
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
+                                return;
+                            g.GetComponent<Turret>().damage += upgradeAmount;
+                        }
+
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");
                         break;
                 }
                 break;
-            case UpgradeType.Turret:
-                GameObject[] turrets = GameObject.FindGameObjectsWithTag("Player");
+            case UpgradeType.Fire:
+                if (g.GetComponent<Turret>() == null)
+                    return;
                 switch (upgrade)
                 {
                     case Upgrades.health:
-                        foreach(GameObject turret in turrets)
+
+                        if (g.GetComponent<Turret>() != null)
                         {
-                            if(turret.GetComponent<Turret>() != null)
-                            {
-                                turret.GetComponent<Turret>().maxHealth += upgradeAmount;
-                                turret.GetComponent<Turret>().Repair(upgradeAmount);
-                            }
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
+                                return;
+                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                            g.GetComponent<Turret>().Repair(upgradeAmount);
                         }
+
                         break;
                     case Upgrades.healthRegen:
-                        foreach (GameObject turret in turrets)
+
+                        if (g.GetComponent<Turret>() != null)
                         {
-                            if (turret.GetComponent<Turret>() != null)
-                            {
-                                turret.GetComponent<Turret>().repairAmount += upgradeAmount;
-                            }
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
+                                return;
+                            g.GetComponent<Turret>().repairAmount += upgradeAmount;
                         }
+
                         break;
                     case Upgrades.Damage:
-                        foreach (GameObject turret in turrets)
+                        if (g.GetComponent<Turret>() != null)
                         {
-                            if (turret.GetComponent<Turret>() != null)
-                            {
-                                turret.GetComponent<Turret>().damage += upgradeAmount;
-                            }
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
+                                return;
+                            g.GetComponent<Turret>().damage += upgradeAmount;
                         }
+
+                        break;
+                    default:
+                        Debug.LogError("Wrong upgrade to this upgrade type!");
+                        break;
+                }
+                break;
+            case UpgradeType.Missile:
+                if (g.GetComponent<Turret>() == null)
+                    return;
+                switch (upgrade)
+                {
+                    case Upgrades.health:
+                        if (g.GetComponent<Turret>() != null)
+                        {
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                                return;
+                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                            g.GetComponent<Turret>().Repair(upgradeAmount);
+                        }
+
+                        break;
+                    case Upgrades.healthRegen:
+
+                        if (g.GetComponent<Turret>() != null)
+                        {
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                                return;
+                            g.GetComponent<Turret>().repairAmount += upgradeAmount;
+                        }
+
+                        break;
+                    case Upgrades.Damage:
+                        if (g.GetComponent<Turret>() != null)
+                        {
+                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                                return;
+                            g.GetComponent<Turret>().damage += upgradeAmount;
+                        }
+
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");

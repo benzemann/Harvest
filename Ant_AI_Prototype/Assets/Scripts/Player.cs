@@ -200,7 +200,13 @@ public class Player : MonoBehaviour {
         if(ressources >= selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().costs)
         {
             ressources -= selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().costs;
-            selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().ApplyUpgrade();
+            selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().hasBeenApplied = true;
+            GameObject[] upgradableObjects = GameObject.FindGameObjectsWithTag("Player");
+            foreach(GameObject g in upgradableObjects)
+            {
+                selection.GetComponent<Building>().upgrades[index].GetComponent<Upgrade>().ApplyUpradeToThis(g);
+            }
+            
         }
         CancleBuild();
     }

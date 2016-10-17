@@ -190,8 +190,8 @@ public class Feromones : MonoBehaviour {
             }
         }
         feromoneTex.Apply();
-        ground.GetComponent<Renderer>().material = debugMat;
-        ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
+        ground.GetComponent<Renderer>().material = groundMat;
+        //ground.GetComponent<Renderer>().material.mainTexture = feromoneTex;
     }
 
     public Vector3 GetProtectionOfFeromoneTrail(int x, int y, bool goingOut)

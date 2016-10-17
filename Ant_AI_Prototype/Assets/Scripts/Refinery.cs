@@ -7,7 +7,7 @@ public class Refinery : MonoBehaviour {
     public float harvesterRespawnTime;
     float timeSinceLostHarvester;
     bool spawningNewHarvester = false;
-    float health;
+    public float health;
     GameObject harvester;
     public GameObject harvesterPrefab;
 

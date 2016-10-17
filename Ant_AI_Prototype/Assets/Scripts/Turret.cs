@@ -20,7 +20,7 @@ public class Turret : MonoBehaviour {
     public float turretEndHeight;
     public enum TurretType { Phasma, Fire };
     public TurretType turretType;
-    float health;
+    public float health;
     GameObject target;
     public GameObject turretHead;
     public Transform barrelExit;

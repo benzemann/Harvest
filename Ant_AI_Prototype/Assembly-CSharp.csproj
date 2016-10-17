@@ -123,7 +123,6 @@
      <Compile Include="Assets\AstarPathfindingProject\Utilities\ProfileHelper.cs" />
      <Compile Include="Assets\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
      <Compile Include="Assets\AstarPathfindingProject\changelog.cs" />
-     <Compile Include="Assets\Healthbar.cs" />
      <Compile Include="Assets\Lava_Flowing_Shader\Scripts\ScrollingUVs_Layers.cs" />
      <Compile Include="Assets\Missile Systems\Improved Tracer\Improved_Tracer.cs" />
      <Compile Include="Assets\Missile Systems\Improved Tracer\ShootImprovedTracer.cs" />
@@ -151,12 +150,14 @@
      <Compile Include="Assets\Scripts\Feromones.cs" />
      <Compile Include="Assets\Scripts\FireCollision.cs" />
      <Compile Include="Assets\Scripts\Harvester.cs" />
+     <Compile Include="Assets\Scripts\Healthbar.cs" />
      <Compile Include="Assets\Scripts\Hive.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\Refinery.cs" />
      <Compile Include="Assets\Scripts\Ressource.cs" />
      <Compile Include="Assets\Scripts\RessourceRespawn.cs" />
      <Compile Include="Assets\Scripts\Turret.cs" />
+     <Compile Include="Assets\Scripts\TurretHealthbar.cs" />
      <Compile Include="Assets\Scripts\TurretSpot.cs" />
      <Compile Include="Assets\Scripts\Upgrade.cs" />
      <Compile Include="Assets\Scripts\WarriorAnt.cs" />

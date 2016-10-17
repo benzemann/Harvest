@@ -13,7 +13,7 @@ public class Harvester : MonoBehaviour {
     public float ressources;
     public float ressourceSearchArea;
     public bool goHomeIfNoRes;
-    float health;
+    public float health;
     float timeSinceLastHarvest;
     float timeSinceLastUnload;
     float timeSinceLastRepair;

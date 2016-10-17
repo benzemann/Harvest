@@ -46,7 +46,7 @@ public class WarriorAnt : MonoBehaviour {
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         health = maxHealth;
     }
-	
+
 	// Update is called once per frame
 	void Update () {
         switch (state)
@@ -108,7 +108,7 @@ public class WarriorAnt : MonoBehaviour {
                             seeker.StartPath(transform.position, target.transform.position);
                             targetLastPos = target.transform.position;
                         }
-                        
+
                     }
                 }
                 break;
@@ -129,12 +129,11 @@ public class WarriorAnt : MonoBehaviour {
                 lastPos = transform.position;
                 timeSinceLastMove = 0f;
             }
-            if (timeSinceLastMove > 15f)
+            if (timeSinceLastMove > 30f)
             {
-                Debug.LogError("Ant not moving! Go home!");
-                state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
-                timeSinceLastMove = 0f;
+                Debug.Log("Ant not moving! Transportet to home");
+                hive.GetComponent<Hive>().EnterHive(ressource);
+                Destroy(this.gameObject);
             }
         }
     }
@@ -172,7 +171,7 @@ public class WarriorAnt : MonoBehaviour {
                 if (!CheckForProtectionTrail())
                 {
                     state = State.IDLE;
-                } 
+                }
             }
         }
         if(state == State.GOINGTOBEACON)
@@ -236,7 +235,7 @@ public class WarriorAnt : MonoBehaviour {
             if (hit.transform.gameObject.name != "Ground")
             {
                 ranPos = pos;
-            } 
+            }
         }
 
         seeker.StartPath(transform.position, ranPos);
@@ -309,7 +308,7 @@ public class WarriorAnt : MonoBehaviour {
             hive.GetComponent<Hive>().KillWarrior();
             Destroy(this.gameObject);
         }
-            
+
     }
 
     public string[] InfoText()

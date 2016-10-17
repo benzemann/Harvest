@@ -168,7 +168,7 @@ public class Ant : MonoBehaviour {
                 state = State.RETURNHOME;
                 seeker.StartPath(transform.position, hive.transform.position);
             }
-                
+
         }
         if( state == State.RETURNHOME)
         {
@@ -183,13 +183,12 @@ public class Ant : MonoBehaviour {
                 lastPos = transform.position;
                 timeSinceLastMove = 0f;
             }
-            if(timeSinceLastMove > 15f)
+            if(timeSinceLastMove > 30f)
             {
-                Debug.LogError("Ant not moving! Go home!");
-                state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
-                timeSinceLastMove = 0f;
-            } 
+                Debug.Log("Ant not moving! Transportet to home");
+                hive.GetComponent<Hive>().EnterHive(ressource);
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -275,7 +274,7 @@ public class Ant : MonoBehaviour {
     {
         hive = h;
     }
-    
+
     bool LookForEnemies()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Player");
@@ -311,7 +310,7 @@ public class Ant : MonoBehaviour {
             hive.GetComponent<Hive>().KillWorker();
             Destroy(this.gameObject);
         }
-            
+
     }
 
     public string[] InfoText()
@@ -324,7 +323,7 @@ public class Ant : MonoBehaviour {
         switch (state)
         {
             case State.IDLE:
-                infoText[3] = "State: Idle"; 
+                infoText[3] = "State: Idle";
                 break;
             case State.FOLLOWTRAIL:
                 infoText[3] = "State: FollowTrail";

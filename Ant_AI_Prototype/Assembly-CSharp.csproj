@@ -142,6 +142,7 @@
      <Compile Include="Assets\Scripts\Ant.cs" />
      <Compile Include="Assets\Scripts\AntUtils.cs" />
      <Compile Include="Assets\Scripts\Building.cs" />
+     <Compile Include="Assets\Scripts\BuildingSpot.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
      <Compile Include="Assets\Scripts\CameraRTS.cs" />
      <Compile Include="Assets\Scripts\DistressBeacon.cs" />
@@ -156,6 +157,7 @@
      <Compile Include="Assets\Scripts\RessourceRespawn.cs" />
      <Compile Include="Assets\Scripts\Turret.cs" />
      <Compile Include="Assets\Scripts\TurretSpot.cs" />
+     <Compile Include="Assets\Scripts\Upgrade.cs" />
      <Compile Include="Assets\Scripts\WarriorAnt.cs" />
      <Compile Include="Assets\VolumetricLines\ExampleScenes\ExampleScripts\CannonBehavior.cs" />
      <Compile Include="Assets\VolumetricLines\ExampleScenes\ExampleScripts\CreateSinShapedLineStrip.cs" />

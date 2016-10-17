@@ -18,7 +18,7 @@ public class Turret : MonoBehaviour {
     public float scaffoldEndHeight;
     public float turretStartHeight;
     public float turretEndHeight;
-    public enum TurretType { Phasma, Fire };
+    public enum TurretType { Phasma, Fire, Missile };
     public TurretType turretType;
     public float health;
     GameObject target;
@@ -116,7 +116,7 @@ public class Turret : MonoBehaviour {
         Bullet b = bulletGO.GetComponent<Bullet>();
         if(b != null)
         {
-            if (turretType == TurretType.Phasma)
+            if (turretType == TurretType.Phasma || turretType == TurretType.Missile)
                 b.Seek(target, damage);
             else
             {

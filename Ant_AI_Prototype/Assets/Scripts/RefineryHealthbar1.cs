@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Healthbar : MonoBehaviour {
+public class RefineryHealthbar1 : MonoBehaviour {
 
-	public Harvester harvester;
+	public Refinery refinery;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +15,7 @@ public class Healthbar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-	float currentHealth = harvester.health / harvester.maxHealth;
+	float currentHealth = refinery.health / refinery.maxHealth;
 
 	transform.localScale = new Vector3(currentHealth,transform.localScale.y,transform.localScale.z);
 

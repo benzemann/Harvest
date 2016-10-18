@@ -14,12 +14,14 @@ public class TurretSpot : MonoBehaviour {
             GetComponent<Renderer>().material = ironMat;
         else
             GetComponent<Renderer>().material = dirtMat;
-        if (turret == null)
-            hasTurret = false;
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (turret == null)
+            hasTurret = false;
 	
 	}
 

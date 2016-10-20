@@ -115,6 +115,7 @@ public class Harvester : MonoBehaviour {
                 if (closeRes != null)
                 {
                     seeker.StartPath(transform.position, closeRes.transform.position);
+                    target = closeRes;
                     state = State.GoToRessource;
                 }
             }   
@@ -234,6 +235,11 @@ public class Harvester : MonoBehaviour {
     public void AddHealth(float h)
     {
         health += h;
+    }
+
+    public void AddSpeed(float s)
+    {
+        GetComponent<AIPath>().speed += s;
     }
 
     public string[] InfoText()

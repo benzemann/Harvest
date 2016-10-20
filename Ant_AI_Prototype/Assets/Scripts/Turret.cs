@@ -51,8 +51,13 @@ public class Turret : MonoBehaviour {
         if (isReady)
         {
             if (target != null)
+            {
                 if (Vector3.Distance(target.transform.position, transform.position) > range)
                     target = null;
+                if (!CanISeeIt(target))
+                    target = null;
+            }
+                
             if (target == null)
                 FindNewTarget();
             else
@@ -141,6 +146,17 @@ public class Turret : MonoBehaviour {
         }
     }
 
+    bool CanISeeIt(GameObject t)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(barrelExit.transform.position, t.transform.position- barrelExit.transform.position , out hit))
+        {
+            if (hit.transform.gameObject == t)
+                return true;
+        }
+        return false;
+    }
+
     void FindNewTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Ants");
@@ -149,7 +165,7 @@ public class Turret : MonoBehaviour {
         foreach(GameObject enemy in enemies)
         {
             float distance = Vector3.Distance(enemy.transform.position, transform.position);
-            if(distance < closestDistance)
+            if(distance < closestDistance && CanISeeIt(enemy))
             {
                 closestDistance = distance;
                 closestEnemy = enemy;

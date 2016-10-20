@@ -14,10 +14,17 @@ public class HarvesterResourcebar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	float currentResources = harvester.ressources / harvester.ressourceCapacity;
 
-	transform.localScale = new Vector3(currentResources,transform.localScale.y,transform.localScale.z);
+        if (harvester == null)
+        {
+            GameObject harvesterGO = GameObject.Find("Harvester");
+            if (harvesterGO != null)
+                harvester = harvesterGO.GetComponent<Harvester>();
+        }
+
+        float currentResources = harvester.ressources / harvester.ressourceCapacity;
+
+	    transform.localScale = new Vector3(currentResources,transform.localScale.y,transform.localScale.z);
 
 	}
 }

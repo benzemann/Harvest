@@ -14,10 +14,17 @@ public class HarvesterHealthbar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	float currentHealth = harvester.health / harvester.maxHealth;
 
-	transform.localScale = new Vector3(currentHealth,transform.localScale.y,transform.localScale.z);
+        if (harvester == null)
+        {
+            GameObject harvesterGO = GameObject.Find("Harvester");
+            if(harvesterGO != null)
+                harvester = harvesterGO.GetComponent<Harvester>();
+        }
+            
+	    float currentHealth = harvester.health / harvester.maxHealth;
+
+	    transform.localScale = new Vector3(currentHealth,transform.localScale.y,transform.localScale.z);
 
 	}
 }

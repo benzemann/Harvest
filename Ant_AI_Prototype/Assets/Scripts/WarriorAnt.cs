@@ -132,6 +132,7 @@ public class WarriorAnt : MonoBehaviour {
             if (timeSinceLastMove > 30f)
             {
                 Debug.Log("Ant not moving! Transportet to home");
+                hive.GetComponent<Hive>().EnterWarriorHive();
                 Destroy(this.gameObject);
             }
         }

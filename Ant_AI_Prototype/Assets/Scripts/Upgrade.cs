@@ -5,7 +5,7 @@ public class Upgrade : MonoBehaviour {
 
     public float costs;
     public enum UpgradeType { Harvester, Turret, Phasma, Fire, Missile };
-    public enum Upgrades { health, healthRegen, Damage }
+    public enum Upgrades { health, healthRegen, Damage, HarvestTime, UnloadTime, RessourceCapacity, Speed }
     public UpgradeType upgradeType;
     public Upgrades upgrade;
     public float upgradeAmount;
@@ -27,17 +27,23 @@ public class Upgrade : MonoBehaviour {
                 switch (upgrade)
                 {
                     case Upgrades.health:
-                        if (g != null)
-                        {
-                            g.GetComponent<Harvester>().maxHealth += upgradeAmount;
-                            g.GetComponent<Harvester>().AddHealth(upgradeAmount);
-                        }
+                        g.GetComponent<Harvester>().maxHealth += upgradeAmount;
+                        g.GetComponent<Harvester>().AddHealth(upgradeAmount);
                         break;
                     case Upgrades.healthRegen:
-                        if (g != null)
-                        {
-                            g.GetComponent<Harvester>().repairPrSec += upgradeAmount;
-                        }
+                        g.GetComponent<Harvester>().repairPrSec += upgradeAmount;
+                        break;
+                    case Upgrades.RessourceCapacity:
+                        g.GetComponent<Harvester>().ressourceCapacity += upgradeAmount;
+                        break;
+                    case Upgrades.HarvestTime:
+                        g.GetComponent<Harvester>().harvestTime += upgradeAmount;
+                        break;
+                    case Upgrades.UnloadTime:
+                        g.GetComponent<Harvester>().unloadTime += upgradeAmount;
+                        break;
+                    case Upgrades.Speed:
+                        g.GetComponent<Harvester>().AddSpeed(upgradeAmount);
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");

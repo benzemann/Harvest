@@ -236,6 +236,7 @@ public class Harvester : MonoBehaviour {
     public void GoToPosition(Vector3 pos)
     {
         seeker.StartPath(transform.position, pos);
+        state = State.Driving;
     }
 
     public void GoToRessource(GameObject ressource)

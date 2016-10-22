@@ -5,7 +5,7 @@ public class Upgrade : MonoBehaviour {
 
     public float costs;
     public enum UpgradeType { Harvester, Turret, Phasma, Fire, Missile };
-    public enum Upgrades { health, healthRegen, Damage, HarvestTime, UnloadTime, RessourceCapacity, Speed }
+    public enum Upgrades { health, healthRegen, Damage, HarvestTime, UnloadTime, RessourceCapacity, Speed, LineOfSight }
     public UpgradeType upgradeType;
     public Upgrades upgrade;
     public float upgradeAmount;
@@ -45,6 +45,9 @@ public class Upgrade : MonoBehaviour {
                     case Upgrades.Speed:
                         g.GetComponent<Harvester>().AddSpeed(upgradeAmount);
                         break;
+                    case Upgrades.LineOfSight:
+                        g.GetComponent<Revealer>().radius += (int)upgradeAmount;
+                        break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");
                         break;
@@ -56,28 +59,17 @@ public class Upgrade : MonoBehaviour {
                 switch (upgrade)
                 {
                     case Upgrades.health:
-                        
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
-                            g.GetComponent<Turret>().Repair(upgradeAmount);
-                        }
-                        
+                        g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                        g.GetComponent<Turret>().Repair(upgradeAmount);
                         break;
                     case Upgrades.healthRegen:
-                        
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            g.GetComponent<Turret>().repairAmount += upgradeAmount;
-                        }
-                        
+                        g.GetComponent<Turret>().repairAmount += upgradeAmount;
                         break;
                     case Upgrades.Damage:
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            g.GetComponent<Turret>().damage += upgradeAmount;
-                        }
-                        
+                        g.GetComponent<Turret>().damage += upgradeAmount;
+                        break;
+                    case Upgrades.LineOfSight:
+                        g.GetComponent<Revealer>().radius += (int)upgradeAmount;
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");
@@ -90,34 +82,23 @@ public class Upgrade : MonoBehaviour {
                 switch (upgrade)
                 {
                     case Upgrades.health:
-
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
-                                return;
-                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
-                            g.GetComponent<Turret>().Repair(upgradeAmount);
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
+                            return;
+                        g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                        g.GetComponent<Turret>().Repair(upgradeAmount);
                         break;
                     case Upgrades.healthRegen:
-
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
-                                return;
-                            g.GetComponent<Turret>().repairAmount += upgradeAmount;
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
+                            return;
+                        g.GetComponent<Turret>().repairAmount += upgradeAmount;
                         break;
                     case Upgrades.Damage:
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
-                                return;
-                            g.GetComponent<Turret>().damage += upgradeAmount;
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Phasma)
+                            return;
+                        g.GetComponent<Turret>().damage += upgradeAmount;
+                        break;
+                    case Upgrades.LineOfSight:
+                        g.GetComponent<Revealer>().radius += (int)upgradeAmount;
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");
@@ -130,34 +111,23 @@ public class Upgrade : MonoBehaviour {
                 switch (upgrade)
                 {
                     case Upgrades.health:
-
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
-                                return;
-                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
-                            g.GetComponent<Turret>().Repair(upgradeAmount);
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
+                            return;
+                        g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                        g.GetComponent<Turret>().Repair(upgradeAmount);
                         break;
                     case Upgrades.healthRegen:
-
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
-                                return;
-                            g.GetComponent<Turret>().repairAmount += upgradeAmount;
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
+                            return;
+                        g.GetComponent<Turret>().repairAmount += upgradeAmount;
                         break;
                     case Upgrades.Damage:
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
-                                return;
-                            g.GetComponent<Turret>().damage += upgradeAmount;
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Fire)
+                            return;
+                        g.GetComponent<Turret>().damage += upgradeAmount;
+                        break;
+                    case Upgrades.LineOfSight:
+                        g.GetComponent<Revealer>().radius += (int)upgradeAmount;
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");
@@ -170,33 +140,23 @@ public class Upgrade : MonoBehaviour {
                 switch (upgrade)
                 {
                     case Upgrades.health:
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
-                                return;
-                            g.GetComponent<Turret>().maxHealth += upgradeAmount;
-                            g.GetComponent<Turret>().Repair(upgradeAmount);
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                            return;
+                        g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                        g.GetComponent<Turret>().Repair(upgradeAmount);
                         break;
                     case Upgrades.healthRegen:
-
-                        if (g.GetComponent<Turret>() != null)
-                        {
                             if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
                                 return;
                             g.GetComponent<Turret>().repairAmount += upgradeAmount;
-                        }
-
                         break;
                     case Upgrades.Damage:
-                        if (g.GetComponent<Turret>() != null)
-                        {
-                            if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
-                                return;
-                            g.GetComponent<Turret>().damage += upgradeAmount;
-                        }
-
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                            return;
+                        g.GetComponent<Turret>().damage += upgradeAmount;
+                        break;
+                    case Upgrades.LineOfSight:
+                        g.GetComponent<Revealer>().radius += (int)upgradeAmount;
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");

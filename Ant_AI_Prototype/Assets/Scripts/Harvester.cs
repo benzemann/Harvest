@@ -9,11 +9,15 @@ public class Harvester : MonoBehaviour {
     public float harvestTime;
     [Tooltip("The time to unload 1 ressource")]
     public float unloadTime;
+    public float repairCosts;
     public float ressourceCapacity;
     public float ressources;
     public float ressourceSearchArea;
     public bool goHomeIfNoRes;
     public float health;
+    public GameObject repairPrefab;
+    public Vector3 repairLocalPos;
+    GameObject repairGO;
     float timeSinceLastHarvest;
     float timeSinceLastUnload;
     float timeSinceLastRepair;
@@ -172,11 +176,27 @@ public class Harvester : MonoBehaviour {
             {
                 if (Time.time - timeSinceLastRepair > 1f)
                 {
-                    if (health < maxHealth)
-                        health += repairPrSec;
-
-                    timeSinceLastRepair = Time.time;
+                    if (GameObject.Find("Player").GetComponent<Player>().Pay(repairCosts))
+                    {
+                        if (health < maxHealth)
+                        {
+                            InstatiateRepairGO();
+                            health += repairPrSec;
+                        }
+                        else
+                        {
+                            health = maxHealth;
+                            RemoveRepairGO();
+                        }
+                        timeSinceLastRepair = Time.time;
+                    } else
+                    {
+                        RemoveRepairGO();
+                    }
                 }
+            } else
+            {
+                RemoveRepairGO();
             }
         }
     }
@@ -240,6 +260,22 @@ public class Harvester : MonoBehaviour {
     public void AddSpeed(float s)
     {
         GetComponent<AIPath>().speed += s;
+    }
+
+    void InstatiateRepairGO()
+    {
+        if (repairPrefab != null && repairGO == null)
+        {
+            repairGO = Instantiate(repairPrefab, repairLocalPos, Quaternion.identity) as GameObject;
+            repairGO.transform.parent = this.transform;
+            repairGO.transform.localPosition = repairLocalPos;
+        }  
+    }
+
+    void RemoveRepairGO()
+    {
+        if (repairGO != null)
+            Destroy(repairGO);
     }
 
     public string[] InfoText()

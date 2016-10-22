@@ -11,6 +11,8 @@ public class Turret : MonoBehaviour {
     public float repairTime;
     public float repairAmount;
     public float repairCosts;
+    public float costs;
+    public string textOnButton;
     public float buildTime;
     public float scaffoldUpTime;
     public float scaffoldDownTime;
@@ -27,11 +29,13 @@ public class Turret : MonoBehaviour {
     public GameObject bullet;
     public GameObject fireCollider;
     public GameObject scaffold;
+    public GameObject repairPrefab;
+    public Vector3 repairLocalPos;
+    GameObject repairGO;
     GameObject scaffoldGO;
 
     Vector3 startPos;
     bool isReady = false;
-    float height;
     float timeSinceLastShot;
     float timeSinceLastRepair;
     float timeBuilding;
@@ -42,8 +46,7 @@ public class Turret : MonoBehaviour {
         GameObject.Find("A*").GetComponent<AstarPath>().Scan();
         startPos = new Vector3(transform.position.x, turretStartHeight, transform.position.z);
         transform.position = startPos;
-        scaffoldGO = Instantiate(scaffold, new Vector3( transform.position.x, scaffoldStartHeight, transform.position.z ), Quaternion.identity) as GameObject; 
-        height = (transform.localScale.y / 2f);
+        scaffoldGO = Instantiate(scaffold, new Vector3( transform.position.x, scaffoldStartHeight, transform.position.z ), Quaternion.identity) as GameObject;
     }
 	
 	// Update is called once per frame
@@ -80,14 +83,23 @@ public class Turret : MonoBehaviour {
                 {
                     if (GameObject.Find("Player").GetComponent<Player>().Pay(repairCosts))
                     {
+                        if (repairGO == null)
+                            InstatiateRepairGO();
                         health += repairAmount;
                         if (health > maxHealth)
                         {
                             health = maxHealth;
                         }
                         timeSinceLastRepair = 0f;
+                    } else
+                    {
+                        RemoveRepairGO();
                     }
                 }
+            }
+            else
+            {
+                RemoveRepairGO();
             }
         } else
         {
@@ -114,6 +126,22 @@ public class Turret : MonoBehaviour {
             }
         }
 	}
+
+    void InstatiateRepairGO()
+    {
+        if (repairPrefab != null && repairGO == null)
+        {
+            repairGO = Instantiate(repairPrefab, repairLocalPos, Quaternion.identity) as GameObject;
+            repairGO.transform.parent = this.transform;
+            repairGO.transform.localPosition = repairLocalPos;
+        }
+    }
+
+    void RemoveRepairGO()
+    {
+        if (repairGO != null)
+            Destroy(repairGO);
+    }
 
     void Shoot()
     {
@@ -149,9 +177,11 @@ public class Turret : MonoBehaviour {
     bool CanISeeIt(GameObject t)
     {
         RaycastHit hit;
-        if (Physics.Raycast(barrelExit.transform.position, t.transform.position- barrelExit.transform.position , out hit))
+        if (t == null)
+            return false;
+        if (Physics.Raycast(barrelExit.transform.position, t.transform.position - barrelExit.position , out hit))
         {
-            if (hit.transform.gameObject == t)
+            if (hit.transform.gameObject.tag == "Ants")
                 return true;
         }
         return false;
@@ -165,10 +195,13 @@ public class Turret : MonoBehaviour {
         foreach(GameObject enemy in enemies)
         {
             float distance = Vector3.Distance(enemy.transform.position, transform.position);
-            if(distance < closestDistance && CanISeeIt(enemy))
+            if(distance < closestDistance)
             {
-                closestDistance = distance;
-                closestEnemy = enemy;
+                if (CanISeeIt(enemy))
+                {
+                    closestDistance = distance;
+                    closestEnemy = enemy;
+                }
             }
         }
         if(closestEnemy != null)

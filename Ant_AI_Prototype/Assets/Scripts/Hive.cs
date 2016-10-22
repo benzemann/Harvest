@@ -38,6 +38,7 @@ public class Hive : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
         CheckAntsStatus();
         BreedAnts();
         MusterWarriors();
@@ -46,6 +47,7 @@ public class Hive : MonoBehaviour {
         int x, y;
         feromones.GetCurrentGridCoords(transform.position, out x, out y);
         feromones.SetDefendFeromone(x, y, 0.0f);
+        feromones.ConnectToAllNeighbors(x, y);
         if (ressourceText != null)
             ressourceText.text = "Hive ressources: " + ressources.ToString();
 	}
@@ -82,6 +84,7 @@ public class Hive : MonoBehaviour {
             {
                 sumOfDistressLevel += beacon.GetComponent<DistressBeacon>().GetDistressLevel();
             }
+
             float ratio = 0.0f;
             if (activeWarriorAnts.Count != 0)
                 ratio = musteredWarriors / activeWarriorAnts.Count;
@@ -207,7 +210,7 @@ public class Hive : MonoBehaviour {
     public void PutDownDistressBeacon(Vector3 pos)
     {
         foreach (GameObject b in distressBeacons)
-            if (Vector3.Distance(b.transform.position, pos) < 2.0f)
+            if (Vector3.Distance(b.transform.position, pos) < 20.0f)
                 return;
         GameObject beacon = Instantiate(distressBeacon, pos, Quaternion.identity) as GameObject;
         beacon.GetComponent<DistressBeacon>().SetHive(this.gameObject);

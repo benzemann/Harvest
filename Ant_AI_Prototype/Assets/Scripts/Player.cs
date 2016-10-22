@@ -6,9 +6,6 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviour {
 
     public float plateCost;
-    public float phasmaTurretCosts;
-    public float flameTurretCosts;
-    public float sniperTurretCosts;
     public float startRessources;
     GameObject selection;
     public Material selectionMat;
@@ -16,18 +13,13 @@ public class Player : MonoBehaviour {
     GameObject selectionPlane;
     public Text infoText;
     public Text ressourcesText;
-    public GameObject buildButtons;
-    public GameObject repairButtons;
-    public GameObject phasmaTurret;
-    public GameObject flameTurret;
-    public GameObject sniperTurret;
+    public GameObject[] turrets;
     public GameObject[] buildings;
-    public GameObject upgradeButton;
+    public GameObject buttonPrefab;
     public GameObject layoutGroup;
     float ressources;
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         ressources = startRessources;
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 	}
@@ -35,7 +27,7 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if(selection == null)
-        {
+        {   
             if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit hit;
@@ -59,7 +51,7 @@ public class Player : MonoBehaviour {
                         CancleBuild();
                         selection = parentHit.transform.gameObject;
                         if (selection.tag == "TurretSpot")
-                            ShowBuildButtons();
+                            ShowTurretBuildButtons();
                         if (selection.tag == "BuildingSpot")
                             ShowBuildingButtons();
                         if (selection.tag == "Building")
@@ -94,7 +86,7 @@ public class Player : MonoBehaviour {
                         CancleBuild();
                         selection = parentHit;
                         if (selection.tag == "TurretSpot")
-                            ShowBuildButtons();
+                            ShowTurretBuildButtons();
                         if (selection.tag == "BuildingSpot")
                             ShowBuildingButtons();
                         if (selection.tag == "Building")
@@ -147,10 +139,21 @@ public class Player : MonoBehaviour {
         ressourcesText.text = ressources.ToString();
     }
 
-    void ShowBuildButtons()
+    void ShowTurretBuildButtons()
     {
         if(selection.GetComponent<TurretSpot>().HasPlate() && !selection.GetComponent<TurretSpot>().hasTurret)
-            buildButtons.SetActive(true);
+        {
+            int i = 0;
+            foreach(GameObject t in turrets)
+            {
+                GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
+                newButton.transform.parent = layoutGroup.transform;
+                newButton.transform.GetChild(0).GetComponent<Text>().text = t.GetComponent<Turret>().textOnButton;
+                int x = i;
+                newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; BuildTurret(y); });
+                i++;
+            }
+        }  
     }
 
     void ShowBuildingButtons()
@@ -160,7 +163,7 @@ public class Player : MonoBehaviour {
             int i = 0;
             foreach(GameObject b in buildings)
             {
-                GameObject newButton = Instantiate(upgradeButton, transform.position, Quaternion.identity) as GameObject;
+                GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
                 newButton.transform.parent = layoutGroup.transform;
                 newButton.transform.GetChild(0).GetComponent<Text>().text = b.GetComponent<Building>().textOnButton;
                 int x = i;
@@ -172,6 +175,8 @@ public class Player : MonoBehaviour {
 
     void ShowUpgradeButtons()
     {
+        if (!selection.GetComponent<Building>().isReady)
+            return;
         GameObject[] upgrades = selection.GetComponent<Building>().upgrades;
         int i = 0;
         foreach(GameObject upgrade in upgrades)
@@ -181,7 +186,7 @@ public class Player : MonoBehaviour {
                 i++;
                 continue;
             }
-            GameObject newButton = Instantiate(upgradeButton, transform.position, Quaternion.identity) as GameObject;
+            GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
             newButton.transform.parent = layoutGroup.transform;
             newButton.transform.GetChild(0).GetComponent<Text>().text = upgrade.GetComponent<Upgrade>().textOnButton;
             int x = i;
@@ -215,14 +220,6 @@ public class Player : MonoBehaviour {
     void HideUpgradeButtons()
     {
 
-    }
-
-    void ShowRepairButtons()
-    {
-        if(selection.GetComponent<Turret>() != null || selection.GetComponent<Refinery>() != null)
-        {
-            repairButtons.SetActive(true);
-        }
     }
 
     void CreateSelectionPlane()
@@ -305,68 +302,28 @@ public class Player : MonoBehaviour {
         return false;
     }
 
-    public void BuildPhasmaTurret()
+    public void BuildTurret(int indx)
     {
-        buildButtons.SetActive(false);
+        CancleBuild();
         if (selection.GetComponent<TurretSpot>() == null)
             return;
-        if(ressources >= phasmaTurretCosts)
+        GameObject turret = turrets[indx];
+        if(ressources >= turret.GetComponent<Turret>().costs)
         {
             selection.GetComponent<TurretSpot>().hasTurret = true;
-            GameObject t = Instantiate(phasmaTurret, selection.transform.position, Quaternion.identity) as GameObject;
-            selection.GetComponent<TurretSpot>().SetTurret(t);
-            GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
-            foreach(GameObject upgrade in upgrades)
-            {
-                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(t);
-            }
-            ressources -= phasmaTurretCosts;
-        }
-        
-    }
-
-    public void BuildFlameTurret()
-    {
-        buildButtons.SetActive(false);
-        if (selection.GetComponent<TurretSpot>() == null)
-            return;
-        if (ressources >= flameTurretCosts)
-        {
-            selection.GetComponent<TurretSpot>().hasTurret = true;
-            GameObject t = Instantiate(flameTurret, selection.transform.position, Quaternion.identity) as GameObject;
-            selection.GetComponent<TurretSpot>().SetTurret(t);
+            GameObject newTurret = Instantiate(turret, selection.transform.position, Quaternion.identity) as GameObject;
+            selection.GetComponent<TurretSpot>().SetTurret(newTurret);
             GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
             foreach (GameObject upgrade in upgrades)
             {
-                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(t);
+                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(newTurret);
             }
-            ressources -= flameTurretCosts;
-        }
-
-    }
-
-    public void BuildSniperTurret()
-    {
-        buildButtons.SetActive(false);
-        if (selection.GetComponent<TurretSpot>() == null)
-            return;
-        if (ressources >= sniperTurretCosts)
-        {
-            selection.GetComponent<TurretSpot>().hasTurret = true;
-            GameObject t = Instantiate(sniperTurret, selection.transform.position, Quaternion.identity) as GameObject;
-            selection.GetComponent<TurretSpot>().SetTurret(t);
-            GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
-            foreach (GameObject upgrade in upgrades)
-            {
-                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(t);
-            }
-            ressources -= sniperTurretCosts;
+            ressources -= turret.GetComponent<Turret>().costs;
         }
     }
 
     public void BuildBuilding(int buildingIndex)
     {
-        Debug.Log(buildingIndex);
         if(buildings.Length > buildingIndex)
         {
             if(ressources >= buildings[buildingIndex].GetComponent<Building>().costs)
@@ -383,16 +340,10 @@ public class Player : MonoBehaviour {
 
     public void CancleBuild()
     {
-        buildButtons.SetActive(false);
         for(int i = 0; i < layoutGroup.transform.childCount; i++)
         {
             Destroy(layoutGroup.transform.GetChild(i).gameObject);
         }
-    }
-
-    public void CancleRepair()
-    {
-        repairButtons.SetActive(false);
     }
 
     public void RepairTurret()

@@ -203,19 +203,19 @@ public class Feromones : MonoBehaviour {
             nodes = feromoneGrid[x, y].backConnectedNodes;
         if (nodes.Count > 0 || !goingOut)
         {
+            
             Dictionary<Vector3, float> valueMapping = new Dictionary<Vector3, float>();
             foreach (Vector2 nCoords in nodes)
             {
                 if (feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue > 0)
                 {
 
-                    valueMapping.Add(GetPosFromCoords((int)nCoords.x, (int)nCoords.y), (float)feromoneGrid[(int)nCoords.x, (int)nCoords.y].feromoneValue - feromoneGrid[(int)nCoords.x, (int)nCoords.y].defendValue);
+                    valueMapping.Add(GetPosFromCoords((int)nCoords.x, (int)nCoords.y), feromoneGrid[(int)nCoords.x,(int)nCoords.y].feromoneValue - feromoneGrid[(int)nCoords.x, (int)nCoords.y].defendValue);
 
                 }
             }
-
             Vector3 largestPos = new Vector3(-1000.0f,-1000.0f,-1000.0f);
-            float largestValue = -1000.0f;
+            float largestValue = -1000000.0f;
             foreach(Vector3 pos in valueMapping.Keys)
             {
                 if(valueMapping[pos] > largestValue)
@@ -368,6 +368,19 @@ public class Feromones : MonoBehaviour {
         }
 
         return new Vector3(-1000.0f,-1000.0f,-1000.0f);
+    }
+
+    public void ConnectToAllNeighbors(int x, int y)
+    {
+        for(int i = -1; i < 2; i++)
+        {
+            for(int j = -1; j < 2; j++)
+            {
+                if(feromoneGrid[x+i,y+j].feromoneValue > 0f && !(i == 0 && j == 0))
+                    if(!feromoneGrid[x, y].connectedNodes.Contains(new Vector2(x+i, y+j)))
+                        feromoneGrid[x, y].connectedNodes.Add(new Vector2(x+i,y+j));
+            }
+        }
     }
 
     public void AddFeromone(int x, int y, int lastX, int lastY, int value)

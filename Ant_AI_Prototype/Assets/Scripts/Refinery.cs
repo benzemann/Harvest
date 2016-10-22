@@ -10,9 +10,14 @@ public class Refinery : MonoBehaviour {
     public float health;
     GameObject harvester;
     public GameObject harvesterPrefab;
-
-	// Use this for initialization
-	void Start () {
+    public float repairCosts;
+    public float repairPrSec;
+    public GameObject repairPrefab;
+    public Vector3 repairLocalPos;
+    GameObject repairGO;
+    float timeSinceLastRepair;
+    // Use this for initialization
+    void Start () {
         harvester = GameObject.Find("Harvester");
         health = maxHealth;
 	}
@@ -31,7 +36,33 @@ public class Refinery : MonoBehaviour {
                 SpawnHarvester();
             }
         }
-	}
+        if (health < maxHealth)
+        {
+            timeSinceLastRepair += Time.deltaTime;
+            if (timeSinceLastRepair >= 1.0f)
+            {
+                if (GameObject.Find("Player").GetComponent<Player>().Pay(repairCosts))
+                {
+                    if (repairGO == null)
+                        InstatiateRepairGO();
+                    health += repairPrSec;
+                    if (health > maxHealth)
+                    {
+                        health = maxHealth;
+                    }
+                    timeSinceLastRepair = 0f;
+                }
+                else
+                {
+                    RemoveRepairGO();
+                }
+            }
+        }
+        else
+        {
+            RemoveRepairGO();
+        }
+    }
 
     void SpawnHarvester()
     {
@@ -68,5 +99,21 @@ public class Refinery : MonoBehaviour {
         {
             health = maxHealth;
         }
+    }
+
+    void InstatiateRepairGO()
+    {
+        if (repairPrefab != null && repairGO == null)
+        {
+            repairGO = Instantiate(repairPrefab, repairLocalPos, Quaternion.identity) as GameObject;
+            repairGO.transform.parent = this.transform;
+            repairGO.transform.localPosition = repairLocalPos;
+        }
+    }
+
+    void RemoveRepairGO()
+    {
+        if (repairGO != null)
+            Destroy(repairGO);
     }
 }

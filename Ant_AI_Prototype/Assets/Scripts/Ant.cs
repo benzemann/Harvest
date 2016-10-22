@@ -143,7 +143,7 @@ public class Ant : MonoBehaviour {
 
     public void PathComplete()
     {
-
+        
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         if (state == State.SCOUT)
         {

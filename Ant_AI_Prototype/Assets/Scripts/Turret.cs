@@ -122,6 +122,7 @@ public class Turret : MonoBehaviour {
             if(timeBuilding >= buildTime + scaffoldUpTime + scaffoldDownTime)
             {
                 Destroy(scaffoldGO);
+                GameObject.Find("A*").GetComponent<AstarPath>().Scan();
                 isReady = true;
             }
         }
@@ -179,7 +180,7 @@ public class Turret : MonoBehaviour {
         RaycastHit hit;
         if (t == null)
             return false;
-        if (Physics.Raycast(barrelExit.transform.position, t.transform.position - barrelExit.position , out hit))
+        if (Physics.Raycast(barrelExit.transform.position + Vector3.up * .5f, t.transform.position - barrelExit.position , out hit))
         {
             if (hit.transform.gameObject.tag == "Ants")
                 return true;

@@ -195,6 +195,8 @@ public class Turret : MonoBehaviour {
         float closestDistance = Mathf.Infinity;
         foreach(GameObject enemy in enemies)
         {
+			if(enemy.GetComponent<Ant>() == null && enemy.GetComponent<WarriorAnt>() == null)
+				continue;
             float distance = Vector3.Distance(enemy.transform.position, transform.position);
             if(distance < closestDistance)
             {

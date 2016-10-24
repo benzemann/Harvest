@@ -231,7 +231,11 @@ public class Player : MonoBehaviour {
             Destroy(selectionPlane);
         }
         selectionPlane = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        float size = selection.GetComponent<Renderer>().bounds.extents.magnitude * .25f;
+        float size = 1f;
+        if (selection.GetComponent<Renderer>() != null)
+            size = selection.GetComponent<Renderer>().bounds.extents.magnitude * .25f;
+        else
+            size = selection.transform.GetChild(0).gameObject.GetComponent<Renderer>().bounds.extents.magnitude * .25f;
         selectionPlane.transform.localScale = new Vector3(size, 1f, size);
         selectionPlane.GetComponent<Renderer>().material = selectionMat;
         Destroy(selectionPlane.GetComponent<Collider>());

@@ -50,8 +50,11 @@ public class WarriorAnt : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(state == State.ATTACKING || state == State.GOINGTOBEACON){
-			transform.GetChild(0).GetComponent<Collider>().isTrigger = false;
-		} else {
+            if(target == null)
+			    transform.GetChild(0).GetComponent<Collider>().isTrigger = false;
+            else if(Vector3.Distance(transform.position, target.transform.position) < 3f)
+                transform.GetChild(0).GetComponent<Collider>().isTrigger = true;
+        } else {
 			transform.GetChild(0).GetComponent<Collider>().isTrigger = true;
 		}
         switch (state)

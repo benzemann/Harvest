@@ -174,13 +174,15 @@ public class Turret : MonoBehaviour {
                 
         }
     }
-
+    
     bool CanISeeIt(GameObject t)
     {
         RaycastHit hit;
         if (t == null)
             return false;
-        if (Physics.Raycast(barrelExit.transform.position + Vector3.up * .5f, t.transform.position - barrelExit.position , out hit))
+        LayerMask layerMask = new LayerMask();
+        layerMask = 1 << LayerMask.NameToLayer("Ants") | 1 << LayerMask.NameToLayer("Obstacles");
+        if (Physics.Raycast(barrelExit.transform.position, t.transform.position - barrelExit.position , out hit, 1000f, layerMask))
         {
             if (hit.transform.gameObject.tag == "Ants")
                 return true;

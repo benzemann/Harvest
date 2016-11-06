@@ -20,7 +20,7 @@ public class Turret : MonoBehaviour {
     public float scaffoldEndHeight;
     public float turretStartHeight;
     public float turretEndHeight;
-    public enum TurretType { Phasma, Fire, Missile };
+    public enum TurretType { Phasma, Fire, Missile, Shield };
     public TurretType turretType;
     public float health;
     GameObject target;
@@ -33,6 +33,7 @@ public class Turret : MonoBehaviour {
     public Vector3 repairLocalPos;
     GameObject repairGO;
     GameObject scaffoldGO;
+    bool shieldHasBeenInit = false;
 
     Vector3 startPos;
     bool isReady = false;
@@ -53,27 +54,37 @@ public class Turret : MonoBehaviour {
 	void Update () {
         if (isReady)
         {
-            if (target != null)
+            if(turretType != TurretType.Shield)
             {
-                if (Vector3.Distance(target.transform.position, transform.position) > range)
-                    target = null;
-                if (!CanISeeIt(target))
-                    target = null;
-            }
-                
-            if (target == null)
-                FindNewTarget();
-            else
-            {
-                Vector3 dir = target.transform.position - turretHead.transform.position;
-                Quaternion lookRotation = Quaternion.LookRotation(dir);
-                Vector3 rotation = Quaternion.Lerp(turretHead.transform.rotation, lookRotation, rotationSpeed * Time.deltaTime).eulerAngles;
-                turretHead.transform.localRotation = Quaternion.Euler(0f, rotation.y, 0f);
-
-                if (Time.time - timeSinceLastShot > fireCoolDownTime)
+                if (target != null)
                 {
-                    Shoot();
-                    timeSinceLastShot = Time.time;
+                    if (Vector3.Distance(target.transform.position, transform.position) > range)
+                        target = null;
+                    if (!CanISeeIt(target))
+                        target = null;
+                }
+
+                if (target == null)
+                    FindNewTarget();
+                else
+                {
+                    Vector3 dir = target.transform.position - turretHead.transform.position;
+                    Quaternion lookRotation = Quaternion.LookRotation(dir);
+                    Vector3 rotation = Quaternion.Lerp(turretHead.transform.rotation, lookRotation, rotationSpeed * Time.deltaTime).eulerAngles;
+                    turretHead.transform.localRotation = Quaternion.Euler(0f, rotation.y, 0f);
+
+                    if (Time.time - timeSinceLastShot > fireCoolDownTime)
+                    {
+                        Shoot();
+                        timeSinceLastShot = Time.time;
+                    }
+                }
+            } else
+            {
+                if (!shieldHasBeenInit)
+                {
+                    GetComponentInChildren<Shield>().Enable();
+                    shieldHasBeenInit = true;
                 }
             }
             if (health < maxHealth)

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
 
@@ -13,7 +14,7 @@ public class Player : MonoBehaviour {
     GameObject selectionPlane;
     public Text infoText;
     public Text ressourcesText;
-    public GameObject[] turrets;
+    public List<GameObject> turrets;
     public GameObject[] buildings;
     public GameObject buttonPrefab;
     public GameObject layoutGroup;

@@ -6,6 +6,11 @@ public class Turret : MonoBehaviour {
     public float range;
     public float rotationSpeed;
     public float damage;
+    float teslaDamage;
+    public float teslaDamageIncrease;
+    float timeSinceTeslaStage;
+    public int teslaDamageStages;
+    public float teslaSecPrStage;
     public float fireCoolDownTime;
     public float maxHealth;
     public float repairTime;
@@ -20,7 +25,7 @@ public class Turret : MonoBehaviour {
     public float scaffoldEndHeight;
     public float turretStartHeight;
     public float turretEndHeight;
-    public enum TurretType { Phasma, Fire, Missile, Shield };
+    public enum TurretType { Phasma, Fire, Missile, Shield, TeslaCoil };
     public TurretType turretType;
     public float health;
     GameObject target;
@@ -34,6 +39,7 @@ public class Turret : MonoBehaviour {
     GameObject repairGO;
     GameObject scaffoldGO;
     bool shieldHasBeenInit = false;
+    int teslaStage = 1;
 
     Vector3 startPos;
     bool isReady = false;
@@ -48,12 +54,22 @@ public class Turret : MonoBehaviour {
         startPos = new Vector3(transform.position.x, turretStartHeight, transform.position.z);
         transform.position = startPos;
         scaffoldGO = Instantiate(scaffold, new Vector3( transform.position.x, scaffoldStartHeight, transform.position.z ), Quaternion.identity) as GameObject;
+        teslaDamage = damage;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (isReady)
         {
+            if(turretType == TurretType.TeslaCoil)
+            {
+                if(Time.time - timeSinceTeslaStage > teslaSecPrStage && teslaStage < teslaDamageStages)
+                {
+                    teslaDamage += teslaDamageIncrease;
+                    timeSinceTeslaStage = Time.time;
+                    teslaStage++;
+                }
+            }
             if(turretType != TurretType.Shield)
             {
                 if (target != null)
@@ -77,6 +93,8 @@ public class Turret : MonoBehaviour {
                     {
                         Shoot();
                         timeSinceLastShot = Time.time;
+                        timeSinceTeslaStage = Time.time;
+                        teslaStage = 1;
                     }
                 }
             } else
@@ -161,8 +179,8 @@ public class Turret : MonoBehaviour {
         Bullet b = bulletGO.GetComponent<Bullet>();
         if(b != null)
         {
-            if (turretType == TurretType.Phasma || turretType == TurretType.Missile)
-                b.Seek(target, damage);
+            if (turretType != TurretType.Fire)
+                b.Seek(target, teslaDamage);
             else
             {
 				b.Seek(fireCollider.transform.GetChild(0).gameObject, 0.0f);
@@ -180,9 +198,8 @@ public class Turret : MonoBehaviour {
                         }
                     }
                 }
-                
             }
-                
+            teslaDamage = damage;
         }
     }
     
@@ -249,9 +266,11 @@ public class Turret : MonoBehaviour {
 
     public string[] InfoText()
     {
-        string[] infoText = new string[2];
+        string[] infoText = new string[4];
         infoText[0] = "Turret";
         infoText[1] = "Health : " + health + "/" + maxHealth;
+        infoText[2] = "Damage : " + teslaDamage;
+        infoText[3] = "Tesla stage : " + teslaStage; 
         return infoText;
     }
 

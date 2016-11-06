@@ -135,7 +135,7 @@ public class Harvester : MonoBehaviour {
                         if (ressources <= 0)
                         {
                             state = State.Driving;
-                            if(lastRessourcePos != null)
+                            if(lastRessourcePos != null && health == maxHealth)
                             {
                                 state = State.ReturnToRessource;
                                 seeker.StartPath(transform.position, lastRessourcePos);
@@ -187,11 +187,29 @@ public class Harvester : MonoBehaviour {
                         {
                             health = maxHealth;
                             RemoveRepairGO();
+                            if(ressources == 0)
+                            {
+                                state = State.Driving;
+                                if (lastRessourcePos != null)
+                                {
+                                    state = State.ReturnToRessource;
+                                    seeker.StartPath(transform.position, lastRessourcePos);
+                                }
+                            }
                         }
                         timeSinceLastRepair = Time.time;
                     } else
                     {
                         RemoveRepairGO();
+                        if (ressources == 0)
+                        {
+                            state = State.Driving;
+                            if (lastRessourcePos != null)
+                            {
+                                state = State.ReturnToRessource;
+                                seeker.StartPath(transform.position, lastRessourcePos);
+                            }
+                        }
                     }
                 }
             } else

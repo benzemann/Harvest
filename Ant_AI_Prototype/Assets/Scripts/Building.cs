@@ -8,6 +8,7 @@ public class Building : MonoBehaviour {
     public string textOnButton;
     public GameObject scaffold;
     GameObject scaffoldGO;
+    public GameObject[] turretsToBeUnlocked;
     public float scaffoldUpTime;
     public float scaffoldDownTime;
     public float buildingBuildTime;
@@ -60,6 +61,9 @@ public class Building : MonoBehaviour {
         {
             Destroy(scaffoldGO);
             isReady = true;
+            GameObject player = GameObject.Find("Player");
+            foreach (GameObject turret in turretsToBeUnlocked)
+                player.GetComponent<Player>().turrets.Add(turret);
         }
     }
 

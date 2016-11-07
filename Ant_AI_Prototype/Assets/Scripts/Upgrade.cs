@@ -4,8 +4,8 @@ using System.Collections;
 public class Upgrade : MonoBehaviour {
 
     public float costs;
-    public enum UpgradeType { Harvester, Turret, Phasma, Fire, Missile };
-    public enum Upgrades { health, healthRegen, Damage, HarvestTime, UnloadTime, RessourceCapacity, Speed, LineOfSight }
+    public enum UpgradeType { Harvester, Turret, Phasma, Fire, Missile, Shield };
+    public enum Upgrades { health, healthRegen, Damage, HarvestTime, UnloadTime, RessourceCapacity, Speed, LineOfSight, ShieldSecToRepair, ShieldMaxHealth }
     public UpgradeType upgradeType;
     public Upgrades upgrade;
     public float upgradeAmount;
@@ -160,6 +160,35 @@ public class Upgrade : MonoBehaviour {
                         break;
                     default:
                         Debug.LogError("Wrong upgrade to this upgrade type!");
+                        break;
+                }
+                break;
+            case UpgradeType.Shield:
+                if (g.GetComponent<Turret>() == null)
+                    return;
+                switch (upgrade)
+                {
+                    case Upgrades.health:
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                            return;
+                        g.GetComponent<Turret>().maxHealth += upgradeAmount;
+                        g.GetComponent<Turret>().Repair(upgradeAmount);
+                        break;
+                    case Upgrades.healthRegen:
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Missile)
+                            return;
+                        g.GetComponent<Turret>().repairAmount += upgradeAmount;
+                        break;
+                    case Upgrades.ShieldMaxHealth:
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Shield)
+                            return;
+                        g.GetComponentInChildren<Shield>().maxHealth += upgradeAmount;
+                        g.GetComponentInChildren<Shield>().AddHealth(upgradeAmount);
+                        break;
+                    case Upgrades.ShieldSecToRepair:
+                        if (g.GetComponent<Turret>().turretType != Turret.TurretType.Shield)
+                            return;
+                        g.GetComponentInChildren<Shield>().secToRepair += upgradeAmount;
                         break;
                 }
                 break;

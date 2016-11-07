@@ -8,7 +8,8 @@ public class WarriorAnt : MonoBehaviour {
     Vector3 targetLastPos;
     Seeker seeker;
     GameObject hive;
-
+    GameObject enemyShield;
+    State oldState;
     public float defendFeromoneAmount;
     public float distressDistance;
     public float beaconFleeingDistance;
@@ -28,7 +29,7 @@ public class WarriorAnt : MonoBehaviour {
     float timeSinceLastMove;
     Vector3 lastPos;
 
-    enum State { IDLE, PATROLING, RETURNHOME, ATTACKING, GOINGTOBEACON };
+    enum State { IDLE, PATROLING, RETURNHOME, ATTACKING, GOINGTOBEACON, ATTACKINGSHIELD };
 
     State state;
 
@@ -116,7 +117,7 @@ public class WarriorAnt : MonoBehaviour {
                             seeker.StartPath(transform.position, target.transform.position);
                             targetLastPos = target.transform.position;
                         }
-
+                        
                     }
                 }
                 break;
@@ -126,6 +127,20 @@ public class WarriorAnt : MonoBehaviour {
                 if (GetNewTarget())
                 {
                     state = State.ATTACKING;
+                }
+                break;
+            case State.ATTACKINGSHIELD:
+                if(enemyShield == false || enemyShield.GetComponent<Shield>().IsDisabled())
+                {
+                    GetComponent<AIPath>().canMove = true;
+                    state = oldState;
+                } else
+                {
+                    if (Time.time - timeSinceLastAttack >= 1.0f)
+                    {
+                        timeSinceLastAttack = Time.time;
+                        enemyShield.GetComponent<Shield>().Damage(damagePrSec);
+                    }
                 }
                 break;
         }
@@ -190,6 +205,15 @@ public class WarriorAnt : MonoBehaviour {
                 seeker.StartPath(transform.position, hive.transform.position);
             }
         }
+        
+    }
+
+    public void EnterShield(GameObject s)
+    {
+        enemyShield = s;
+        oldState = state;
+        state = State.ATTACKINGSHIELD;
+        GetComponent<AIPath>().canMove = false;
     }
 
     public void NextWaypoint()

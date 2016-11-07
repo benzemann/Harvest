@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
 
@@ -13,7 +14,7 @@ public class Player : MonoBehaviour {
     GameObject selectionPlane;
     public Text infoText;
     public Text ressourcesText;
-    public GameObject[] turrets;
+    public List<GameObject> turrets;
     public GameObject[] buildings;
     public GameObject buttonPrefab;
     public GameObject layoutGroup;
@@ -144,11 +145,14 @@ public class Player : MonoBehaviour {
         if(selection.GetComponent<TurretSpot>().HasPlate() && !selection.GetComponent<TurretSpot>().hasTurret)
         {
             int i = 0;
-            foreach(GameObject t in turrets)
+            float widthOffset = 0f;
+            foreach (GameObject t in turrets)
             {
                 GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
                 newButton.transform.parent = layoutGroup.transform;
-                newButton.transform.GetChild(0).GetComponent<Text>().text = t.GetComponent<Turret>().textOnButton;
+                newButton.transform.GetChild(0).GetComponent<Text>().text = t.GetComponent<Turret>().textOnButton.Replace("NEWLINE", "\n");
+                newButton.transform.localPosition = new Vector3(widthOffset, 0f, 0f);
+                widthOffset += newButton.GetComponent<RectTransform>().rect.width / 1.5f;
                 int x = i;
                 newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; BuildTurret(y); });
                 i++;
@@ -161,11 +165,14 @@ public class Player : MonoBehaviour {
         if (!selection.GetComponent<BuildingSpot>().hasBuilding)
         {
             int i = 0;
+            float widthOffset = 0f;
             foreach(GameObject b in buildings)
             {
                 GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
                 newButton.transform.parent = layoutGroup.transform;
-                newButton.transform.GetChild(0).GetComponent<Text>().text = b.GetComponent<Building>().textOnButton;
+                newButton.transform.GetChild(0).GetComponent<Text>().text = b.GetComponent<Building>().textOnButton.Replace("NEWLINE", "\n");
+                newButton.transform.localPosition = new Vector3(widthOffset, 0f, 0f);
+                widthOffset += newButton.GetComponent<RectTransform>().rect.width / 1.5f;
                 int x = i;
                 newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; BuildBuilding(y); } );
                 i++;
@@ -179,7 +186,8 @@ public class Player : MonoBehaviour {
             return;
         GameObject[] upgrades = selection.GetComponent<Building>().upgrades;
         int i = 0;
-        foreach(GameObject upgrade in upgrades)
+        float widthOffset = 0f;
+        foreach (GameObject upgrade in upgrades)
         {
             if (upgrade.GetComponent<Upgrade>().hasBeenApplied)
             {
@@ -188,7 +196,9 @@ public class Player : MonoBehaviour {
             }
             GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
             newButton.transform.parent = layoutGroup.transform;
-            newButton.transform.GetChild(0).GetComponent<Text>().text = upgrade.GetComponent<Upgrade>().textOnButton;
+            newButton.transform.GetChild(0).GetComponent<Text>().text = upgrade.GetComponent<Upgrade>().textOnButton.Replace("NEWLINE", "\n");
+            newButton.transform.localPosition = new Vector3(widthOffset, 0f, 0f);
+            widthOffset += newButton.GetComponent<RectTransform>().rect.width / 1.5f;
             int x = i;
             newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; ApplyUpgrade(y); });
             i++;

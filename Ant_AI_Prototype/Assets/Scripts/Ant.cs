@@ -141,6 +141,12 @@ public class Ant : MonoBehaviour {
         }
 	}
 
+    public void GoHome()
+    {
+        state = State.RETURNHOME;
+        seeker.StartPath(transform.position, hive.transform.position);
+    }
+
     public void PathComplete()
     {
         

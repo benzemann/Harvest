@@ -166,6 +166,7 @@
      <Compile Include="Assets\Scripts\Feromones.cs" />
      <Compile Include="Assets\Scripts\FireCollision.cs" />
      <Compile Include="Assets\Scripts\FogOfWar.cs" />
+     <Compile Include="Assets\Scripts\GameTime.cs" />
      <Compile Include="Assets\Scripts\Harvester.cs" />
      <Compile Include="Assets\Scripts\HarvesterHealthbar.cs" />
      <Compile Include="Assets\Scripts\HarvesterResourcebar.cs" />
@@ -177,6 +178,7 @@
      <Compile Include="Assets\Scripts\Ressource.cs" />
      <Compile Include="Assets\Scripts\RessourceRespawn.cs" />
      <Compile Include="Assets\Scripts\Revealer.cs" />
+     <Compile Include="Assets\Scripts\Shield.cs" />
      <Compile Include="Assets\Scripts\Turret.cs" />
      <Compile Include="Assets\Scripts\TurretHealthbar.cs" />
      <Compile Include="Assets\Scripts\TurretSpot.cs" />

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
@@ -15,14 +16,26 @@ public class Player : MonoBehaviour {
     public Text infoText;
     public Text ressourcesText;
     public List<GameObject> turrets;
+    public GameObject drill;
     public GameObject[] buildings;
     public GameObject buttonPrefab;
     public GameObject layoutGroup;
     float ressources;
+    public Text objectiveText;
+    public GameObject[] objectives;
+    GameObject[] objectivesGO;
+    public Text victoryText;
     // Use this for initialization
     void Start () {
         ressources = startRessources;
         camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        objectivesGO = new GameObject[objectives.Length];
+        int indx = 0;
+        foreach(GameObject objective in objectives)
+        {
+            objectivesGO[indx] = Instantiate(objective) as GameObject;
+            indx++;
+        }
 	}
 	
 	// Update is called once per frame
@@ -137,12 +150,15 @@ public class Player : MonoBehaviour {
         }
         UpdateSelectionPlane();
         UpdateSelectionText();
+        foreach (GameObject objective in objectivesGO)
+            objective.GetComponent<Objectives>().UpdateObjective(0);
+        UpdateObjectiveText();
         ressourcesText.text = ressources.ToString();
     }
 
     void ShowTurretBuildButtons()
     {
-        if(selection.GetComponent<TurretSpot>().HasPlate() && !selection.GetComponent<TurretSpot>().hasTurret)
+        if(selection.GetComponent<TurretSpot>().HasPlate() && !selection.GetComponent<TurretSpot>().hasTurret && !selection.GetComponent<TurretSpot>().isDrillSpot)
         {
             int i = 0;
             float widthOffset = 0f;
@@ -157,7 +173,34 @@ public class Player : MonoBehaviour {
                 newButton.GetComponent<Button>().onClick.AddListener(delegate { int y = x; BuildTurret(y); });
                 i++;
             }
-        }  
+        }  else if (selection.GetComponent<TurretSpot>().isDrillSpot && !selection.GetComponent<TurretSpot>().hasTurret)
+        {
+            GameObject newButton = Instantiate(buttonPrefab, transform.position, Quaternion.identity) as GameObject;
+            newButton.transform.parent = layoutGroup.transform;
+            newButton.transform.GetChild(0).GetComponent<Text>().text = drill.GetComponent<Turret>().textOnButton;
+            newButton.transform.localPosition = new Vector3(0f, 0f, 0f);
+            newButton.GetComponent<Button>().onClick.AddListener(delegate { BuildDrill(); });
+        }
+    }
+
+    public void BuildDrill()
+    {
+        CancleBuild();
+        if (selection.GetComponent<TurretSpot>() == null)
+            return;
+        
+        if (ressources >= drill.GetComponent<Turret>().costs)
+        {
+            selection.GetComponent<TurretSpot>().hasTurret = true;
+            GameObject newTurret = Instantiate(drill, selection.transform.position, Quaternion.identity) as GameObject;
+            selection.GetComponent<TurretSpot>().SetTurret(newTurret);
+            GameObject[] upgrades = GameObject.FindGameObjectsWithTag("Upgrade");
+            foreach (GameObject upgrade in upgrades)
+            {
+                upgrade.GetComponent<Upgrade>().ApplyUpradeToThis(newTurret);
+            }
+            ressources -= drill.GetComponent<Turret>().costs;
+        }
     }
 
     void ShowBuildingButtons()
@@ -178,6 +221,21 @@ public class Player : MonoBehaviour {
                 i++;
             }
         }
+    }
+
+    public void CheckVictory()
+    {
+        bool isAllComplete = true;
+        foreach (GameObject objective in objectivesGO)
+            if (!objective.GetComponent<Objectives>().isComplete)
+                isAllComplete = false;
+        if(isAllComplete)
+            victoryText.gameObject.SetActive(true);
+    }
+
+    public float GetRessources()
+    {
+        return ressources;
     }
 
     void ShowUpgradeButtons()
@@ -265,6 +323,14 @@ public class Player : MonoBehaviour {
         selectionPlane.transform.position = new Vector3(selection.transform.position.x, 0.05f, selection.transform.position.z);
     }
 
+    void UpdateObjectiveText()
+    {
+        StringBuilder sb = new StringBuilder("OBJECTIVES: \n");
+        foreach (GameObject objective in objectivesGO)
+            sb.Append(objective.GetComponent<Objectives>().GetText() + "\n");
+        objectiveText.text = sb.ToString();
+    }
+
     void UpdateSelectionText()
     {
         if (selection == null || infoText == null)
@@ -304,6 +370,8 @@ public class Player : MonoBehaviour {
     public void AddRessources(float a)
     {
         ressources += a;
+        foreach (GameObject objective in objectivesGO)
+            objective.GetComponent<Objectives>().UpdateObjective(a);
     }
 
     public bool PayForPlate()

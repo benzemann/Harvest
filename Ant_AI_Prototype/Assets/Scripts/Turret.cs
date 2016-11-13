@@ -25,7 +25,7 @@ public class Turret : MonoBehaviour {
     public float scaffoldEndHeight;
     public float turretStartHeight;
     public float turretEndHeight;
-    public enum TurretType { Phasma, Fire, Missile, Shield, TeslaCoil };
+    public enum TurretType { Phasma, Fire, Missile, Shield, TeslaCoil, Drill };
     public TurretType turretType;
     public float health;
     GameObject target;
@@ -70,7 +70,7 @@ public class Turret : MonoBehaviour {
                     teslaStage++;
                 }
             }
-            if(turretType != TurretType.Shield)
+            if(turretType != TurretType.Shield && turretType != TurretType.Drill)
             {
                 if (target != null)
                 {
@@ -97,7 +97,7 @@ public class Turret : MonoBehaviour {
                         teslaStage = 1;
                     }
                 }
-            } else
+            } else if (turretType == TurretType.Shield)
             {
                 if (!shieldHasBeenInit)
                 {
@@ -165,6 +165,11 @@ public class Turret : MonoBehaviour {
             repairGO.transform.parent = this.transform;
             repairGO.transform.localPosition = repairLocalPos;
         }
+    }
+
+    public bool IsReady()
+    {
+        return isReady;
     }
 
     void RemoveRepairGO()
@@ -270,7 +275,10 @@ public class Turret : MonoBehaviour {
         infoText[0] = "Turret";
         infoText[1] = "Health : " + health + "/" + maxHealth;
         infoText[2] = "Damage : " + teslaDamage;
-        infoText[3] = "Tesla stage : " + teslaStage; 
+        if (turretType == TurretType.TeslaCoil)
+            infoText[3] = "Tesla stage : " + teslaStage;
+        else
+            infoText[3] = "";
         return infoText;
     }
 

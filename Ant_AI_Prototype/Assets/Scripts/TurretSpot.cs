@@ -7,6 +7,7 @@ public class TurretSpot : MonoBehaviour {
     public Material ironMat;
     public bool hasPlate = false;
     public bool hasTurret = false;
+    public bool isDrillSpot = false;
     GameObject turret;
 	// Use this for initialization
 	void Start () {

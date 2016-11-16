@@ -76,12 +76,14 @@
      <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAdditive.shader" />
      <None Include="Assets\BasicBeamShot\sh\Add_UVScroll_sh.shader" />
      <None Include="Assets\PyroParticles\Prefab\Materials\AdditiveTintable.shader" />
+     <None Include="Assets\Fonts\Jupiter\LICENSE.txt" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort.shader" />
      <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort_Transparent.shader" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\DiffuseAlwaysVisible.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\dependencies.txt" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\_Example Scenes.txt" />
      <None Include="Assets\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
+     <None Include="Assets\Textures and Sprites\SF UI\Background\LICENSE.txt" />
      <None Include="Assets\Missile Systems\instructions.txt" />
      <None Include="Assets\BasicBeamShot\sh\Sprite_Add_sh.shader" />
      <None Include="Assets\BasicBeamShot\sh\GeroBeam_sh.shader" />
@@ -93,6 +95,7 @@
      <None Include="Assets\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
      <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAdditiveFast.shader" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\Projector Light.shader" />
+     <None Include="Assets\Materials\UI-Default-No-Alpha.shader" />
      <None Include="Assets\AstarPathfindingProject\Readme.txt" />
      <None Include="Assets\WarZone\Vehicles\Car\CarGuidelines.txt" />
      <None Include="Assets\VolumetricLines\Shaders\VolumetricLineStripShaderAdditive.shader" />
@@ -103,6 +106,7 @@
      <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAlphaBlendedFast.shader" />
      <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\NavmeshOutline.shader" />
      <None Include="Assets\BasicBeamShot\sh\AddColor_sh.shader" />
+     <None Include="Assets\Particlecollection_Free samples\Particlecollection Readme.txt" />
      <None Include="Assets\AstarPathfindingProject\link.xml" />
  <Reference Include="Assembly-UnityScript">
  <HintPath>/Users/SimonBentzen/Source Tree Projects/Harvest/Ant_AI_Prototype/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>

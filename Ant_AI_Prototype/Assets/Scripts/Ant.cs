@@ -20,7 +20,7 @@ public class Ant : MonoBehaviour {
 
     Feromones feromones;
     GameObject target;
-    Seeker seeker;
+    AgentController agentController;
     GameObject hive;
 
     int lastX;
@@ -43,7 +43,8 @@ public class Ant : MonoBehaviour {
     // Use this for initialization
     void Start () {
         feromones = GameObject.Find("FeromoneHandler").GetComponent<Feromones>();
-        seeker = GetComponent<Seeker>();
+        agentController = GetComponent<AgentController>();
+        agentController.CanWalkThrough = true;
         state = State.IDLE;
         health = maxHealth;
     }
@@ -114,7 +115,7 @@ public class Ant : MonoBehaviour {
                 {
                     feromones.GetCurrentGridCoords(transform.position, out lastX, out lastY);
                     state = State.RETURNHOME;
-                    seeker.StartPath(transform.position, hive.transform.position);
+                    agentController.GoToPos(hive.transform.position);
                     if (target != null)
                     {
                         if(target.transform.GetChild(0).gameObject.GetComponent<Ressource>().Harvest(harvestAmount))
@@ -144,7 +145,7 @@ public class Ant : MonoBehaviour {
     public void GoHome()
     {
         state = State.RETURNHOME;
-        seeker.StartPath(transform.position, hive.transform.position);
+        agentController.GoToPos(hive.transform.position);
     }
 
     public void PathComplete()
@@ -153,7 +154,7 @@ public class Ant : MonoBehaviour {
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         if (state == State.SCOUT)
         {
-            seeker.StartPath(transform.position, GetRandomNearLocation());
+            agentController.GoToPos(GetRandomNearLocation());
             if(Time.time - startScoutTime > minScoutTime)
             {
                 state = State.WORKER;
@@ -164,7 +165,7 @@ public class Ant : MonoBehaviour {
             //Debug.Log(SmellForFeromoneTrail());
             if (!SmellForFeromoneTrail())
             {
-                seeker.StartPath(transform.position, GetRandomNearLocation());
+                agentController.GoToPos(GetRandomNearLocation());
                 state = State.SCOUT;
                 startScoutTime = Time.time;
             }
@@ -172,7 +173,7 @@ public class Ant : MonoBehaviour {
             if(timeSinceLastTrail > maxScoutTime)
             {
                 state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
+                agentController.GoToPos(hive.transform.position);
             }
 
         }
@@ -251,7 +252,7 @@ public class Ant : MonoBehaviour {
             {
                 state = State.GOTORESSOURCE;
                 target = res;
-                seeker.StartPath(transform.position, target.transform.position);
+                agentController.GoToPos(target.transform.position);
                 return true;
             }
         }
@@ -264,7 +265,7 @@ public class Ant : MonoBehaviour {
         if(feromoneTrail.x != -1000.0f)
         {
             //Debug.Log(feromoneTrail + " " + transform.position);
-            seeker.StartPath(transform.position, feromoneTrail);
+            agentController.GoToPos(feromoneTrail);
             timeSinceLastTrail = 0.0f;
             return true;
         }
@@ -291,7 +292,7 @@ public class Ant : MonoBehaviour {
                 hive.GetComponent<Hive>().PutDownDistressBeacon(enemy.transform.position);
                 fleeing = true;
                 state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
+                agentController.GoToPos(hive.transform.position);
                 return true;
             }
         }
@@ -301,7 +302,7 @@ public class Ant : MonoBehaviour {
             {
                 fleeing = true;
                 state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
+                agentController.GoToPos(hive.transform.position);
                 return true;
             }
         }

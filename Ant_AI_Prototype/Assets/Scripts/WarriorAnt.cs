@@ -6,7 +6,7 @@ public class WarriorAnt : MonoBehaviour {
     Feromones feromones;
     GameObject target;
     Vector3 targetLastPos;
-    Seeker seeker;
+    AgentController agentController;
     GameObject hive;
     GameObject enemyShield;
     State oldState;
@@ -43,7 +43,8 @@ public class WarriorAnt : MonoBehaviour {
         if (state == State.GOINGTOBEACON)
             return;
         feromones = GameObject.Find("FeromoneHandler").GetComponent<Feromones>();
-        seeker = GetComponent<Seeker>();
+        agentController = GetComponent<AgentController>();
+        agentController.CanWalkThrough = true;
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         health = maxHealth;
     }
@@ -51,7 +52,8 @@ public class WarriorAnt : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(state == State.ATTACKING || state == State.GOINGTOBEACON){
-            if(target == null)
+            agentController.CanWalkThrough = false;
+            if (target == null)
 			    transform.GetChild(0).GetComponent<Collider>().isTrigger = false;
             else if(Vector3.Distance(transform.position, target.transform.position) < 3f)
                 transform.GetChild(0).GetComponent<Collider>().isTrigger = true;
@@ -71,7 +73,7 @@ public class WarriorAnt : MonoBehaviour {
                 } else
                 {
                     state = State.RETURNHOME;
-                    seeker.StartPath(transform.position, hive.transform.position);
+                    agentController.GoToPos(hive.transform.position);
                 }
                 break;
             case State.PATROLING:
@@ -94,12 +96,14 @@ public class WarriorAnt : MonoBehaviour {
                     if (!GetNewTarget())
                     {
                         state = State.RETURNHOME;
-                        seeker.StartPath(transform.position, hive.transform.position);
+                        agentController.GoToPos(hive.transform.position);
                     }
                 } else
                 {
                     if(Vector3.Distance(transform.position, target.transform.position) < attackDistance)
                     {
+                        agentController.Stop();
+                        agentController.AvoidPushing();
                         if(Time.time - timeSinceLastAttack >= 1.0f)
                         {
                             timeSinceLastAttack = Time.time;
@@ -114,7 +118,7 @@ public class WarriorAnt : MonoBehaviour {
                     {
                         if(Vector3.Distance(target.transform.position, targetLastPos) > 1.0f)
                         {
-                            seeker.StartPath(transform.position, target.transform.position);
+                            agentController.GoToPos(target.transform.position);
                             targetLastPos = target.transform.position;
                         }
                         
@@ -136,6 +140,7 @@ public class WarriorAnt : MonoBehaviour {
                     state = oldState;
                 } else
                 {
+                    agentController.AvoidPushing();
                     if (Time.time - timeSinceLastAttack >= 1.0f)
                     {
                         timeSinceLastAttack = Time.time;
@@ -168,7 +173,7 @@ public class WarriorAnt : MonoBehaviour {
         //Debug.Log(protectionTrail + " " + gridX + " " + gridY);
         if(protectionTrail.x != -1000.0f)
         {
-            seeker.StartPath(transform.position, protectionTrail);
+            agentController.GoToPos(protectionTrail);
             return true;
         }
         return false;
@@ -186,7 +191,7 @@ public class WarriorAnt : MonoBehaviour {
                 if(goingOut == true)
                 {
                     state = State.RETURNHOME;
-                    seeker.StartPath(transform.position, hive.transform.position);
+                    agentController.GoToPos(hive.transform.position);
                     AddDefendTrail();
                     return;
                 }
@@ -202,7 +207,7 @@ public class WarriorAnt : MonoBehaviour {
             if (!GetNewTarget())
             {
                 state = State.RETURNHOME;
-                seeker.StartPath(transform.position, hive.transform.position);
+                agentController.GoToPos(hive.transform.position);
             }
         }
         
@@ -270,7 +275,7 @@ public class WarriorAnt : MonoBehaviour {
             }
         }
 
-        seeker.StartPath(transform.position, ranPos);
+        agentController.GoToPos(ranPos);
     }
 
     bool GetNewTarget()
@@ -292,7 +297,7 @@ public class WarriorAnt : MonoBehaviour {
             if(Vector3.Distance(transform.position, closestEnemy.transform.position) < distressDistance)
             {
                 target = closestEnemy;
-                seeker.StartPath(transform.position, target.transform.position);
+                agentController.GoToPos(target.transform.position);
                 return true;
             }
         }
@@ -338,6 +343,7 @@ public class WarriorAnt : MonoBehaviour {
         if (health <= 0f)
         {
             hive.GetComponent<Hive>().KillWarrior();
+            agentController.ReleaseGroundNodes();
             Destroy(this.gameObject);
         }
 

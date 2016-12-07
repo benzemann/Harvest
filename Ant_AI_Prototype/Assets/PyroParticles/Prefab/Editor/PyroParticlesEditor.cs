@@ -39,7 +39,7 @@ namespace DigitalRuby.LightningBolt
                 GUI.DrawTexture(r, logo, ScaleMode.StretchToFill);
                 if (GUI.Button(r, "", new GUIStyle()))
                 {
-                    Application.OpenURL("http://u3d.as/f1c");
+                    Application.OpenURL("https://www.assetstore.unity3d.com/en/#!/content/34217?aid=1011lGnL");
                 }
                 EditorGUILayout.Separator();
             }

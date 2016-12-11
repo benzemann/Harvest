@@ -18,12 +18,16 @@ public class AgentController : MonoBehaviour
     bool isStandingGround = false;
     float timeSinceLastPath;
     bool canWalkThrough = false;
+    float speed;
+    float mass;
+    float maxForce;
+    [SerializeField]
+    float repathRate;
     #endregion
     #region Public
-    public float maxForce;
-    public float maxSpeed;
-    public float speed;
-    public float mass;
+    public float MaxForce { get { return maxForce; } set { maxForce = value; } }
+    public float Speed { get { return speed; } set { speed = value; } }
+    public float Mass { get { return mass; } set { mass = value; } }
     public float pickNextWaypointDistance;
     public Vector3 PushingForce { get; set; }
     public bool IsStandingGround{
@@ -36,6 +40,7 @@ public class AgentController : MonoBehaviour
         set { canWalkThrough = value; }
     }
     public int NoOfPushers { get; set; }
+    public float CurrentSpeed { get { return velocity.magnitude; } }
     #endregion
 
     // Use this for initialization
@@ -43,7 +48,7 @@ public class AgentController : MonoBehaviour
     {
         // Add this to the flocking controller
         FlockingController.Instance.AddAgent(this);
-        
+        maxForce = 1f;
     }
 
     void Awake()
@@ -52,7 +57,6 @@ public class AgentController : MonoBehaviour
         seeker = GetComponent<Seeker>();
         // Add the OnPathComplete method as a callback
         seeker.pathCallback += OnPathComplete;
-
         controller = GetComponent<CharacterController>();
     }
 
@@ -69,8 +73,21 @@ public class AgentController : MonoBehaviour
     public void GoToPos(Vector3 tp)
     {
         targetPos = tp;
-        //Stop();
-        seeker.StartPath(transform.position, targetPos);
+        StartCoroutine(TryToSearchPath());
+    }
+
+    private IEnumerator TryToSearchPath()
+    {
+        while (true)
+        {
+            if (seeker.IsDone())
+            {
+                seeker.StartPath(transform.position, targetPos);
+                yield return null;
+            }
+            yield return new WaitForSeconds(repathRate);
+        }
+          
     }
 
     /// <summary>
@@ -85,10 +102,13 @@ public class AgentController : MonoBehaviour
         PushingForce = Vector3.zero;
 
         Vector3 finalVelocity = velocity * Time.deltaTime * speed;
-        if (finalVelocity.magnitude > maxSpeed)
-            finalVelocity = finalVelocity.normalized * maxSpeed;
-        transform.Translate(finalVelocity, Space.World);
-        if(velocity.magnitude > 0f)
+
+        if(finalVelocity.magnitude > 0f)
+        {
+            transform.Translate(finalVelocity, Space.World);
+        }
+
+        if(velocity != Vector3.zero)
         {
             Quaternion rotation = Quaternion.LookRotation(velocity);
             transform.rotation = rotation;
@@ -164,7 +184,7 @@ public class AgentController : MonoBehaviour
         }
 
         // Calculate steering
-        Vector3 desiredVelocity = Vector3.Normalize(vPath[currentWaypoint] - currentPosition) * maxSpeed;
+        Vector3 desiredVelocity = Vector3.Normalize(vPath[currentWaypoint] - currentPosition) * speed;
         Vector3 steering = desiredVelocity - velocity;
         if (steering.sqrMagnitude > maxForce)
             steering = Vector3.Normalize(steering) * maxForce;
@@ -173,8 +193,6 @@ public class AgentController : MonoBehaviour
         // Calculate velocity
         velocity = velocity + steering;
         velocity += flockingForces;
-        if (velocity.sqrMagnitude > maxSpeed)
-            velocity = Vector3.Normalize(velocity) * maxSpeed;
 
         // Make sure to mark area under the agent as walkable
         if (isStandingGround && velocity != Vector3.zero)

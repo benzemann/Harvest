@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 
 Project("{E8AEF6CE-25DB-277B-031B-0BDAA1D92982}") = "Ant_AI_Prototype", "Assembly-CSharp.csproj", "{838A6296-4041-DC4A-17A5-14181E14F8E5}"
 EndProject
+Project("{E8AEF6CE-25DB-277B-031B-0BDAA1D92982}") = "Ant_AI_Prototype", "Assembly-CSharp-Editor-firstpass.csproj", "{8938D39C-36EA-7CD3-8752-D539BB001521}"
+EndProject
 Project("{E8AEF6CE-25DB-277B-031B-0BDAA1D92982}") = "Ant_AI_Prototype", "Assembly-CSharp-Editor.csproj", "{E4619215-963E-0424-B6F4-FCF69EE9D12C}"
 EndProject
 Global
@@ -15,6 +17,10 @@ Global
 		{838A6296-4041-DC4A-17A5-14181E14F8E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{838A6296-4041-DC4A-17A5-14181E14F8E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{838A6296-4041-DC4A-17A5-14181E14F8E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8938D39C-36EA-7CD3-8752-D539BB001521}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8938D39C-36EA-7CD3-8752-D539BB001521}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8938D39C-36EA-7CD3-8752-D539BB001521}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8938D39C-36EA-7CD3-8752-D539BB001521}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4619215-963E-0424-B6F4-FCF69EE9D12C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4619215-963E-0424-B6F4-FCF69EE9D12C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4619215-963E-0424-B6F4-FCF69EE9D12C}.Release|Any CPU.ActiveCfg = Release|Any CPU

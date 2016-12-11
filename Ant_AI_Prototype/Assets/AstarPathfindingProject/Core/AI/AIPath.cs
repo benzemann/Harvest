@@ -236,7 +236,7 @@ public class AIPath : MonoBehaviour {
 		canSearchAgain = false;
 
 		//Alternative way of requesting the path
-		//ABPath p = ABPath.Construct (GetFeetPosition(),targetPoint,null);
+		//ABPath p = ABPath.Construct (GetFeetPosition(),targetPosition,null);
 		//seeker.StartPath (p);
 
 		//We should search from the current position
@@ -244,22 +244,12 @@ public class AIPath : MonoBehaviour {
 	}
 
 	public virtual void OnTargetReached () {
-        //End of path has been reached
-        //If you want custom logic for when the AI has reached it's destination
-        //add it here
-        //You can also create a new script which inherits from this one
-        //and override the function in that script
-        if (GetComponent<Ant>() != null)
-        {
-            Ant a = GetComponent<Ant>();
-            a.PathComplete();
-        }
-        else if(GetComponent<WarriorAnt>() != null)
-        {
-            WarriorAnt a = GetComponent<WarriorAnt>();
-            a.PathComplete();
-        }
-    }
+		//End of path has been reached
+		//If you want custom logic for when the AI has reached it's destination
+		//add it here
+		//You can also create a new script which inherits from this one
+		//and override the function in that script
+	}
 
 	/** Called when a requested path has finished calculation.
 	 * A path is first requested by #SearchPath, it is then calculated, probably in the same or the next frame.
@@ -316,8 +306,7 @@ public class AIPath : MonoBehaviour {
 				p1 += dir;
 			}
 		}
-
-    }
+	}
 
 	public virtual Vector3 GetFeetPosition () {
 		if (controller != null) {
@@ -391,15 +380,6 @@ public class AIPath : MonoBehaviour {
 				if (dist < pickNextWaypointDist*pickNextWaypointDist) {
 					lastFoundWaypointPosition = currentPosition;
 					lastFoundWaypointTime = Time.time;
-                    if(GetComponent<Ant>() != null)
-                    {
-                        Ant a = GetComponent<Ant>();
-                        a.NextWaypoint();
-                    } else if(GetComponent<WarriorAnt>() != null) {
-                        WarriorAnt a = GetComponent<WarriorAnt>();
-                        a.NextWaypoint();
-                    }
-                    
 					currentWaypointIndex++;
 				} else {
 					break;
@@ -437,42 +417,8 @@ public class AIPath : MonoBehaviour {
 		if (Time.deltaTime > 0) {
 			sp = Mathf.Clamp(sp, 0, targetDist/(Time.deltaTime*2));
 		}
-
-        Vector3 velocity = forward * sp;
-        velocity += GetLocalAvoidance(velocity);
-
-        return velocity;
+		return forward*sp;
 	}
-
-    Vector3 GetLocalAvoidance(Vector3 velocity)
-    {
-
-        RaycastHit hit;
-        
-        if(Physics.Raycast(transform.position, velocity, out hit, 0.25f))
-        {
-            if (hit.transform.gameObject.name == "Hive" || hit.transform.gameObject.name == "FireDamager" || hit.transform.gameObject.tag == "Ressources")
-                return Vector3.zero;
-            Vector3 avoidanceVec = (hit.point) - hit.transform.position;
-            avoidanceVec = avoidanceVec.normalized;
-            if (Vector3.Dot(avoidanceVec.normalized, velocity.normalized) < -0.99f 
-                || Vector3.Dot(avoidanceVec.normalized, velocity.normalized) > 0.99f)
-            {
-                Vector3 v_n = velocity.normalized;
-                //Debug.DrawLine(transform.position, transform.position + new Vector3(-v_n.z,0f,v_n.x).normalized * 2f, Color.yellow);
-                //Debug.DrawLine(transform.position, transform.position + velocity.normalized * 1f, Color.magenta);
-                return new Vector3(-v_n.z, 0f, v_n.x).normalized * 2f;
-            }
-            //Debug.Log("Avoidance: " + avoidanceVec * 2.0f);
-            //Debug.DrawLine(transform.position, transform.position + avoidanceVec * 2f, Color.red);
-            //Debug.DrawLine(transform.position, transform.position + velocity.normalized * 1f, Color.magenta);
-            return avoidanceVec * 2f;
-        }
-
-        
-
-        return Vector3.zero;
-    }
 
 	/** Rotates in the specified direction.
 	 * Rotates around the Y-axis.

@@ -29,7 +29,7 @@ function CheckForUpdates(){
 		const mainProcess = remote.require('./main')
 		var path = require('path');
 		var appDir = path.dirname(require.main.filename);
-		gamePath = appDir + "\\Game";
+		gamePath = appDir;
 		document.getElementById("projectFolder").innerHTML = "Game folder: " + gamePath;
 	}
 	GetVersionFromGit();

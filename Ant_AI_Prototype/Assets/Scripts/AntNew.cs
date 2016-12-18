@@ -10,6 +10,7 @@ public abstract class AntNew : MonoBehaviour {
     protected Animator anim;
     [Header("Stats")]
     [SerializeField]
+    [Tooltip("Maximum health of the ant.")]
     protected float maxHealth;
     protected float health;
     [SerializeField]
@@ -18,10 +19,14 @@ public abstract class AntNew : MonoBehaviour {
     [Tooltip("The mass of the ant. If mass is a high number the ant will turn slowly.")]
     protected float mass;
     [SerializeField]
+    [Tooltip("The radius which the ant will see enemies")]
     protected float lookRadius;
     #endregion
     #region private
-
+    private Hive hive;
+    #endregion
+    #region public 
+    public Hive Hive { get { return hive; } set { hive = value; } }
     #endregion
 
     /// <summary>
@@ -38,6 +43,15 @@ public abstract class AntNew : MonoBehaviour {
         agentController.Mass = mass;
         // Animator
         anim = GetComponent<Animator>();
+    }
+
+    /// <summary>
+    /// Commands the ant to go to a specific position.
+    /// </summary>
+    /// <param name="pos"></param>
+    public void GoToPos(Vector3 pos)
+    {
+        agentController.GoToPos(pos);
     }
 
     /// <summary>
@@ -79,5 +93,22 @@ public abstract class AntNew : MonoBehaviour {
     public void ChangeState(StateID newStateID)
     {
         fsm.ChangeState(newStateID);
+    }
+
+    /// <summary>
+    /// Tells the ant to go to its hive.
+    /// </summary>
+    public void ReturnHome()
+    {
+        if (hive == null) return;
+        agentController.GoToPos(hive.transform.position);
+    }
+
+    /// <summary>
+    /// The ant will enter its own hive.
+    /// </summary>
+    public void EnterHive()
+    {
+
     }
 }

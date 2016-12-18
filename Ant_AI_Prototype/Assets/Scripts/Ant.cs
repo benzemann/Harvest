@@ -3,7 +3,7 @@ using System.Collections;
 using Pathfinding;
 
 public class Ant : MonoBehaviour {
-
+    
     public float ressourcesSearchRadius;
     public float minScoutDistance;
     public float maxScoutDistance;

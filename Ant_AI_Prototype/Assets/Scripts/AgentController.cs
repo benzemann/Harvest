@@ -48,7 +48,7 @@ public class AgentController : MonoBehaviour
     {
         // Add this to the flocking controller
         FlockingController.Instance.AddAgent(this);
-        maxForce = 1f;
+        maxForce = 1f;  
     }
 
     void Awake()
@@ -135,6 +135,21 @@ public class AgentController : MonoBehaviour
         Vector3 currentPosition = this.transform.position;
         currentPosition.y = 0.0f;
 
+        // Check if further ahead nodes are closer, if so increment currentwaypoint
+        while (currentWaypoint < vPath.Count - 2)
+        {
+            float disToCurrent = Vector3.Distance(transform.position, vPath[currentWaypoint]);
+            float disToNext = Vector3.Distance(transform.position, vPath[currentWaypoint + 1]);
+            if (disToNext < disToCurrent)
+            {
+                currentWaypoint++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
         // Check if we need to go to next waypoint
         if (currentWaypoint <= vPath.Count - 1)
         {
@@ -143,18 +158,6 @@ public class AgentController : MonoBehaviour
             if (dis <= pickNextWaypointDistance)
             {
                 currentWaypoint++;
-                // SHOULD BE CHANGED WHEN ANT AND WARRIOR ANT HAS BEEN REIMPLEMENTED. FROM HERE:
-                if (GetComponent<Ant>() != null)
-                {
-                    Ant a = GetComponent<Ant>();
-                    a.NextWaypoint();
-                }
-                else if (GetComponent<WarriorAnt>() != null)
-                {
-                    WarriorAnt a = GetComponent<WarriorAnt>();
-                    a.NextWaypoint();
-                }
-                // TO HERE
                 // Check if path is complete
                 if (currentWaypoint >= vPath.Count)
                 {
@@ -166,20 +169,6 @@ public class AgentController : MonoBehaviour
             {
                 GetComponent<Seeker>().StartPath(transform.position, targetPos);
                 timeSinceLastPath = Time.time;
-            }
-        }
-
-        // Check if further ahead nodes are closer, if so increment currentwaypoint
-        while(currentWaypoint < vPath.Count-2)
-        {
-            float disToCurrent = Vector3.Distance(transform.position, vPath[currentWaypoint]);
-            float disToNext = Vector3.Distance(transform.position, vPath[currentWaypoint + 1]);
-            if(disToNext < disToCurrent)
-            {
-                currentWaypoint++;
-            } else
-            {
-                break;
             }
         }
 
@@ -294,13 +283,6 @@ public class AgentController : MonoBehaviour
         // Release and remove path
         path.Release(this);
         path = null;
-        // THIS SHOULD BE REMOVED WHEN ANT AND WARRIORANT HAS BEEN REIMPLEMENTED!
-        if (this.gameObject.GetComponent<Ant>() != null)
-            this.gameObject.GetComponent<Ant>().PathComplete();
-        else if (this.gameObject.GetComponent<WarriorAnt>() != null)
-        {
-            this.gameObject.GetComponent<WarriorAnt>().PathComplete();
-        }
     }
 
     /// <summary>

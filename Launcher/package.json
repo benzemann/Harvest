@@ -1,6 +1,6 @@
 {
   "name": "Harvest",
-  "version": "1.4.10",
+  "version": "0.0.1",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -9,6 +9,11 @@
   "author": "Bentzen",
   "license": "ISC",
   "dependencies": {
-    "extract-zip": "^1.5.0"
+    "extract-zip": "^1.5.0",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^10.7.0",
+    "electron-prebuilt": "^1.4.12"
   }
 }

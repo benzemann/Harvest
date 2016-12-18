@@ -25,6 +25,9 @@ public class HiveNew : MonoBehaviour {
         public int breedingWeight;
         [Tooltip("The number of free ants of this type.")]
         public int free;
+        // Number of current alive ants of this type
+     //   [HideInInspector]
+        public int alive;
     }
     [SerializeField]
     [Tooltip("A list of the different ant types this hive can spawn")]
@@ -45,7 +48,7 @@ public class HiveNew : MonoBehaviour {
 
     void Update()
     {
-
+        BreedAnts();
     }
 
     /// <summary>
@@ -58,11 +61,54 @@ public class HiveNew : MonoBehaviour {
             // Check if breeding time has finished
             if(Time.time - startBreedingTime >= antTypes[currentBreedingIndx].breedingTime)
             {
-                // Breed the currentAnt type
+                // Breed the current ant type
+                isBreeding = false;
+                antTypes[currentBreedingIndx].alive++;
+                return;
+            }
+            
+        } else
+        {
+            // Find a free anttype if any
+            var freeAntType = antTypes.Where(ant => ant.alive < ant.free && ant.alive < ant.max).OrderBy(ant => ant.breedingWeight).Select(ant => ant.antType).ToArray();
+            if (freeAntType.Any())
+            {
+                // Breed a free ant with the highest weight
+                for (int i = 0; i < antTypes.Count(); i++)
+                {
+                    if (freeAntType[0] == antTypes[i].antType)
+                    {
+                        // start breeding 
+                        currentBreedingIndx = i;
+                        startBreedingTime = Time.time;
+                        isBreeding = true;
+                        return;
+                    }
+                }
+            }
+            // Get the total number of alive ants of all types
+            var numberOfAnts = 0;
+            foreach (var antType in antTypes)
+                numberOfAnts += antType.alive;
+            // Get a sorted list based on weight to target weight
+            var nextAnt = antTypes.Where(ant => ant.alive < ant.max).OrderBy(ant => (ant.breedingWeight / numberOfAnts) - (ant.alive / numberOfAnts)).ToArray();
+            if (nextAnt.Any())
+            {
+                if (nextAnt.First().costs <= resources)
+                {
+                    for (int i = 0; i < antTypes.Count(); i++)
+                    {
+                        if (nextAnt.First().antType == antTypes[i].antType)
+                        {
+                            currentBreedingIndx = i;
+                            startBreedingTime = Time.time;
+                            isBreeding = true;
+                            resources -= nextAnt.First().costs;
+                            return;
+                        }
+                    }
+                }
             }
         }
-        // Find a 
-        var sortedAntTypes = antTypes.OrderBy(ant => ant.breedingWeight).ToArray();
-        
     }
 }

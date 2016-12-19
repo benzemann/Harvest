@@ -212,6 +212,7 @@
     <Compile Include="Assets\Scripts\DropMe.cs" />
     <Compile Include="Assets\Scripts\FPSCounter.cs" />
     <Compile Include="Assets\Scripts\FSM.cs" />
+    <Compile Include="Assets\Scripts\FeromonHandler.cs" />
     <Compile Include="Assets\Scripts\Feromones.cs" />
     <Compile Include="Assets\Scripts\FireCollision.cs" />
     <Compile Include="Assets\Scripts\FlockingController.cs" />

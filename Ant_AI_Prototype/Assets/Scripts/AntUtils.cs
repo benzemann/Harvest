@@ -17,7 +17,7 @@ public class AntUtils : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        /*
+
         if (Input.GetKeyDown("z"))
         {
             RaycastHit hit;
@@ -72,6 +72,6 @@ public class AntUtils : MonoBehaviour {
                 }
             }
         }
-        */
+
     }
 }

@@ -184,7 +184,7 @@ public class Hive : MonoBehaviour {
     void SpawnWorker()
     {
         GameObject antGO = Instantiate(ant, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
-        //antGO.GetComponent<Ant>().SetHive(this.gameObject);
+        antGO.GetComponent<Ant>().SetHive(this.gameObject);
         activeWorkerAnts.Add(antGO);
     }
 

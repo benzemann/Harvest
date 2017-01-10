@@ -3,7 +3,7 @@ using System.Collections;
 using Pathfinding;
 
 public class Ant : MonoBehaviour {
-    
+
     public float ressourcesSearchRadius;
     public float minScoutDistance;
     public float maxScoutDistance;
@@ -20,7 +20,7 @@ public class Ant : MonoBehaviour {
 
     Feromones feromones;
     GameObject target;
-    AgentController agentController;
+    Seeker seeker;
     GameObject hive;
 
     int lastX;
@@ -43,8 +43,7 @@ public class Ant : MonoBehaviour {
     // Use this for initialization
     void Start () {
         feromones = GameObject.Find("FeromoneHandler").GetComponent<Feromones>();
-        agentController = GetComponent<AgentController>();
-        agentController.CanWalkThrough = true;
+        seeker = GetComponent<Seeker>();
         state = State.IDLE;
         health = maxHealth;
     }
@@ -115,7 +114,7 @@ public class Ant : MonoBehaviour {
                 {
                     feromones.GetCurrentGridCoords(transform.position, out lastX, out lastY);
                     state = State.RETURNHOME;
-                    agentController.GoToPos(hive.transform.position);
+                    seeker.StartPath(transform.position, hive.transform.position);
                     if (target != null)
                     {
                         if(target.transform.GetChild(0).gameObject.GetComponent<Ressource>().Harvest(harvestAmount))
@@ -145,7 +144,7 @@ public class Ant : MonoBehaviour {
     public void GoHome()
     {
         state = State.RETURNHOME;
-        agentController.GoToPos(hive.transform.position);
+        seeker.StartPath(transform.position, hive.transform.position);
     }
 
     public void PathComplete()
@@ -154,7 +153,7 @@ public class Ant : MonoBehaviour {
         feromones.GetCurrentGridCoords(transform.position, out gridX, out gridY);
         if (state == State.SCOUT)
         {
-            agentController.GoToPos(GetRandomNearLocation());
+            seeker.StartPath(transform.position, GetRandomNearLocation());
             if(Time.time - startScoutTime > minScoutTime)
             {
                 state = State.WORKER;
@@ -165,7 +164,7 @@ public class Ant : MonoBehaviour {
             //Debug.Log(SmellForFeromoneTrail());
             if (!SmellForFeromoneTrail())
             {
-                agentController.GoToPos(GetRandomNearLocation());
+                seeker.StartPath(transform.position, GetRandomNearLocation());
                 state = State.SCOUT;
                 startScoutTime = Time.time;
             }
@@ -173,7 +172,7 @@ public class Ant : MonoBehaviour {
             if(timeSinceLastTrail > maxScoutTime)
             {
                 state = State.RETURNHOME;
-                agentController.GoToPos(hive.transform.position);
+                seeker.StartPath(transform.position, hive.transform.position);
             }
 
         }
@@ -252,7 +251,7 @@ public class Ant : MonoBehaviour {
             {
                 state = State.GOTORESSOURCE;
                 target = res;
-                agentController.GoToPos(target.transform.position);
+                seeker.StartPath(transform.position, target.transform.position);
                 return true;
             }
         }
@@ -265,7 +264,7 @@ public class Ant : MonoBehaviour {
         if(feromoneTrail.x != -1000.0f)
         {
             //Debug.Log(feromoneTrail + " " + transform.position);
-            agentController.GoToPos(feromoneTrail);
+            seeker.StartPath(transform.position, feromoneTrail);
             timeSinceLastTrail = 0.0f;
             return true;
         }
@@ -292,7 +291,7 @@ public class Ant : MonoBehaviour {
                 hive.GetComponent<Hive>().PutDownDistressBeacon(enemy.transform.position);
                 fleeing = true;
                 state = State.RETURNHOME;
-                agentController.GoToPos(hive.transform.position);
+                seeker.StartPath(transform.position, hive.transform.position);
                 return true;
             }
         }
@@ -302,7 +301,7 @@ public class Ant : MonoBehaviour {
             {
                 fleeing = true;
                 state = State.RETURNHOME;
-                agentController.GoToPos(hive.transform.position);
+                seeker.StartPath(transform.position, hive.transform.position);
                 return true;
             }
         }

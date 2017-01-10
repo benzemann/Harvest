@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ant_AI_Prototype", "Ant_AI_Prototype.csproj", "{1093A008-6F5E-A154-A80C-69DD651C4D3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ant_AI_Prototype.Editor.Plugins", "Ant_AI_Prototype.Editor.Plugins.csproj", "{F51E6228-BDB6-EDBE-E60B-6C44F0FD902F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ant_AI_Prototype.Editor", "Ant_AI_Prototype.Editor.csproj", "{B4CF43D2-1D6C-0218-27C9-912B04A964BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1093A008-6F5E-A154-A80C-69DD651C4D3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1093A008-6F5E-A154-A80C-69DD651C4D3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1093A008-6F5E-A154-A80C-69DD651C4D3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1093A008-6F5E-A154-A80C-69DD651C4D3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51E6228-BDB6-EDBE-E60B-6C44F0FD902F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51E6228-BDB6-EDBE-E60B-6C44F0FD902F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51E6228-BDB6-EDBE-E60B-6C44F0FD902F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51E6228-BDB6-EDBE-E60B-6C44F0FD902F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4CF43D2-1D6C-0218-27C9-912B04A964BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4CF43D2-1D6C-0218-27C9-912B04A964BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4CF43D2-1D6C-0218-27C9-912B04A964BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4CF43D2-1D6C-0218-27C9-912B04A964BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

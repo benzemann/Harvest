@@ -53,63 +53,63 @@
      <Compile Include="Assets\Standard Assets\Effects\Common\Editor\FieldFinder.cs" />
      <Compile Include="Assets\Standard Assets\Effects\Common\Editor\MinDrawer.cs" />
      <Compile Include="Assets\Standard Assets\Effects\LensAberrations\Editor\LensAberrationsEditor.cs" />
-     <None Include="Assets\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonBasic.shader" />
+     <None Include="Assets\3rd party models and debris\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonBasic.shader" />
      <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh.shader" />
-     <None Include="Assets\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
-     <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAlphaBlended.shader" />
+     <None Include="Assets\Effects\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
+     <None Include="Assets\Effects\VolumetricLines\Shaders\VolumetricLineShaderAlphaBlended.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\DotNetZip\DotNetZipLicense.txt" />
-     <None Include="Assets\LightningBolt\Readme.txt" />
-     <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Simple.shader" />
+     <None Include="Assets\Effects\LightningBolt\Readme.txt" />
+     <None Include="Assets\Textures\Lava_Flowing_Shader\Shaders\Unlit_Lava_Simple.shader" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\Projector Multiply.shader" />
-     <None Include="Assets\Lava_Flowing_Shader\Shaders\Diffuse_Lava_Distort.shader" />
-     <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAdditive.shader" />
-     <None Include="Assets\BasicBeamShot\sh\Add_UVScroll_sh.shader" />
-     <None Include="Assets\PyroParticles\Prefab\Materials\AdditiveTintable.shader" />
+     <None Include="Assets\Textures\Lava_Flowing_Shader\Shaders\Diffuse_Lava_Distort.shader" />
+     <None Include="Assets\Effects\VolumetricLines\Shaders\VolumetricLineShaderAdditive.shader" />
+     <None Include="Assets\Effects\BasicBeamShot\sh\Add_UVScroll_sh.shader" />
+     <None Include="Assets\Effects\PyroParticles\Prefab\Materials\AdditiveTintable.shader" />
      <None Include="Assets\Fonts\Jupiter\LICENSE.txt" />
-     <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort.shader" />
-     <None Include="Assets\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort_Transparent.shader" />
+     <None Include="Assets\Textures\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort.shader" />
+     <None Include="Assets\Textures\Lava_Flowing_Shader\Shaders\Unlit_Lava_Distort_Transparent.shader" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\DiffuseAlwaysVisible.shader" />
-     <None Include="Assets\Particlecollection_Free samples\Plugins\Effect\Shader\effect_distortion_mask.shader" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\Plugins\Effect\Shader\effect_distortion_mask.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\dependencies.txt" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\_Example Scenes.txt" />
-     <None Include="Assets\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
-     <None Include="Assets\Textures and Sprites\SF UI\Background\LICENSE.txt" />
-     <None Include="Assets\Missile Systems\instructions.txt" />
+     <None Include="Assets\3rd party models and debris\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
+     <None Include="Assets\Textures\Textures and Sprites\SF UI\Background\LICENSE.txt" />
+     <None Include="Assets\Effects\Missile Systems\instructions.txt" />
      <None Include="Assets\Standard Assets\Effects\Bloom\Resources\Bloom.shader" />
-     <None Include="Assets\Particlecollection_Free samples\Plugins\Effect\Shader\ParticleAddSoftEffect.shader" />
-     <None Include="Assets\BasicBeamShot\sh\Sprite_Add_sh.shader" />
-     <None Include="Assets\BasicBeamShot\sh\GeroBeam_sh.shader" />
-     <None Include="Assets\BasicBeamShot\sh\BeamLine_sh.shader" />
-     <None Include="Assets\Lava_Flowing_Shader\ReadMe.txt" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\Plugins\Effect\Shader\ParticleAddSoftEffect.shader" />
+     <None Include="Assets\Effects\BasicBeamShot\sh\Sprite_Add_sh.shader" />
+     <None Include="Assets\Effects\BasicBeamShot\sh\GeroBeam_sh.shader" />
+     <None Include="Assets\Effects\BasicBeamShot\sh\BeamLine_sh.shader" />
+     <None Include="Assets\Textures\Lava_Flowing_Shader\ReadMe.txt" />
      <None Include="Assets\AstarPathfindingProject\Readme_upgrading.txt" />
-     <None Include="Assets\PyroParticles\Readme.txt" />
-     <None Include="Assets\Elemental Free\Readme.txt" />
-     <None Include="Assets\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
-     <None Include="Assets\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
-     <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAdditiveFast.shader" />
+     <None Include="Assets\Effects\PyroParticles\Readme.txt" />
+     <None Include="Assets\Effects\Elemental Free\Readme.txt" />
+     <None Include="Assets\3rd party models and debris\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
+     <None Include="Assets\3rd party models and debris\Sci-Fi Crate\Demo\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
+     <None Include="Assets\Effects\VolumetricLines\Shaders\VolumetricLineShaderAdditiveFast.shader" />
      <None Include="Assets\AstarPathfindingProject\ExampleScenes\Materials\Projector Light.shader" />
-     <None Include="Assets\Particlecollection_Free samples\Plugins\Effect\Shader\ParticlePremultiplyBlend.shader" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\Plugins\Effect\Shader\ParticlePremultiplyBlend.shader" />
      <None Include="Assets\Materials\UI-Default-No-Alpha.shader" />
-     <None Include="Assets\Particlecollection_Free samples\READ ME.txt" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\READ ME.txt" />
      <None Include="Assets\AstarPathfindingProject\Readme.txt" />
-     <None Include="Assets\GUI Animator\GUI Animator FREE\Readme.txt" />
-     <None Include="Assets\WarZone\Vehicles\Car\CarGuidelines.txt" />
-     <None Include="Assets\VolumetricLines\Shaders\VolumetricLineStripShaderAdditive.shader" />
+     <None Include="Assets\Effects\GUI Animator\GUI Animator FREE\Readme.txt" />
+     <None Include="Assets\3rd party models and debris\WarZone\Vehicles\Car\CarGuidelines.txt" />
+     <None Include="Assets\Effects\VolumetricLines\Shaders\VolumetricLineStripShaderAdditive.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\JsonFx\JsonFxLicense.txt" />
      <None Include="Assets\Standard Assets\Effects\Bloom\Resources\Bloom.cginc" />
-     <None Include="Assets\VolumetricLines\Shaders\VolumetricLineStripShaderAlphaBlended.shader" />
+     <None Include="Assets\Effects\VolumetricLines\Shaders\VolumetricLineStripShaderAlphaBlended.shader" />
      <None Include="Assets\AstarPathfindingProject\Plugins\JsonFx\Readme.txt" />
-     <None Include="Assets\Particlecollection_Free samples\Plugins\Effect\Shader\ParticleAddEffect.shader" />
-     <None Include="Assets\Detonator Explosion Framework\Resources\Detonator\Textures\HeatDistort.shader" />
-     <None Include="Assets\GE Common Assets\Readme.txt" />
-     <None Include="Assets\VolumetricLines\Shaders\VolumetricLineShaderAlphaBlendedFast.shader" />
-     <None Include="Assets\GUI Animator\GUI Animator FREE\!How to.txt" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\Plugins\Effect\Shader\ParticleAddEffect.shader" />
+     <None Include="Assets\Effects\Detonator Explosion Framework\Resources\Detonator\Textures\HeatDistort.shader" />
+     <None Include="Assets\Effects\GE Common Assets\Readme.txt" />
+     <None Include="Assets\Effects\VolumetricLines\Shaders\VolumetricLineShaderAlphaBlendedFast.shader" />
+     <None Include="Assets\Effects\GUI Animator\GUI Animator FREE\!How to.txt" />
      <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\NavmeshOutline.shader" />
-     <None Include="Assets\BasicBeamShot\sh\AddColor_sh.shader" />
-     <None Include="Assets\Particlecollection_Free samples\Particlecollection Readme.txt" />
+     <None Include="Assets\Effects\BasicBeamShot\sh\AddColor_sh.shader" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\Particlecollection Readme.txt" />
      <None Include="Assets\Standard Assets\Effects\LensAberrations\Resources\LensAberrations.shader" />
      <None Include="Assets\AstarPathfindingProject\link.xml" />
-     <None Include="Assets\Particlecollection_Free samples\Plugins\Effect\Shader\ParticleBlendEffect.shader" />
+     <None Include="Assets\Effects\Particlecollection_Free samples\Plugins\Effect\Shader\ParticleBlendEffect.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -180,11 +180,15 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/macstandalonesupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
  <Reference Include="GETween">
- <HintPath>/Users/SimonBentzen/Harvest Source Tree/Ant_AI_Prototype/Assets/GUI Animator/Common/Plugins/GETween.dll</HintPath>
+ <HintPath>/Users/SimonBentzen/Harvest Source Tree/Ant_AI_Prototype/Assets/Effects/GUI Animator/Common/Plugins/GETween.dll</HintPath>
  </Reference>
  <Reference Include="GUIAnimatorFREE">
- <HintPath>/Users/SimonBentzen/Harvest Source Tree/Ant_AI_Prototype/Assets/GUI Animator/GUI Animator FREE/Plugins/GUIAnimatorFREE.dll</HintPath>
+ <HintPath>/Users/SimonBentzen/Harvest Source Tree/Ant_AI_Prototype/Assets/Effects/GUI Animator/GUI Animator FREE/Plugins/GUIAnimatorFREE.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{49797429-035F-705C-EC32-1E41A370ED27}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

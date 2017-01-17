@@ -164,6 +164,7 @@
     <Compile Include="Assets\Scripts\Bar.cs" />
     <Compile Include="Assets\Scripts\CameraRTS.cs" />
     <Compile Include="Assets\Scripts\Managers\AgentManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameDataManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectableManager.cs" />
     <Compile Include="Assets\Scripts\MoveCommander.cs" />
     <Compile Include="Assets\Scripts\Selectable.cs" />

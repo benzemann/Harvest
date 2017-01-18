@@ -49,7 +49,7 @@ public class Bar : MonoBehaviour {
             } else
             {
                 slider.gameObject.SetActive(true);
-                slider.sizeDelta = new Vector2((_value * maxWidth), slider.sizeDelta.y);
+                slider.sizeDelta = new Vector2((_value * GetComponent<RectTransform>().rect.width), slider.sizeDelta.y);
             }
         }
 	}

@@ -31,7 +31,7 @@ public class CameraRTS : MonoBehaviour {
         {
             translation -= Vector3.up * ZoomSpeed * zoomDelta;
         }
-
+        
         // Start panning camera if zooming in close to the ground or if just zooming out.
         var pan = camera.transform.eulerAngles.x - zoomDelta * PanSpeed;
         pan = Mathf.Clamp(pan, PanAngleMin, PanAngleMax);
@@ -39,7 +39,7 @@ public class CameraRTS : MonoBehaviour {
         {
             camera.transform.eulerAngles = new Vector3(pan, 0, 0);
         }
-
+        
         // Move camera with arrow keys
         translation += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 

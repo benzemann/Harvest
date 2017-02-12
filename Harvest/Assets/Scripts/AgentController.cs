@@ -22,6 +22,13 @@ public class AgentController : MonoBehaviour
     float repathRate;
     [SerializeField, Tooltip("The distance the agent will pick a new waypoint.")]
     float pickNextWaypointDistance;
+    [Header("Push force variables")]
+    [SerializeField, Tooltip("Whether this agent is pushed by other agents")]
+    bool applyPushingForce;
+    [SerializeField, Tooltip("The radius of influence of the pushing force")]
+    float pushRadius;
+    [SerializeField, Tooltip("How much the agent is pushed")]
+    float pushWeight;
     #endregion
     #region Private
     Path path;
@@ -35,7 +42,7 @@ public class AgentController : MonoBehaviour
     float timeSinceLastPath;
     bool canWalkThrough = false;
     #endregion
-    #region Public
+    #region Properties
     public float MaxForce { get { return maxForce; } set { maxForce = value; } }
     public float Speed { get { return speed; } set { speed = value; } }
     public float Mass { get { return mass; } set { mass = value; } }
@@ -52,6 +59,15 @@ public class AgentController : MonoBehaviour
     }
     public int NoOfPushers { get; set; }
     public float CurrentSpeed { get { return velocity.magnitude; } }
+    public bool IsWalking {
+        get {
+            if (path != null)
+                return true;
+            return false;
+        }
+    }
+    public float PushRadius { get { return pushRadius; } }
+    public bool ApplyPushingForces { get { return applyPushingForce; } }
     #endregion
 
     // Use this for initialization
@@ -84,6 +100,15 @@ public class AgentController : MonoBehaviour
         targetPos = tp;
         //seeker.StartPath(transform.position, targetPos);
         StartCoroutine(TryToSearchPath());
+    }
+
+    /// <summary>
+    /// Check if the agentcontroller is searching for a path.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsSearchingForPath()
+    {
+        return !seeker.IsDone();
     }
 
     private IEnumerator TryToSearchPath()
@@ -119,6 +144,9 @@ public class AgentController : MonoBehaviour
 
         Vector3 finalVelocity = transform.forward * velocity.magnitude * Time.deltaTime * speed;
 
+        if (finalVelocity.magnitude > speed)
+            finalVelocity = finalVelocity.normalized * speed;
+
         if (finalVelocity.magnitude > 0f)
         {
             transform.Translate(finalVelocity, Space.World);
@@ -134,7 +162,7 @@ public class AgentController : MonoBehaviour
         // Ensures that there is a path
         if (path == null || path.vectorPath == null || path.vectorPath.Count == 0)
         {
-            velocity = this.transform.forward;
+            velocity = Vector3.zero;
             return;
         }
 
@@ -146,7 +174,7 @@ public class AgentController : MonoBehaviour
         //currentPosition.y = 0.0f;
 
         // Check if further ahead nodes are closer, if so increment currentwaypoint
-        while (currentWaypoint < vPath.Count - 2)
+        /*while (currentWaypoint < vPath.Count - 2)
         {
             float disToCurrent = Vector3.Distance(transform.position, vPath[currentWaypoint]);
             float disToNext = Vector3.Distance(transform.position, vPath[currentWaypoint + 1]);
@@ -158,12 +186,12 @@ public class AgentController : MonoBehaviour
             {
                 break;
             }
-        }
+        }*/
 
         // Check if we need to go to next waypoint
         if (currentWaypoint <= vPath.Count - 1)
         {
-            var dis = Vector3.Distance(currentPosition, vPath[currentWaypoint]);
+            var dis = XZDistance(currentPosition, vPath[currentWaypoint]);
             // Check if agent is close enough to waypoint
             if (dis <= pickNextWaypointDistance)
             {
@@ -175,11 +203,11 @@ public class AgentController : MonoBehaviour
                     return;
                 }
             }
-            else if (dis > 2f && Time.time - timeSinceLastPath >= 1f && GetComponent<Seeker>().IsDone())
+            /*else if (dis > 2f && Time.time - timeSinceLastPath >= 1f && GetComponent<Seeker>().IsDone())
             {
                 GetComponent<Seeker>().StartPath(transform.position, targetPos);
                 timeSinceLastPath = Time.time;
-            }
+            }*/
         }
 
         // Calculate steering
@@ -197,7 +225,7 @@ public class AgentController : MonoBehaviour
         // Make sure to mark area under the agent as walkable
         if (isStandingGround && velocity != Vector3.zero)
         {
-            ReleaseGroundNodes();
+            //ReleaseGroundNodes();
         }
     }
 
@@ -208,10 +236,13 @@ public class AgentController : MonoBehaviour
     {
         isStandingGround = false;
         Bounds bounds = GetComponent<Collider>().bounds;
+        
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
-        //guo.modifyWalkability = true;
-        //guo.setWalkability = true;
+        guo.resetPenaltyOnPhysics = false;
+        //AstarPath.RegisterSafeUpdate(() => {
         AstarPath.active.UpdateGraphs(guo);
+        //});
+        
     }
 
     /// <summary>
@@ -255,7 +286,7 @@ public class AgentController : MonoBehaviour
         foreach (AgentController agent in neighborAgents)
         {
             float d = Vector3.Distance(agent.transform.position, this.transform.position);
-            if (d < 1f && agent != this)
+            if (d < pushRadius && agent != this)
             {
                 if (!agent.IsStandingGround && !agent.CanWalkThrough)
                 {
@@ -263,23 +294,71 @@ public class AgentController : MonoBehaviour
                     pushForce = pushForce.normalized;
                     pushForce *= (1f - d);
                     pushForce = new Vector3(pushForce.x, 0f, pushForce.z);
-                    agent.PushingForce += pushForce;
-                    agent.NoOfPushers++;
+                    //agent.PushingForce += pushForce;
+                    //agent.NoOfPushers++;
                 }
-                else if (!isStandingGround && !canWalkThrough)
+                if (!isStandingGround)
                 {
                     Vector3 pushForce = this.transform.position - agent.transform.position;
                     pushForce = pushForce.normalized;
-                    pushForce *= (1f - d);
+                    pushForce *= (pushRadius - d);
                     pushForce = new Vector3(pushForce.x, 0f, pushForce.z);
-                    PushingForce += pushForce;
+                    PushingForce += pushForce * Time.deltaTime * 10f;
                     NoOfPushers++;
-                    if (Time.time - timeSinceLastPath >= 0.25f && GetComponent<Seeker>().IsDone())
+                    if (Time.time - timeSinceLastPath >= repathRate && GetComponent<Seeker>().IsDone())
                     {
-                        timeSinceLastPath = Time.time;
-                        GetComponent<Seeker>().StartPath(transform.position, targetPos);
+
+                        if (agent.IsStandingGround)
+                        {
+                            timeSinceLastPath = Time.time;
+                            GetComponent<Seeker>().StartPath(transform.position, targetPos);
+
+                        } else if(d < pushRadius * 0.75f)
+                        {
+                            timeSinceLastPath = Time.time;
+                            GetComponent<Seeker>().StartPath(transform.position, targetPos);
+                        }
                     }
                     //GetComponent<Seeker>().StartPath(transform.position, -transform.forward * 2f);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Calculate push forcing based on close agents
+    /// </summary>
+    /// <param name="neighborAgents">A list of close neighborhood agents</param>
+    public void CalculatePushForces(List<AgentController> neighborAgents)
+    {
+        foreach (AgentController agent in neighborAgents)
+        {
+            if (agent != this)
+            {
+                var d = Vector3.Distance(this.transform.position, agent.transform.position);
+                if (!isStandingGround)
+                {
+                    Vector3 pushForce = this.transform.position - agent.transform.position;
+                    pushForce = pushForce.normalized;
+                    pushForce *= (pushRadius - d);
+                    pushForce = new Vector3(pushForce.x, 0f, pushForce.z);
+                    PushingForce += pushForce * Time.deltaTime * pushWeight;
+                    NoOfPushers++;
+                    if (Time.time - timeSinceLastPath >= repathRate && GetComponent<Seeker>().IsDone())
+                    {
+
+                        if (agent.IsStandingGround)
+                        {
+                            timeSinceLastPath = Time.time;
+                            GetComponent<Seeker>().StartPath(transform.position, targetPos);
+
+                        }
+                        else if (d < pushRadius * 0.75f)
+                        {
+                            timeSinceLastPath = Time.time;
+                            GetComponent<Seeker>().StartPath(transform.position, targetPos);
+                        }
+                    }
                 }
             }
         }
@@ -320,7 +399,10 @@ public class AgentController : MonoBehaviour
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
         guo.modifyWalkability = true;
         guo.setWalkability = false;
-        AstarPath.active.UpdateGraphs(guo);
+        guo.resetPenaltyOnPhysics = false;
+        //AstarPath.RegisterSafeUpdate(() => {
+            AstarPath.active.UpdateGraphs(guo);
+        //});
     }
 
     /// <summary>
@@ -370,6 +452,11 @@ public class AgentController : MonoBehaviour
         float dz = b.z - a.z;
 
         return dx * dx + dz * dz;
+    }
+
+    private void OnDestroy()
+    {
+        AgentManager.Instance.RemoveAgent(this);
     }
 
 }

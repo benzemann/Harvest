@@ -1,0 +1,318 @@
+fileFormatVersion: 2
+guid: 8ba0a549d29bf53469438eaf0724847a
+timeCreated: 1486810014
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Ant
+    100002: Armature
+    100004: Back
+    100006: Back_end
+    100008: BackFoot.L
+    100010: BackFoot.L_end
+    100012: BackFoot.R
+    100014: BackFoot.R_end
+    100016: BackUnderLeg.L
+    100018: BackUnderLeg.R
+    100020: Camera
+    100022: Center
+    100024: CenterFoot.L
+    100026: CenterFoot.L_end
+    100028: CenterFoot.R
+    100030: CenterFoot.R_end
+    100032: CenterUnderLeg.L
+    100034: CenterUnderLeg.R
+    100036: FrontFoot.L
+    100038: FrontFoot.L_end
+    100040: FrontFoot.R
+    100042: FrontFoot.R_end
+    100044: FrontMiddleLeg.L
+    100046: FrontMiddleLeg.R
+    100048: FrontUnderLeg.L
+    100050: FrontUnderLeg.R
+    100052: neck
+    100054: neck_end
+    100056: Torso
+    100058: //RootNode
+    400000: Ant
+    400002: Armature
+    400004: Back
+    400006: Back_end
+    400008: BackFoot.L
+    400010: BackFoot.L_end
+    400012: BackFoot.R
+    400014: BackFoot.R_end
+    400016: BackUnderLeg.L
+    400018: BackUnderLeg.R
+    400020: Camera
+    400022: Center
+    400024: CenterFoot.L
+    400026: CenterFoot.L_end
+    400028: CenterFoot.R
+    400030: CenterFoot.R_end
+    400032: CenterUnderLeg.L
+    400034: CenterUnderLeg.R
+    400036: FrontFoot.L
+    400038: FrontFoot.L_end
+    400040: FrontFoot.R
+    400042: FrontFoot.R_end
+    400044: FrontMiddleLeg.L
+    400046: FrontMiddleLeg.R
+    400048: FrontUnderLeg.L
+    400050: FrontUnderLeg.R
+    400052: neck
+    400054: neck_end
+    400056: Torso
+    400058: //RootNode
+    4300000: Ant
+    7400000: Armature|Idle
+    7400002: Armature|tes
+    7400004: Armature|Walk
+    7400006: Armature|Walk.001
+    9500000: //RootNode
+    13700000: Ant
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armature|Idle
+      takeName: Armature|Idle
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Ant
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Center
+        weight: 1
+      - path: Armature/Center/Back
+        weight: 1
+      - path: Armature/Center/Back/Back_end
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.L
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.L/BackFoot.L
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.L/BackFoot.L/BackFoot.L_end
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.R
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.R/BackFoot.R
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.R/BackFoot.R/BackFoot.R_end
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.L
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.L/CenterFoot.L
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.L/CenterFoot.L/CenterFoot.L_end
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.R
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.R/CenterFoot.R
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.R/CenterFoot.R/CenterFoot.R_end
+        weight: 1
+      - path: Armature/Center/Torso
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L/FrontMiddleLeg.L
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L/FrontMiddleLeg.L/FrontFoot.L
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L/FrontMiddleLeg.L/FrontFoot.L/FrontFoot.L_end
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R/FrontMiddleLeg.R
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R/FrontMiddleLeg.R/FrontFoot.R
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R/FrontMiddleLeg.R/FrontFoot.R/FrontFoot.R_end
+        weight: 1
+      - path: Armature/Center/Torso/neck
+        weight: 1
+      - path: Armature/Center/Torso/neck/neck_end
+        weight: 1
+      - path: Camera
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Walk
+      takeName: Armature|Walk
+      firstFrame: 0
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Ant
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/Center
+        weight: 1
+      - path: Armature/Center/Back
+        weight: 1
+      - path: Armature/Center/Back/Back_end
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.L
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.L/BackFoot.L
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.L/BackFoot.L/BackFoot.L_end
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.R
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.R/BackFoot.R
+        weight: 1
+      - path: Armature/Center/BackUnderLeg.R/BackFoot.R/BackFoot.R_end
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.L
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.L/CenterFoot.L
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.L/CenterFoot.L/CenterFoot.L_end
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.R
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.R/CenterFoot.R
+        weight: 1
+      - path: Armature/Center/CenterUnderLeg.R/CenterFoot.R/CenterFoot.R_end
+        weight: 1
+      - path: Armature/Center/Torso
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L/FrontMiddleLeg.L
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L/FrontMiddleLeg.L/FrontFoot.L
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.L/FrontMiddleLeg.L/FrontFoot.L/FrontFoot.L_end
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R/FrontMiddleLeg.R
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R/FrontMiddleLeg.R/FrontFoot.R
+        weight: 1
+      - path: Armature/Center/Torso/FrontUnderLeg.R/FrontMiddleLeg.R/FrontFoot.R/FrontFoot.R_end
+        weight: 1
+      - path: Armature/Center/Torso/neck
+        weight: 1
+      - path: Armature/Center/Torso/neck/neck_end
+        weight: 1
+      - path: Camera
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.15
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

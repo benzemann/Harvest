@@ -162,12 +162,27 @@
     <Compile Include="Assets\Scripts\AgentController.cs" />
     <Compile Include="Assets\Scripts\AlignToGround.cs" />
     <Compile Include="Assets\Scripts\Bar.cs" />
-    <Compile Include="Assets\Scripts\CameraRTS.cs" />
+    <Compile Include="Assets\Scripts\CameraControls.cs" />
+    <Compile Include="Assets\Scripts\Deactivater.cs" />
+    <Compile Include="Assets\Scripts\Destructable.cs" />
+    <Compile Include="Assets\Scripts\FPSCounter.cs" />
+    <Compile Include="Assets\Scripts\FSM.cs" />
+    <Compile Include="Assets\Scripts\Health.cs" />
     <Compile Include="Assets\Scripts\Managers\AgentManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameDataManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ObjectManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectableManager.cs" />
+    <Compile Include="Assets\Scripts\MeleeDamager.cs" />
     <Compile Include="Assets\Scripts\MoveCommander.cs" />
+    <Compile Include="Assets\Scripts\ObjectPool.cs" />
+    <Compile Include="Assets\Scripts\PlayerObject.cs" />
     <Compile Include="Assets\Scripts\Selectable.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
+    <Compile Include="Assets\Scripts\State.cs" />
+    <Compile Include="Assets\Scripts\TargetFinder.cs" />
+    <Compile Include="Assets\Scripts\UIFollower.cs" />
+    <Compile Include="Assets\Scripts\WarriorAntAI.cs" />
+    <Compile Include="Assets\Scripts\WarriorAntStates.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\3rd Party\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh.shader" />
@@ -181,6 +196,7 @@
     <None Include="Assets\3rd Party\AstarPathfindingProject\Readme.txt" />
     <None Include="Assets\3rd Party\AstarPathfindingProject\Readme_upgrading.txt" />
     <None Include="Assets\3rd Party\AstarPathfindingProject\link.xml" />
+    <None Include="Assets\Scripts\Shaders\ProjectorShader.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

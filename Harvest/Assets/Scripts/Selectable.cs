@@ -11,6 +11,8 @@ public class Selectable : MonoBehaviour {
     private GameObject selectionPlanePrefab;
     [SerializeField, Tooltip("The selection plane will be instatiated at local (0,0,0) + this offset")]
     private Vector3 offset;
+    [SerializeField, Tooltip("Rotation of the selectionplane")]
+    private Vector3 selectionPlaneRotation;
     [SerializeField, Tooltip("The size of the selection plane is calculated based on the size of the model + this scale")]
     private Vector3 scaling;
     [SerializeField, Tooltip("Defines whether the selection plane should be a square or allowed to be rectangular")]
@@ -52,7 +54,7 @@ public class Selectable : MonoBehaviour {
                 (transform.forward * offset.z) + 
                 (transform.right * offset.x) + 
                 (transform.up * offset.y);
-            selectionPlane.transform.rotation = transform.rotation;
+            selectionPlane.transform.rotation = Quaternion.Euler(selectionPlaneRotation);
         } else if (!isSelected && selectionPlane != null)
         {
             selectionPlane.SetActive(false);

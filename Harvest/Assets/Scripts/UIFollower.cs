@@ -16,6 +16,8 @@ public class UIFollower : MonoBehaviour {
     [Header("Bar variables")]
     [SerializeField, Tooltip("The prefab of the bar")]
     private GameObject barPrefab;
+    [SerializeField, Tooltip("The type of the bar")]
+    private BarTypes barType;
     [SerializeField, Tooltip("Scale the UI element based or keep size fixed")]
     private bool scaleBar;
     [SerializeField, Range(0f, 5f), Tooltip("The max size of the bar.")]
@@ -34,11 +36,34 @@ public class UIFollower : MonoBehaviour {
     private GameObject bar;
     #endregion
 
+    public enum BarTypes {
+        None,
+        Health,
+        Ressources
+    }
+
     // Use this for initialization
     void Start () {
         if(barPrefab != null)
             bar = Instantiate(barPrefab, canvas.transform) as GameObject;
             
+    }
+
+    private void Update()
+    {
+        switch (barType)
+        {
+            case BarTypes.Health:
+                if (GetComponent<Health>() != null)
+                    bar.GetComponent<Bar>().Value = GetComponent<Health>().Percentage;
+                else
+                    Debug.LogWarning("Bar type is set to healt but there is no healt component attached to gameobject.");
+                break;
+            case BarTypes.Ressources:
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -66,7 +91,10 @@ public class UIFollower : MonoBehaviour {
             bar.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
             bar.transform.localPosition = new Vector3(bar.transform.localPosition.x + offsetFromCenter.x, bar.transform.localPosition.y + barHeightOffset, bar.transform.localPosition.z);
         }
+    }
 
-        
+    private void OnDestroy()
+    {
+        Destroy(bar);
     }
 }

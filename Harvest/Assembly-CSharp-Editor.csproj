@@ -69,6 +69,7 @@
      <None Include="Assets\3rd Party\AstarPathfindingProject\ExampleScenes\_Example Scenes.txt" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\Readme_upgrading.txt" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\ExampleScenes\Materials\Projector Light.shader" />
+     <None Include="Assets\Scripts\Shaders\ProjectorShader.shader" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\Readme.txt" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\Editor\EditorAssets\Materials\NavmeshOutline.shader" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\link.xml" />

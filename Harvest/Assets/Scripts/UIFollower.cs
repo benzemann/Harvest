@@ -57,9 +57,16 @@ public class UIFollower : MonoBehaviour {
                 if (GetComponent<Health>() != null)
                     bar.GetComponent<Bar>().Value = GetComponent<Health>().Percentage;
                 else
-                    Debug.LogWarning("Bar type is set to healt but there is no healt component attached to gameobject.");
+                    Debug.LogWarning("Bar type is set to health but there is no healt component attached to gameobject.");
                 break;
             case BarTypes.Ressources:
+                if(GetComponent<ResourceStorage>() != null)
+                {
+                    bar.GetComponent<Bar>().Value = GetComponent<ResourceStorage>().Percentage;
+                } else
+                {
+                    Debug.LogWarning("Bar type is set to resource but there is no resource storage component attached to gameobject.");
+                }
                 break;
             default:
                 break;

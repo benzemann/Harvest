@@ -21,11 +21,13 @@ public class WarriorAntAI : MonoBehaviour {
         WarriorAntScout scout = new WarriorAntScout(this.gameObject);
         WarriorAntPursuit pursuit = new WarriorAntPursuit(this.gameObject);
         WarriorAntAttack attack = new WarriorAntAttack(this.gameObject);
+        WarriorAntHarvesting harvesting = new WarriorAntHarvesting(this.gameObject);
 
         fsm.AddState(idle);
         fsm.AddState(scout);
         fsm.AddState(pursuit);
         fsm.AddState(attack);
+        fsm.AddState(harvesting);
 
         // Cache components
         ac = GetComponent<AgentController>();

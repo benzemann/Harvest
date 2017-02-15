@@ -34,6 +34,9 @@ public class MoveCommander : MonoBehaviour {
                         clickObject.transform.rotation = Quaternion.identity;
                         clickObject.SetActive(true);
                     }
+                    // Make sure resource collector disables its target
+                    if (GetComponent<ResourceCollector>() != null && GetComponent<ResourceCollector>().Target != null)
+                        GetComponent<ResourceCollector>().Target = null;
                 }
             }
         }

@@ -13,13 +13,20 @@ public class TargetFinder : MonoBehaviour {
     
     private GameObject _currentTarget;
 
+    private bool hasSearchedInThisFrame;
+
     public GameObject Target {
         get
         {
-            if (_currentTarget == null)
+            if (_currentTarget == null && !hasSearchedInThisFrame)
                 FindTarget();
             return _currentTarget;
         }
+    }
+
+    public void LateUpdate()
+    {
+        hasSearchedInThisFrame = false;
     }
 
     public enum TargetType
@@ -34,6 +41,7 @@ public class TargetFinder : MonoBehaviour {
     /// </summary>
     private void FindTarget()
     {
+        hasSearchedInThisFrame = true;
         // Get all potential targets
         GameObject[] potentialTargets = new GameObject[0];
         switch (targetType)

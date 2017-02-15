@@ -2,26 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class DamagerBase : MonoBehaviour
-{
-    public virtual float GetAttackRange()
-    {
-        return 0f;
-    }
-    public virtual float GetAttackDamage()
-    {
-        return 0f;
-    }
-    public virtual float GetAttackSpeed()
-    {
-        return 0f;
-    }
-    public virtual void Damage(Health health)
-    {
-
-    }
-}
-
+[RequireComponent(typeof(TargetFinder))]
 public class MeleeDamager : MonoBehaviour
 {
     [SerializeField, Tooltip("How much damage per hit")]
@@ -30,23 +11,39 @@ public class MeleeDamager : MonoBehaviour
     private float attackSpeed;
     [SerializeField, Tooltip("How far away it attacker can attack")]
     private float attackRange;
+    [SerializeField, Tooltip("Define which object should rotate towards the enemy")]
+    private GameObject objectToBeRotated;
 
-    public float GetAttackRange()
+    public float AttackRange { get { return attackRange; } }
+
+    private float timeAtLastAttack;
+
+    private void Update()
     {
-        return attackRange;
-    }
+        if(GetComponent<TargetFinder>().Target != null)
+        {
+            var target = GetComponent<TargetFinder>().Target;
+            if(Vector3.Distance(target.transform.position, this.transform.position) <= attackRange)
+            {
+                if (objectToBeRotated != null)
+                {
+                    float step = 5f * Time.deltaTime;
+                    Vector3 targetDir = target.transform.position - objectToBeRotated.transform.position;
+                    targetDir = new Vector3(targetDir.x, objectToBeRotated.transform.position.y, targetDir.z);
+                    Vector3 newDir = Vector3.RotateTowards(objectToBeRotated.transform.forward, targetDir, step, 0.0f);
+                    objectToBeRotated.transform.rotation = Quaternion.LookRotation(newDir);
+                }
 
-    public float GetAttackDamage()
-    {
-        return damage;
+                if (Time.time - timeAtLastAttack > attackSpeed)
+                {
+                    timeAtLastAttack = Time.time;
+                    Damage(target.GetComponent<Health>());
+                }
+            }
+        }
     }
-
-    public float GetAttackSpeed()
-    {
-        return attackSpeed;
-    }
-
-    public void Damage(Health health)
+    
+    private void Damage(Health health)
     {
         health.Damage(damage);
     }

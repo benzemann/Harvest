@@ -74,6 +74,15 @@ public class WarriorAntScout : State
             return StateID.PursuitID;
         }
 
+        Resource resource;
+        if(ant.GetComponent<ResourceStorage>().RemainingStorageSpace > 0 &&
+            ant.GetComponent<ResourceFinder>().GetClosestResource(out resource))
+        {
+            ant.GetComponent<ResourceCollector>().Target = resource;
+            ant.GetComponent<AgentController>().GoToPos(resource.transform.position);
+            return StateID.HarvestingID;
+        }
+
         if (goToIdle)
         {
             goToIdle = false;
@@ -140,7 +149,8 @@ public class WarriorAntPursuit : State
     {
         if (target == null)
             return;
-        if(Vector3.Distance(target.transform.position, targetOldPos) > ant.GetComponent<MeleeDamager>().GetAttackRange())
+        if(Vector3.Distance(target.transform.position, targetOldPos) > ant.GetComponent<MeleeDamager>().AttackRange || 
+            ant.GetComponent<AgentController>().CurrentSpeed == 0f)
         {
             ant.GetComponent<AgentController>().GoToPos(target.transform.position);
             targetOldPos = target.transform.position;
@@ -153,7 +163,7 @@ public class WarriorAntPursuit : State
             return StateID.IdleID;
 
         if (Vector3.Distance(ant.transform.position, target.transform.position) <=
-            ant.GetComponent<MeleeDamager>().GetAttackRange())
+            ant.GetComponent<MeleeDamager>().AttackRange)
             return StateID.AttackID;
 
         return base.Reason();
@@ -170,8 +180,6 @@ public class WarriorAntAttack : State
 
     private GameObject ant;
     private GameObject target;
-    private MeleeDamager damager;
-    private float timeAtLastAttack;
 
     public WarriorAntAttack(GameObject a)
     {
@@ -184,26 +192,10 @@ public class WarriorAntAttack : State
         target = ant.GetComponent<TargetFinder>().Target;
         ant.GetComponent<AgentController>().Stop();
         ant.GetComponent<AgentController>().AvoidPushing();
-        damager = ant.GetComponent<MeleeDamager>();
-        timeAtLastAttack = Time.time;
-        if (damager == null)
-            Debug.LogError("The ant needs a damager component!");
     }
 
     public override void Execute()
     {
-        if (target == null)
-            return;
-        float step = 5f * Time.deltaTime;
-        Vector3 targetDir = target.transform.position - ant.transform.position;
-        targetDir = new Vector3(targetDir.x, ant.transform.position.y, targetDir.z);
-        Vector3 newDir = Vector3.RotateTowards(ant.transform.forward, targetDir, step, 0.0f);
-        ant.transform.rotation = Quaternion.LookRotation(newDir);
-        if(Time.time - timeAtLastAttack > damager.GetAttackSpeed())
-        {
-            timeAtLastAttack = Time.time;
-            damager.Damage(target.GetComponent<Health>());
-        }
     }
 
     public override StateID Reason()
@@ -212,7 +204,7 @@ public class WarriorAntAttack : State
             return StateID.IdleID;
 
         if (Vector3.Distance(ant.transform.position, target.transform.position) >
-            ant.GetComponent<MeleeDamager>().GetAttackRange())
+            ant.GetComponent<MeleeDamager>().AttackRange)
             return StateID.PursuitID;
 
         return base.Reason();
@@ -221,6 +213,50 @@ public class WarriorAntAttack : State
     public override void Exit()
     {
         ant.GetComponent<AgentController>().ReleaseGroundNodes();
+    }
+}
+
+public class WarriorAntHarvesting : State
+{
+
+    private GameObject ant;
+
+    public WarriorAntHarvesting(GameObject a)
+    {
+        ant = a;
+        id = StateID.HarvestingID;
+    }
+
+    public override void Enter()
+    {
+
+    }
+
+    public override void Execute()
+    {
+        
+    }
+
+    public override StateID Reason()
+    {
+        if (ant.GetComponent<TargetFinder>().Target != null)
+        {
+            ant.GetComponent<ResourceCollector>().Target = null;
+            return StateID.PursuitID;
+        }
+
+        if (ant.GetComponent<ResourceCollector>().Target == null || 
+            ant.GetComponent<ResourceStorage>().RemainingStorageSpace == 0)
+        {
+            ant.GetComponent<ResourceCollector>().Target = null;
+            return StateID.IdleID;
+        }
+
+        return base.Reason();
+    }
+
+    public override void Exit()
+    {
     }
 }
 

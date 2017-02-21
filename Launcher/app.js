@@ -28,7 +28,7 @@ function CheckForUpdates(){
 		const remote = electron.remote
 		const mainProcess = remote.require('./main')
 		var path = require('path');
-		var appDir = path.dirname(require.main.filename);
+		var appDir = mainProcess.getPath();
 		gamePath = appDir;
 		document.getElementById("projectFolder").innerHTML = "Game folder: " + gamePath;
 	}
@@ -58,7 +58,7 @@ function DownloadGame(){
 	var http = require('http');
 	var request = require('request');
 	var fs = require('fs');
-	var url = "https://dl.dropboxusercontent.com/u/11766236/Harvest.zip";
+	var url = "http://2.110.192.183/download/Harvest.zip";
 	//var dest = "tmp.txt";
 	var file = fs.createWriteStream(gamePath + "\\Harvest.zip");
 	var result = '';
@@ -81,6 +81,25 @@ function DownloadGame(){
 	})
 	.on('end', function () {
 		document.getElementById("downloadProgress").innerHTML = "Download Completed ";
+		DownloadVersionFile();
+	})
+	.pipe(file);
+	
+}
+
+function DownloadVersionFile(){
+	
+	var http = require('http');
+	var request = require('request');
+	var fs = require('fs');
+	var url = "http://2.110.192.183/download/Version.txt";
+	//var dest = "tmp.txt";
+	var file = fs.createWriteStream(gamePath + "\\Version.txt");
+	request(url)
+	.on('error', function(error){
+		console.log(error);
+	})
+	.on('end', function () {
 		UnzipGameFile();
 	})
 	.pipe(file);
@@ -143,7 +162,7 @@ function GetVersionFromGit(){
 	var http = require('http');
 	var request = require('request');
 	//var fs = require('fs');
-	var url = "https://dl.dropboxusercontent.com/u/11766236/Version.txt";
+	var url = "http://2.110.192.183/download/Version.txt";
 	//var dest = "tmp.txt";
 	//var file = fs.createWriteStream(dest);
 	var result = '';

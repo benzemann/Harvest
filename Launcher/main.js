@@ -60,5 +60,5 @@ exports.selectDirectory = function () {
 }
 
 exports.getPath = function () {
-	return app.getPath('exe');
+	return app.getPath('exe').replace('Harvest.exe','');
 }

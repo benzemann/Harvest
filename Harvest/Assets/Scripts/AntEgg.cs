@@ -28,7 +28,7 @@ public class AntEgg : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(storage.CurrentStorage >= resourceNeeded && Time.time - timeAtInstatiation >= readyTime)
+		if(storage.CurrentStorage >= resourceNeeded && Time.time - timeAtInstatiation >= readyTime && !isReady)
         {
             isReady = true;
             timeAtReady = Time.time;

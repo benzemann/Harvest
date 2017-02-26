@@ -4,20 +4,32 @@ using UnityEngine;
 
 public class FeromoneManager : MonoBehaviour
 {
+    [Header("Feromone grid variables")]
     [SerializeField, Tooltip("The width of the feromone grid (number of nodes)")]
     private int gridWidth;
     [SerializeField, Tooltip("The height of the feromone grid (number of nodes)")]
     private int gridHeight;
     [SerializeField, Tooltip("The spacing between each feromone node")]
     private float nodeSpacing;
+    [SerializeField, Tooltip("The max feromone value at each node")]
+    private float maxFeromoneValue;
+    [SerializeField, Tooltip("How much the feromene will deteriate per second")]
+    private float deteriationPrSec;
+    [SerializeField, Tooltip("How often the grid will be updated in seconds. Low update rate can affect performance")]
+    private float gridUpdateRate;
+    [Header("Feromone trail variables")]
     [SerializeField, Tooltip("The prefab of the feromone trail")]
     private GameObject feromoneTrail;
+    [SerializeField, Tooltip("The rate over time for the particle emitter of the feromone trail when fermone value is at max")]
+    private float maxParticleRateOverTime;
 
     private FeromoneNode[,] feromoneGrid;
     private ObjectPool feromoneTrailPool;
 
     private static FeromoneManager _instance;
     public static FeromoneManager Instance { get { return _instance; } }
+
+    private float timeAtLastUpdate;
 
     struct int2
     {
@@ -81,6 +93,40 @@ public class FeromoneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Time.time - timeAtLastUpdate > gridUpdateRate)
+        {
+            DeteriateFeromones();
+            timeAtLastUpdate = Time.time;
+        }
+    }
+
+    private void DeteriateFeromones()
+    {
+        var timeSinceLastUpate = Time.time - timeAtLastUpdate;
+        for(int i = 0; i < gridWidth; i++)
+        {
+            for(int j = 0; j < gridHeight; j++)
+            {
+                if (feromoneGrid[i, j].feromoneValue <= 0)
+                    continue;
+                feromoneGrid[i, j].feromoneValue -= (deteriationPrSec * timeSinceLastUpate);
+                if(feromoneGrid[i, j].feromoneValue <= 0)
+                {
+                    feromoneGrid[i, j].feromoneValue = 0;
+                    var trail = feromoneGrid[i, j].feromoneTrail;
+                    feromoneGrid[i, j].feromoneTrail = null;
+                    trail.SetActive(false);
+                } else
+                {
+                    if (feromoneGrid[i, j].feromoneValue > maxFeromoneValue)
+                        feromoneGrid[i, j].feromoneValue = maxFeromoneValue;
+
+                    var ps = feromoneGrid[i, j].feromoneTrail.GetComponent<ParticleSystem>();
+                    var emission = ps.emission;
+                    emission.rateOverTime = ( maxParticleRateOverTime * (feromoneGrid[i, j].feromoneValue / maxFeromoneValue) );
+                }
+            }
+        }
 
     }
 
@@ -113,15 +159,7 @@ public class FeromoneManager : MonoBehaviour
         if (x == -1 || y == -1)
             return;
 
-        feromoneGrid[x, y].feromoneValue += value;
-        if (oldX < 0 || oldX >= gridWidth || oldY < 0 || oldY >= gridHeight)
-            return;
-        var newDir = new int2(oldX, oldY);
-        if (!feromoneGrid[x, y].connections.Contains(newDir))
-        {
-            feromoneGrid[x, y].connections.Add(new int2(oldX, oldY));
-            AddFeromoneParticles(x, y, oldX, oldY);
-        }
+        AddFeromoneValue(x, y, value, oldX, oldY);
     }
 
     public void AddFeromoneValue(int x, int y, float value, int oldX, int oldY)
@@ -136,8 +174,10 @@ public class FeromoneManager : MonoBehaviour
         if (!feromoneGrid[x, y].connections.Contains(newDir))
         {
             feromoneGrid[x, y].connections.Add(new int2(oldX, oldY));
-            AddFeromoneParticles(x, y, oldX, oldY);
         }
+        if (feromoneGrid[x, y].feromoneValue > 0)
+            AddFeromoneParticles(x, y);
+
     }
 
     public void SetFeromoneValue(Vector3 pos, float value, int oldX, int oldY)
@@ -147,15 +187,7 @@ public class FeromoneManager : MonoBehaviour
         if (x == -1 || y == -1)
             return;
 
-        feromoneGrid[x, y].feromoneValue = value;
-        if (oldX < 0 || oldX >= gridWidth || oldY < 0 || oldY >= gridHeight || value == 0f)
-            return;
-        var newDir = new int2(oldX, oldY);
-        if (!feromoneGrid[x, y].connections.Contains(newDir))
-        {
-            feromoneGrid[x, y].connections.Add(new int2(oldX, oldY));
-            AddFeromoneParticles(x, y, oldX, oldY);
-        }
+        SetFeromoneValue(x, y, value, oldX, oldY);
     }
 
     public void SetFeromoneValue(int x, int y, float value, int oldX, int oldY)
@@ -170,22 +202,28 @@ public class FeromoneManager : MonoBehaviour
         if (!feromoneGrid[x, y].connections.Contains(newDir))
         {
             feromoneGrid[x, y].connections.Add(new int2(oldX, oldY));
-            AddFeromoneParticles(x, y, oldX, oldY);
         }
-        
+        if(feromoneGrid[x, y].feromoneValue > 0)
+            AddFeromoneParticles(x, y);
     }
 
-    private void AddFeromoneParticles(int startX, int startY, int endX, int endY)
+    private void AddFeromoneParticles(int startX, int startY)
     {
-
+        if (feromoneGrid[startX, startY].feromoneTrail != null)
+            return;
         GameObject trail = feromoneTrailPool.GetPooledObject();
         trail.SetActive(true);
-        trail.transform.position = new Vector3(feromoneGrid[startX, startY].center.x, 0.1f, feromoneGrid[startX,startY].center.y);
-        var v = new Vector3(feromoneGrid[endX, endY].center.x, 0.1f, feromoneGrid[endX, endY].center.y) - trail.transform.position;
-        var r = Quaternion.FromToRotation(Vector3.right, v);
-        trail.transform.rotation = r;
+        var height = 0.1f;
+        RaycastHit hit;
+        var p = new Vector3(feromoneGrid[startX, startY].center.x, 0.1f, feromoneGrid[startX, startY].center.y);
+        Ray ray = new Ray(p + (Vector3.up * 50f), Vector3.down);
+        LayerMask lm = 1 << LayerMask.NameToLayer("Ground");
+        if (Physics.Raycast(ray, out hit, 1000f, lm))
+        {
+            height = hit.point.y;
+        }
+        trail.transform.position = new Vector3(p.x,height,p.z);
         feromoneGrid[startX, startY].feromoneTrail = trail;
-
     }
 
     void OnDrawGizmosSelected()

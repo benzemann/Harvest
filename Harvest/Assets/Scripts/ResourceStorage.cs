@@ -14,11 +14,24 @@ public class ResourceStorage : MonoBehaviour {
     public int RemainingStorageSpace { get { return maxStorage - _currentStorage; } }
     public float Percentage { get { return ((float)_currentStorage / (float)maxStorage); } }
 
-    public bool StoreResource(int amount)
+    public int TakeResource(int amount)
     {
+        var amountToBeTaken = Mathf.Min(amount, _currentStorage);
+        _currentStorage -= amountToBeTaken;
+        return amountToBeTaken;
+    }
+
+    public bool StoreResource(int amount, out int remainder)
+    {
+        remainder = 0;
         int newStorage = _currentStorage + amount;
 
         _currentStorage = Mathf.Min(newStorage, maxStorage);
+
+        if(newStorage > maxStorage)
+        {
+            remainder = newStorage - maxStorage;
+        }
 
         if (_currentStorage == maxStorage)
         {

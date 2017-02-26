@@ -7,6 +7,7 @@ public class ObjectManager : Singleton<ObjectManager> {
 
     private List<GameObject> ants;
     private List<GameObject> playerObjects;
+    private List<GameObject> eggs;
 
     public GameObject[] AllPlayerObjects { get { return playerObjects.ToArray(); } }
     public GameObject[] AllAnts { get { return ants.ToArray(); } }
@@ -18,11 +19,23 @@ public class ObjectManager : Singleton<ObjectManager> {
                     select ant).ToArray();
         }
     }
+    public GameObject[] AllEggs
+    {
+        get { return eggs.ToArray(); }
+    }
+    public GameObject[] AllAvailableEggs
+    {
+        get {
+            return (from egg in eggs
+                    where egg.GetComponent<ResourceStorage>().RemainingStorageSpace > 0
+                    select egg).ToArray(); }
+    }
 
     private void Awake()
     {
         ants = new List<GameObject>();
         playerObjects = new List<GameObject>();
+        eggs = new List<GameObject>();
     }
 
     // Use this for initialization
@@ -64,5 +77,16 @@ public class ObjectManager : Singleton<ObjectManager> {
     {
         if(playerObjects.Contains(obj))
             playerObjects.Remove(obj);
+    }
+
+    public void AddEgg(GameObject egg)
+    {
+        eggs.Add(egg);
+    }
+
+    public void RemoveEgg(GameObject egg)
+    {
+        if (eggs.Contains(egg))
+            eggs.Remove(egg);
     }
 }

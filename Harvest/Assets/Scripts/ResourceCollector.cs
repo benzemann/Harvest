@@ -86,7 +86,8 @@ public class ResourceCollector : MonoBehaviour {
 
         if(GetComponent<ResourceStorage>() != null)
         {
-            if(GetComponent<ResourceStorage>().StoreResource(harvest))
+            int remainder;
+            if(GetComponent<ResourceStorage>().StoreResource(harvest, out remainder))
             {
                 return true;
             } else

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
+#region Idle
 public class WarriorAntIdle : State {
 
     private GameObject ant;
@@ -36,7 +38,8 @@ public class WarriorAntIdle : State {
     }
 
 }
-
+#endregion
+#region Scout
 public class WarriorAntScout : State
 {
 
@@ -121,7 +124,8 @@ public class WarriorAntScout : State
     }
 
 }
-
+#endregion
+#region Pursuit
 public class WarriorAntPursuit : State
 {
 
@@ -138,7 +142,7 @@ public class WarriorAntPursuit : State
     public override void Enter()
     {
         target = ant.GetComponent<TargetFinder>().Target;
-        if(target != null)
+        if (target != null)
         {
             ant.GetComponent<AgentController>().GoToPos(target.transform.position);
             targetOldPos = target.transform.position;
@@ -149,7 +153,7 @@ public class WarriorAntPursuit : State
     {
         if (target == null)
             return;
-        if(Vector3.Distance(target.transform.position, targetOldPos) > ant.GetComponent<MeleeDamager>().AttackRange || 
+        if (Vector3.Distance(target.transform.position, targetOldPos) > ant.GetComponent<MeleeDamager>().AttackRange ||
             ant.GetComponent<AgentController>().CurrentSpeed == 0f)
         {
             ant.GetComponent<AgentController>().GoToPos(target.transform.position);
@@ -174,7 +178,8 @@ public class WarriorAntPursuit : State
 
     }
 }
-
+#endregion
+#region Attack
 public class WarriorAntAttack : State
 {
 
@@ -215,7 +220,8 @@ public class WarriorAntAttack : State
         ant.GetComponent<AgentController>().ReleaseGroundNodes();
     }
 }
-
+#endregion
+#region Harvesting
 public class WarriorAntHarvesting : State
 {
 
@@ -234,7 +240,7 @@ public class WarriorAntHarvesting : State
 
     public override void Execute()
     {
-        
+
     }
 
     public override StateID Reason()
@@ -245,11 +251,17 @@ public class WarriorAntHarvesting : State
             return StateID.PursuitID;
         }
 
-        if (ant.GetComponent<ResourceCollector>().Target == null || 
+        if (ant.GetComponent<ResourceCollector>().Target == null ||
             ant.GetComponent<ResourceStorage>().RemainingStorageSpace == 0)
         {
             ant.GetComponent<ResourceCollector>().Target = null;
-            return StateID.IdleID;
+            if(ant.GetComponent<ResourceStorage>().CurrentStorage > 0)
+            {
+                return StateID.ReturnHome;
+            } else
+            {
+                return StateID.IdleID;
+            }
         }
 
         return base.Reason();
@@ -259,4 +271,88 @@ public class WarriorAntHarvesting : State
     {
     }
 }
+#endregion
+#region ReturnHome
+public class WarriorAntReturnHome : State
+{
+
+    private GameObject ant;
+
+    public WarriorAntReturnHome(GameObject a)
+    {
+        ant = a;
+        id = StateID.ReturnHome;
+    }
+
+    public override void Enter()
+    {
+        if (ant.GetComponent<AlternativePath>() != null)
+        {
+            ant.GetComponent<AlternativePath>().enabled = false;
+        }
+
+        if(ant.GetComponent<FeromoneLayer>() != null)
+        {
+            ant.GetComponent<FeromoneLayer>().LayFeromones = true;
+        }
+
+        GoToClosestEgg();
+    }
+
+    public override void Execute()
+    {
+        if(ant.GetComponent<ResourceGiver>().TargetReciever != null &&
+            ant.GetComponent<ResourceGiver>().TargetReciever.gameObject.GetComponent<ResourceStorage>().RemainingStorageSpace <= 0)
+        {
+            ant.GetComponent<ResourceGiver>().TargetReciever = null;
+        }
+        if(ant.GetComponent<ResourceGiver>().TargetReciever == null)
+        {
+            GoToClosestEgg();
+        }
+    }
+
+    public override StateID Reason()
+    {
+        if (ant.GetComponent<TargetFinder>().Target != null)
+        {
+            return StateID.PursuitID;
+        }
+
+        if(ant.GetComponent<ResourceGiver>().TargetReciever == null ||
+            ant.GetComponent<ResourceStorage>().CurrentStorage == 0)
+        {
+            return StateID.IdleID;
+        }
+
+        return base.Reason();
+    }
+
+    public override void Exit()
+    {
+        if (ant.GetComponent<AlternativePath>() != null)
+        {
+            ant.GetComponent<AlternativePath>().enabled = true;
+        }
+
+        if (ant.GetComponent<FeromoneLayer>() != null)
+        {
+            ant.GetComponent<FeromoneLayer>().LayFeromones = false;
+        }
+    }
+
+    private void GoToClosestEgg()
+    {
+        GameObject[] allEggs = ObjectManager.Instance.AllAvailableEggs;
+        GameObject closestEgg = Helper.Instance.GetClosestObject(ant.transform.position, allEggs);
+        if (closestEgg != null)
+        {
+            ant.GetComponent<AgentController>().GoToPos(closestEgg.transform.position);
+            ant.GetComponent<ResourceGiver>().TargetReciever = closestEgg.GetComponent<ResourceReciever>();
+        }
+    }
+}
+#endregion
+
+
 

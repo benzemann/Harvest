@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class FeromoneLayer : MonoBehaviour {
 
+    [SerializeField, Tooltip("How much feromone this object will lay each time it enters a feromone node")]
+    private float addFeromoneValue;
+    [SerializeField, Tooltip("Determines if the object always should lay feromones. If false, some other script most use this component")]
+    private bool alwaysLayFeromones;
+
+    public bool LayFeromones { get; set; }
+
     private int gridX;
     private int gridY;
     private int oldGridX;
@@ -19,9 +26,17 @@ public class FeromoneLayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         FeromoneManager.Instance.WorldToGridCoords(transform.position, out gridX, out gridY);
-        if(gridX != oldGridX || gridY != oldGridY)
+        if(alwaysLayFeromones == true || LayFeromones == true)
         {
-            FeromoneManager.Instance.AddFeromoneValue(gridX, gridY, 1f, oldGridX, oldGridY);
+            LayFermoneTrail();
+        }
+    }
+
+    private void LayFermoneTrail()
+    {
+        if (gridX != oldGridX || gridY != oldGridY)
+        {
+            FeromoneManager.Instance.AddFeromoneValue(gridX, gridY, addFeromoneValue, oldGridX, oldGridY);
             oldGridX = gridX;
             oldGridY = gridY;
         }

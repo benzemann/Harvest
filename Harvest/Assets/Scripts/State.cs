@@ -8,7 +8,8 @@ public enum StateID
     ScoutID = 2,
     PursuitID = 3,
     AttackID = 4,
-    HarvestingID = 5
+    HarvestingID = 5,
+    ReturnHome = 6
 }
 
 public abstract class State

@@ -129,6 +129,7 @@
      <Compile Include="Assets\3rd Party\AstarPathfindingProject\changelog.cs" />
      <Compile Include="Assets\Scripts\AgentController.cs" />
      <Compile Include="Assets\Scripts\AlignToGround.cs" />
+     <Compile Include="Assets\Scripts\AntEgg.cs" />
      <Compile Include="Assets\Scripts\Bar.cs" />
      <Compile Include="Assets\Scripts\CameraControls.cs" />
      <Compile Include="Assets\Scripts\CameraRTS.cs" />
@@ -136,8 +137,11 @@
      <Compile Include="Assets\Scripts\Destructable.cs" />
      <Compile Include="Assets\Scripts\FPSCounter.cs" />
      <Compile Include="Assets\Scripts\FSM.cs" />
+     <Compile Include="Assets\Scripts\FeromoneLayer.cs" />
      <Compile Include="Assets\Scripts\Health.cs" />
+     <Compile Include="Assets\Scripts\Helper.cs" />
      <Compile Include="Assets\Scripts\Managers\AgentManager.cs" />
+     <Compile Include="Assets\Scripts\Managers\FeromoneManager.cs" />
      <Compile Include="Assets\Scripts\Managers\GameDataManager.cs" />
      <Compile Include="Assets\Scripts\Managers\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
@@ -151,6 +155,8 @@
      <Compile Include="Assets\Scripts\Resource.cs" />
      <Compile Include="Assets\Scripts\ResourceCollector.cs" />
      <Compile Include="Assets\Scripts\ResourceFinder.cs" />
+     <Compile Include="Assets\Scripts\ResourceGiver.cs" />
+     <Compile Include="Assets\Scripts\ResourceReciever.cs" />
      <Compile Include="Assets\Scripts\ResourceStorage.cs" />
      <Compile Include="Assets\Scripts\Selectable.cs" />
      <Compile Include="Assets\Scripts\Singleton.cs" />

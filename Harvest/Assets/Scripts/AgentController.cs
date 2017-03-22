@@ -239,7 +239,7 @@ public class AgentController : MonoBehaviour
         
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
         guo.resetPenaltyOnPhysics = false;
-        //AstarPath.RegisterSafeUpdate(() => {
+        //if(guo != null)
         AstarPath.active.UpdateGraphs(guo);
         //});
         
@@ -456,6 +456,7 @@ public class AgentController : MonoBehaviour
 
     private void OnDestroy()
     {
+        ReleaseGroundNodes();
         AgentManager.Instance.RemoveAgent(this);
     }
 

@@ -4,14 +4,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(Selectable)), RequireComponent(typeof(AgentController))]
 public class MoveCommander : MonoBehaviour {
-    [SerializeField, Tooltip("The object that will appear when ordering this object to move")]
-    private GameObject groundClickPrefab;
-
-    private ObjectPool groundClickPool;
 
     private void Start()
     {
-        groundClickPool = new ObjectPool(groundClickPrefab, 1, true);
     }
 
     // Update is called once per frame
@@ -27,7 +22,7 @@ public class MoveCommander : MonoBehaviour {
                 {
                     // Tell the agent to move to the position
                     GetComponent<AgentController>().GoToPos(hit.point);
-                    GameObject clickObject = groundClickPool.GetPooledObject();
+                    GameObject clickObject = ObjectPoolsManager.Instance.groundClickPool.GetPooledObject();
                     if (clickObject != null)
                     {
                         clickObject.transform.position = hit.point;

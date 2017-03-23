@@ -48,4 +48,9 @@ public class WarriorAntAI : MonoBehaviour {
         if (animator != null)
             animator.SetFloat("Speed", GetComponent<AgentController>().CurrentSpeed);
 	}
+
+    private void OnDestroy()
+    {
+        ObjectManager.Instance.RemoveAnt(this.gameObject);
+    }
 }

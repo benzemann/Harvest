@@ -235,13 +235,13 @@ public class AgentController : MonoBehaviour
     public void ReleaseGroundNodes()
     {
         isStandingGround = false;
-        Bounds bounds = GetComponent<Collider>().bounds;
+       /* Bounds bounds = GetComponent<Collider>().bounds;
         
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
         guo.resetPenaltyOnPhysics = false;
         //if(guo != null)
         AstarPath.active.UpdateGraphs(guo);
-        //});
+        //});*/
         
     }
 
@@ -393,16 +393,16 @@ public class AgentController : MonoBehaviour
     {
         if (isStandingGround)
             return;
-
+        
         isStandingGround = true;
-        Bounds bounds = GetComponent<Collider>().bounds;
+        /*Bounds bounds = GetComponent<Collider>().bounds;
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
         guo.modifyWalkability = true;
         guo.setWalkability = false;
         guo.resetPenaltyOnPhysics = false;
         //AstarPath.RegisterSafeUpdate(() => {
             AstarPath.active.UpdateGraphs(guo);
-        //});
+        //});*/
     }
 
     /// <summary>

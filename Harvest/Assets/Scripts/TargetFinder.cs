@@ -24,6 +24,17 @@ public class TargetFinder : MonoBehaviour {
         }
     }
 
+    public void Update()
+    {
+        if(_currentTarget != null && GetComponent<Vision>() != null)
+        {
+            if (!GetComponent<Vision>().CanISeeIt(_currentTarget))
+            {
+                _currentTarget = null;
+            }
+        }
+    }
+
     public void LateUpdate()
     {
         hasSearchedInThisFrame = false;
@@ -66,6 +77,10 @@ public class TargetFinder : MonoBehaviour {
             float distance = Vector3.Distance(this.transform.position, potentialTargets[i].transform.position);
             if(distance < closestDistance && distance <= searchRadius)
             {
+                // Handle vision
+                if (GetComponent<Vision>() != null && !GetComponent<Vision>().CanISeeIt(potentialTargets[i]))
+                    continue;
+
                 _currentTarget = potentialTargets[i];
                 closestDistance = distance;
             }

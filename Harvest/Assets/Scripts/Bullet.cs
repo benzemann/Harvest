@@ -15,17 +15,18 @@ public class Bullet : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<WarriorAntAI>() != null)
+        if(other.gameObject.layer == LayerMask.NameToLayer("Ant"))
         {
             other.gameObject.GetComponent<Health>().Damage(10.0f);
-            var bulletHit = ObjectPoolsManager.Instance.phasmaHitPool.GetPooledObject();
+            var bulletHit = ObjectPoolsManager.Instance.phasmaAntHitPool.GetPooledObject();
             bulletHit.SetActive(true);
             bulletHit.transform.position = this.transform.position;
             this.gameObject.SetActive(false);
         }
-        else if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            other.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
         {
-            var bulletHit = ObjectPoolsManager.Instance.phasmaHitPool.GetPooledObject();
+            var bulletHit = ObjectPoolsManager.Instance.phasmaGroundHitPool.GetPooledObject();
             bulletHit.SetActive(true);
             bulletHit.transform.position = this.transform.position;
             this.gameObject.SetActive(false);

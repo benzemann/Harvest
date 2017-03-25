@@ -19,7 +19,7 @@ Platform assembly: D:\Programming\Harvest\Harvest\Scene_Data\Managed\UnityEngine
 Loading D:\Programming\Harvest\Harvest\Scene_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
 Platform assembly: D:\Programming\Harvest\Harvest\Scene_Data\Managed\Pathfinding.Ionic.Zip.Reduced.dll (this message is harmless)
 Loading D:\Programming\Harvest\Harvest\Scene_Data\Managed\Pathfinding.Ionic.Zip.Reduced.dll into Unity Child Domain
-- Completed reload, in  0.167 seconds
+- Completed reload, in  0.922 seconds
 Platform assembly: D:\Programming\Harvest\Harvest\Scene_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Programming\Harvest\Harvest\Scene_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0

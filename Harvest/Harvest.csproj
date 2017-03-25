@@ -52,6 +52,9 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -66,6 +69,9 @@
     </Reference>
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Purchasing">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
@@ -163,9 +169,12 @@
     <Compile Include="Assets\Scripts\AlignToGround.cs" />
     <Compile Include="Assets\Scripts\AntEgg.cs" />
     <Compile Include="Assets\Scripts\Bar.cs" />
+    <Compile Include="Assets\Scripts\Bullet.cs" />
+    <Compile Include="Assets\Scripts\BulletDamager.cs" />
     <Compile Include="Assets\Scripts\ButtonPress.cs" />
     <Compile Include="Assets\Scripts\CameraControls.cs" />
     <Compile Include="Assets\Scripts\CameraRTS.cs" />
+    <Compile Include="Assets\Scripts\Damager.cs" />
     <Compile Include="Assets\Scripts\Deactivater.cs" />
     <Compile Include="Assets\Scripts\Destructable.cs" />
     <Compile Include="Assets\Scripts\FPSCounter.cs" />
@@ -177,6 +186,7 @@
     <Compile Include="Assets\Scripts\Managers\FeromoneManager.cs" />
     <Compile Include="Assets\Scripts\Managers\GameDataManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ObjectManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ObjectPoolsManager.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SelectableManager.cs" />
     <Compile Include="Assets\Scripts\MeleeDamager.cs" />
@@ -196,6 +206,7 @@
     <Compile Include="Assets\Scripts\State.cs" />
     <Compile Include="Assets\Scripts\TargetFinder.cs" />
     <Compile Include="Assets\Scripts\UIFollower.cs" />
+    <Compile Include="Assets\Scripts\Vision.cs" />
     <Compile Include="Assets\Scripts\WarriorAntAI.cs" />
     <Compile Include="Assets\Scripts\WarriorAntStates.cs" />
   </ItemGroup>

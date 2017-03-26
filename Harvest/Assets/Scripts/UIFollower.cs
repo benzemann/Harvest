@@ -95,7 +95,7 @@ public class UIFollower : MonoBehaviour {
             }
 
             float barHeightOffset = (offsetFromCenter.y);
-            bar.transform.position = Camera.main.WorldToScreenPoint(this.transform.position);
+            bar.transform.position = Camera.main.WorldToScreenPoint(ren.transform.position);
             bar.transform.localPosition = new Vector3(bar.transform.localPosition.x + offsetFromCenter.x, bar.transform.localPosition.y + barHeightOffset, bar.transform.localPosition.z);
         }
     }

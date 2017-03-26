@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour {
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Ant"))
         {
-            other.gameObject.GetComponent<Health>().Damage(10.0f);
+            other.gameObject.GetComponent<Health>().Damage(Damage);
             var bulletHit = ObjectPoolsManager.Instance.phasmaAntHitPool.GetPooledObject();
             bulletHit.SetActive(true);
             bulletHit.transform.position = this.transform.position;

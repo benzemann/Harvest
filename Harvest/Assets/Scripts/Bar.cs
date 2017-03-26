@@ -21,7 +21,7 @@ public class Bar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // Chache max width
-        maxWidth = GetComponent<RectTransform>().rect.width;
+        maxWidth = slider.rect.width;
 
         // If slider has not been assigned, try to use first child
         if(slider == null)

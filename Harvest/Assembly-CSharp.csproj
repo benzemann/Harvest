@@ -127,11 +127,11 @@
      <Compile Include="Assets\3rd Party\AstarPathfindingProject\Utilities\ProfileHelper.cs" />
      <Compile Include="Assets\3rd Party\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
      <Compile Include="Assets\3rd Party\AstarPathfindingProject\changelog.cs" />
-     <Compile Include="Assets\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
-     <Compile Include="Assets\EffectExamples\Shared\Scripts\GunAim.cs" />
-     <Compile Include="Assets\EffectExamples\Shared\Scripts\GunShoot.cs" />
-     <Compile Include="Assets\EffectExamples\Shared\Scripts\ParticleExamples.cs" />
-     <Compile Include="Assets\EffectExamples\Shared\Scripts\ParticleMenu.cs" />
+     <Compile Include="Assets\3rd Party\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
+     <Compile Include="Assets\3rd Party\EffectExamples\Shared\Scripts\GunAim.cs" />
+     <Compile Include="Assets\3rd Party\EffectExamples\Shared\Scripts\GunShoot.cs" />
+     <Compile Include="Assets\3rd Party\EffectExamples\Shared\Scripts\ParticleExamples.cs" />
+     <Compile Include="Assets\3rd Party\EffectExamples\Shared\Scripts\ParticleMenu.cs" />
      <Compile Include="Assets\Scripts\AgentController.cs" />
      <Compile Include="Assets\Scripts\AlignToGround.cs" />
      <Compile Include="Assets\Scripts\AntEgg.cs" />
@@ -177,7 +177,7 @@
      <Compile Include="Assets\Scripts\WarriorAntAI.cs" />
      <Compile Include="Assets\Scripts\WarriorAntStates.cs" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh.shader" />
-     <None Include="Assets\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
+     <None Include="Assets\3rd Party\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\Plugins\DotNetZip\DotNetZipLicense.txt" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\ExampleScenes\Materials\Projector Multiply.shader" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\ExampleScenes\Materials\DiffuseAlwaysVisible.shader" />
@@ -192,9 +192,6 @@
      <None Include="Assets\3rd Party\AstarPathfindingProject\Editor\EditorAssets\Materials\NavmeshOutline.shader" />
      <None Include="Assets\Standard Assets\Effects\LensAberrations\Resources\LensAberrations.shader" />
      <None Include="Assets\3rd Party\AstarPathfindingProject\link.xml" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -209,9 +206,6 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Purchasing">
- <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>

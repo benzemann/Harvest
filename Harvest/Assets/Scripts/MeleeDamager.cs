@@ -10,8 +10,8 @@ public class MeleeDamager : Damager
     {
         if (IsTargetClose())
         {
-            if (!RotateTowardsTarget())
-                return;
+            RotateTowardsTarget();
+                
             if (IsReady())
             {
                 var target = GetComponent<TargetFinder>().Target;

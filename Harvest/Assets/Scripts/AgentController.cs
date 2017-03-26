@@ -133,6 +133,7 @@ public class AgentController : MonoBehaviour
         if (NoOfPushers > 0)
             PushingForce /= NoOfPushers;
         NoOfPushers = 0;
+       
         transform.Translate(PushingForce, Space.World);
         PushingForce = Vector3.zero;
         if (velocity != Vector3.zero)
@@ -225,7 +226,7 @@ public class AgentController : MonoBehaviour
         // Make sure to mark area under the agent as walkable
         if (isStandingGround && velocity != Vector3.zero)
         {
-            //ReleaseGroundNodes();
+            ReleaseGroundNodes();
         }
     }
 
@@ -235,13 +236,13 @@ public class AgentController : MonoBehaviour
     public void ReleaseGroundNodes()
     {
         isStandingGround = false;
-       /* Bounds bounds = GetComponent<Collider>().bounds;
+        Bounds bounds = GetComponent<Collider>().bounds;
         
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
         guo.resetPenaltyOnPhysics = false;
         //if(guo != null)
         AstarPath.active.UpdateGraphs(guo);
-        //});*/
+        //});
         
     }
 
@@ -395,14 +396,14 @@ public class AgentController : MonoBehaviour
             return;
         
         isStandingGround = true;
-        /*Bounds bounds = GetComponent<Collider>().bounds;
+        Bounds bounds = GetComponent<Collider>().bounds;
         GraphUpdateObject guo = new GraphUpdateObject(bounds);
         guo.modifyWalkability = true;
         guo.setWalkability = false;
         guo.resetPenaltyOnPhysics = false;
         //AstarPath.RegisterSafeUpdate(() => {
             AstarPath.active.UpdateGraphs(guo);
-        //});*/
+        //});
     }
 
     /// <summary>

@@ -207,9 +207,9 @@ public class WarriorAntAttack : State
     {
         if (target == null)
             return StateID.IdleID;
-
+        ;
         if (Vector3.Distance(ant.transform.position, target.transform.position) >
-            ant.GetComponent<MeleeDamager>().AttackRange)
+            ant.GetComponent<Damager>().AttackRange)
             return StateID.PursuitID;
 
         return base.Reason();

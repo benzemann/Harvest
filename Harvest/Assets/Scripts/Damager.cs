@@ -56,6 +56,7 @@ public class Damager : MonoBehaviour {
         var target = GetComponent<TargetFinder>().Target;
         if (target != null)
         {
+            
             if (Vector3.Distance(target.transform.position, this.transform.position) <= attackRange)
             {
                 return true;

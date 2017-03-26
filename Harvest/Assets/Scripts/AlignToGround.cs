@@ -17,7 +17,7 @@ public class AlignToGround : MonoBehaviour {
             var GroundDis = hit.distance;
             //with this you rotate object to adjust with terrain
             transform.rotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
-            transform.position = hit.point;
+            transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
             
         }
     }

@@ -455,9 +455,16 @@ public class AgentController : MonoBehaviour
         return dx * dx + dz * dz;
     }
 
+    bool quitting;
+    void OnApplicationQuit()
+    {
+        quitting = true;
+    }
+
     private void OnDestroy()
     {
-        ReleaseGroundNodes();
+        if(!quitting)
+            ReleaseGroundNodes();
         AgentManager.Instance.RemoveAgent(this);
     }
 

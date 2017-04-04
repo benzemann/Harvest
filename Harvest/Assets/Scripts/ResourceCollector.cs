@@ -13,6 +13,10 @@ public class ResourceCollector : MonoBehaviour {
     private float harvestDistance;
     [SerializeField, Tooltip("How fast the object will rotate toward a resource when trying to harvest it")]
     private float rotationTowardsResourceSpeed;
+    [SerializeField, Tooltip("These particle systems will play when harvesting")]
+    private ParticleSystem[] harvestParticles;
+    [SerializeField, Tooltip("This sound is played when harvesting")]
+    private AudioSource harvestSound;
 
     private Resource _targetResource;
     private float timeSinceLastHarvest;
@@ -40,11 +44,27 @@ public class ResourceCollector : MonoBehaviour {
                 }
                 // Rotate towards resource
                 float step = rotationTowardsResourceSpeed * Time.deltaTime;
-                Vector3 targetDir = _targetResource.transform.position - this.transform.position;
-                targetDir = new Vector3(targetDir.x, this.transform.position.y, targetDir.z);
+                Vector3 targetDir = new Vector3(_targetResource.transform.position.x, this.transform.position.y, _targetResource.transform.position.z) - this.transform.position;
+                targetDir = new Vector3(targetDir.x, 0f, targetDir.z);
                 if(Vector3.Angle(targetDir, this.transform.forward) < 5f)
                 {
-                    HarvestResource();
+                    if (HarvestResource())
+                    {
+                        if (harvestParticles.Length > 0)
+                        {
+                            if (harvestParticles[1].isStopped)
+                            {
+                                for (int i = 0; i < harvestParticles.Length; i++)
+                                {
+                                    harvestParticles[i].Play();
+                                }
+                            }
+                        } 
+                        if(harvestSound != null && !harvestSound.isPlaying)
+                        {
+                            harvestSound.Play();
+                        }
+                    } 
                 } else
                 {
                     // Need more rotation
@@ -52,6 +72,22 @@ public class ResourceCollector : MonoBehaviour {
                     this.transform.rotation = Quaternion.LookRotation(newDir);
                 }
                 
+            }
+        } else
+        {
+            if (harvestParticles.Length > 0)
+            {
+                if (harvestParticles[1].isPlaying)
+                {
+                    for (int i = 0; i < harvestParticles.Length; i++)
+                    {
+                        harvestParticles[i].Stop();
+                    }
+                }
+            }
+            if (harvestSound != null && harvestSound.isPlaying)
+            {
+                harvestSound.Stop();
             }
         }
     }

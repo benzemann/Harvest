@@ -10,10 +10,10 @@ public class CameraControls : MonoBehaviour {
     private float zoomSpeed;
     [SerializeField, Tooltip("The camera gameobject")]
     private GameObject camera;
-    [SerializeField, Tooltip("The position the camera will start in")]
+    /*[SerializeField, Tooltip("The position the camera will start in")]
     private int startingIndx;
     [SerializeField, Tooltip("A list of camera positions. Transform is a child transform of the camera. Layer is whether the position is after or before the start pos (start position of the camera is layer 0, e.g. you need to zoom out to go to layer -1 and zoom in to go to layer 1 from layer 0)")]
-    private Transform[] cameraZoomPositions;
+    private Transform[] cameraZoomPositions;*/
 
     private int currentIndx;
     private int posCount;
@@ -30,26 +30,28 @@ public class CameraControls : MonoBehaviour {
         if (camera == null)
             Debug.LogError("There is no camera attached to the camera controller!");
 
-        currentIndx = startingIndx;
+        /*currentIndx = startingIndx;
 
         posCount = cameraZoomPositions.Length;
 
         camera.transform.position = cameraZoomPositions[currentIndx].transform.position;
-        camera.transform.rotation = cameraZoomPositions[currentIndx].transform.rotation;
+        camera.transform.rotation = cameraZoomPositions[currentIndx].transform.rotation;*/
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        var zoom = Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomSpeed;
+
         // Get translation of camera in the xz plane
         Vector3 translation = new Vector3(
             Input.GetAxis("Horizontal") * Time.deltaTime * speed,
-            0f,
+            -zoom,
             Input.GetAxis("Vertical") * Time.deltaTime * speed
             );
         // Move camera
         this.transform.position += translation;
 
-        var zoom = Input.GetAxis("Mouse ScrollWheel");
+        /*
 
         if(zoom < 0f)
         {
@@ -68,9 +70,9 @@ public class CameraControls : MonoBehaviour {
                 currentIndx -= 1;
             }
 
-        }
+        }*/
 	}
-
+    /*
     IEnumerator MoveCameraToPosition(Vector3 startPos, Quaternion startRotation, Transform target)
     {
         float step = (speed / (startPos - target.position).magnitude) * Time.fixedDeltaTime;
@@ -84,5 +86,5 @@ public class CameraControls : MonoBehaviour {
         }
         camera.transform.position = target.position;
         camera.transform.rotation = target.rotation;
-    }
+    }*/
 }

@@ -64,7 +64,7 @@ public class AgentManager : Singleton<AgentManager> {
                     neighborhood.Add(agents[j]);
                 }
             }
-            agents[i].ComputeFlockingForces(neighborhood, 0.0f, 0.0f, 0.0f);
+            agents[i].CalculatePushForces(neighborhood);
         }
     }
 

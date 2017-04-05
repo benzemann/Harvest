@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Pathfinding;
 
 #region Idle
 public class WarriorAntIdle : State {
@@ -62,8 +61,7 @@ public class WarriorAntScout : State
 
     public override void Execute()
     {
-        if (!ant.GetComponent<AgentController>().IsWalking && obstacleNormal != Vector3.zero
-            && !ant.GetComponent<AgentController>().IsSearchingForPath())
+        if (!ant.GetComponent<AgentController>().IsWalking && obstacleNormal != Vector3.zero)
         {
             GoInDirection(obstacleNormal, 45);
         }
@@ -196,7 +194,6 @@ public class WarriorAntAttack : State
     {
         target = ant.GetComponent<TargetFinder>().Target;
         ant.GetComponent<AgentController>().Stop();
-        ant.GetComponent<AgentController>().AvoidPushing();
     }
 
     public override void Execute()
@@ -217,7 +214,7 @@ public class WarriorAntAttack : State
 
     public override void Exit()
     {
-        ant.GetComponent<AgentController>().ReleaseGroundNodes();
+        
     }
 }
 #endregion
@@ -286,11 +283,6 @@ public class WarriorAntReturnHome : State
 
     public override void Enter()
     {
-        if (ant.GetComponent<AlternativePath>() != null)
-        {
-            ant.GetComponent<AlternativePath>().enabled = false;
-        }
-
         if(ant.GetComponent<FeromoneLayer>() != null)
         {
             ant.GetComponent<FeromoneLayer>().LayFeromones = true;
@@ -330,11 +322,6 @@ public class WarriorAntReturnHome : State
 
     public override void Exit()
     {
-        if (ant.GetComponent<AlternativePath>() != null)
-        {
-            ant.GetComponent<AlternativePath>().enabled = true;
-        }
-
         if (ant.GetComponent<FeromoneLayer>() != null)
         {
             ant.GetComponent<FeromoneLayer>().LayFeromones = false;

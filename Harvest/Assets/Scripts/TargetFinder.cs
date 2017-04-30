@@ -47,6 +47,12 @@ public class TargetFinder : MonoBehaviour {
         Tags
     }
 
+    public void ClearTarget()
+    {
+        _currentTarget = null;
+        hasSearchedInThisFrame = true;
+    }
+
     /// <summary>
     /// Find the closest target
     /// </summary>

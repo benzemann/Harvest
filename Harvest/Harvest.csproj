@@ -93,6 +93,8 @@
     <Compile Include="Assets\Scripts\AlignToGround.cs" />
     <Compile Include="Assets\Scripts\AntEgg.cs" />
     <Compile Include="Assets\Scripts\Bar.cs" />
+    <Compile Include="Assets\Scripts\BuildButton.cs" />
+    <Compile Include="Assets\Scripts\BuildSpot.cs" />
     <Compile Include="Assets\Scripts\Bullet.cs" />
     <Compile Include="Assets\Scripts\BulletDamager.cs" />
     <Compile Include="Assets\Scripts\ButtonPress.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Assets\Scripts\ResourceGiver.cs" />
     <Compile Include="Assets\Scripts\ResourceReciever.cs" />
     <Compile Include="Assets\Scripts\ResourceStorage.cs" />
+    <Compile Include="Assets\Scripts\SceneObjects.cs" />
     <Compile Include="Assets\Scripts\Selectable.cs" />
     <Compile Include="Assets\Scripts\Singleton.cs" />
     <Compile Include="Assets\Scripts\State.cs" />

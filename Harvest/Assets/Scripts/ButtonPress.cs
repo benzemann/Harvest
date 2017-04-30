@@ -37,16 +37,17 @@ public class ButtonPress : MonoBehaviour
 
     IEnumerator ExpandFill()
     {
-        while (true)
+        var done = false;
+        while (!done)
         {
             fill.GetComponent<RectTransform>().sizeDelta += new Vector2(fillSpeed, fillSpeed) * Time.deltaTime;
             if (fill.GetComponent<RectTransform>().sizeDelta.x > filledSize.x)
             {
                 fill.GetComponent<RectTransform>().sizeDelta = filledSize;
                 yield return new WaitForSeconds(delay);
-
+                
                 StartCoroutine(ExpandBackground());
-                yield return null;
+                done = true;
             }
             yield return new WaitForSeconds(animationUpdateRate);
         }
@@ -54,7 +55,8 @@ public class ButtonPress : MonoBehaviour
 
     IEnumerator ExpandBackground()
     {
-        while (true)
+        var done = false;
+        while (!done)
         {
             var sd = new Vector2(bckSpeed, 0f) * Time.deltaTime;
             background.GetComponent<RectTransform>().sizeDelta += sd;
@@ -62,7 +64,7 @@ public class ButtonPress : MonoBehaviour
             if (background.GetComponent<RectTransform>().sizeDelta.x > bckGroundSize.x)
             {
                 background.GetComponent<RectTransform>().sizeDelta = bckGroundSize;
-                yield return null;
+                done = true;
             }
             yield return new WaitForSeconds(animationUpdateRate);
 

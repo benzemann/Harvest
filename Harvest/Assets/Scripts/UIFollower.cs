@@ -12,6 +12,12 @@ public class UIFollower : MonoBehaviour {
     private Canvas canvas;
     #endregion
 
+    #region Properties
+    public Renderer Renderer { set { ren = value; } }
+    public Canvas Canvas { set { canvas = value; } }
+    public Vector2 OffsetFromCenter { set { offsetFromCenter = value; } }
+    #endregion
+
     #region Bar variables
     [Header("Bar variables")]
     [SerializeField, Tooltip("The prefab of the bar")]
@@ -44,6 +50,10 @@ public class UIFollower : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if(canvas == null)
+        {
+            canvas = SceneObjects.Instance.MainCanvas;
+        }
         if(barPrefab != null)
             bar = Instantiate(barPrefab, canvas.transform) as GameObject;
             
@@ -98,6 +108,13 @@ public class UIFollower : MonoBehaviour {
             bar.transform.position = Camera.main.WorldToScreenPoint(ren.transform.position);
             bar.transform.localPosition = new Vector3(bar.transform.localPosition.x + offsetFromCenter.x, bar.transform.localPosition.y + barHeightOffset, bar.transform.localPosition.z);
         }
+    }
+
+    public void SetUIElement(GameObject uiElement)
+    {
+
+        bar = uiElement;
+
     }
 
     private void OnDestroy()

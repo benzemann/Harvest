@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Helper : Singleton<Helper> {
-
 	
     public GameObject GetClosestObject(Vector3 position, GameObject[] objects, float maxDistance = float.MaxValue)
     {

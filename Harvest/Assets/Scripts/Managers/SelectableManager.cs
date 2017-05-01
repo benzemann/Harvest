@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SelectableManager : Singleton<SelectableManager> {
 
@@ -16,6 +17,9 @@ public class SelectableManager : Singleton<SelectableManager> {
         // Check if mouse is up
         if (Input.GetMouseButtonUp(0))
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
+
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit)){

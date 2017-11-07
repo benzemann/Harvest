@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <style>
+    <style>
 	.hot-container p { margin-top: 10px; }
 	a { text-decoration: none; margin: 0 10px; }
 
@@ -35,13 +35,37 @@
 		background-color: #CCC;
 		border-color: rgba(0,0,0,0.9);
 	}
+	.header{
+		color: #ffffff;
+		font-family: Tahoma, Geneva, sans-serif;
+		font-size: 75px;
+	}
+	.version{
+		color: #ffffff;
+		font-family: Tahoma, Geneva, sans-serif;
+		font-size: 15px;
+	}
   </style>
+	<link rel = "stylesheet" 
+         href = "./bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <meta charset="UTF-8">
     <title>Harvest launcher</title>
 	<script src="app.js"></script>
   </head>
-  <body>
-    <h1>Welcome to the Harvest launcher</h1>
+  <body background="background.jpg">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-2 col-xs-offset-4">
+				<h1 class="header">Harvest</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-3 col-xs-offset-5">
+				<p class="version" id="version">Connecting to server...</p>
+			</div>
+		</div>
+	</div>
+    <!--<h1>Welcome to the Harvest launcher</h1>
 	<p>
 		<a href="#" class="btn" id="play">Play</a>
 	</p>
@@ -55,5 +79,6 @@
 	<p id="localVersion">Checking local version...</p>
 	<p id="version">Checking online version...</p>
 	<p id="downloadProgress"></p>
+	<button class = "btn btn-success" id = "countbtn">Click here</button>-->
   </body>
 </html>

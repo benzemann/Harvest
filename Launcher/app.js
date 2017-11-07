@@ -1,11 +1,15 @@
 var gamePath = '';
 var localVersion = '';
 var gitVersion = '';
+let $ = require('jquery') 
 
 window.onload = function() {
 	
 	console.log("Initializing...");
 	
+	GetVersionFromGit();
+	
+	/*
 	document.getElementById("play").style.visibility = "hidden";
 	document.getElementById("download").style.visibility = "hidden";
 	
@@ -19,7 +23,7 @@ window.onload = function() {
 	}
 	document.getElementById('play').onclick = function() {
 		RunGame();
-	}
+	}*/
 }
 
 function CheckForUpdates(){
@@ -162,7 +166,7 @@ function GetVersionFromGit(){
 	var http = require('http');
 	var request = require('request');
 	//var fs = require('fs');
-	var url = "http://2.110.192.183/download/Version.txt";
+	var url = "https://raw.githubusercontent.com/benzemann/LowPolyVoxelEngine/master/Dokumentation/LowPolyVoxelEngineDiagramV0_2.xml";
 	//var dest = "tmp.txt";
 	//var file = fs.createWriteStream(dest);
 	var result = '';
@@ -170,12 +174,14 @@ function GetVersionFromGit(){
 	.on('data', function (chunk){ result += chunk; })
 	.on('error', function(error){
 		console.log(error);
-		GetLocalVersion();
+		$('#version').text('Could not connect to server')
 	})
 	.on('end', function () {
-		document.getElementById("version").innerHTML = "Version: " + result;
-		gitVersion = result;
-		GetLocalVersion();
+		if(result != '' || result != undefined){
+			$('#version').text('version: ' + result)
+		} else {
+			$('#version').text('Could not connect to server')
+		}
 	});
 }
 

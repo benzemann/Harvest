@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "extract-zip": "^1.5.0",
+    "jquery": "^3.2.1",
     "request": "^2.79.0"
   },
   "devDependencies": {

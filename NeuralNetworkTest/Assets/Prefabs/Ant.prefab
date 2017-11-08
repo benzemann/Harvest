@@ -459,6 +459,7 @@ GameObject:
   - component: {fileID: 54240894633338794}
   - component: {fileID: 65036313737366498}
   - component: {fileID: 114618453658912900}
+  - component: {fileID: 136442272071322924}
   m_Layer: 0
   m_Name: Ant
   m_TagString: Untagged
@@ -596,7 +597,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1931322981459594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.2779555, y: -3.0742518e-17, z: 13.8452}
+  m_LocalPosition: {x: 10.735767, y: -5.42982e-17, z: 24.453733}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4958951346596868}
@@ -938,7 +939,7 @@ BoxCollider:
   m_GameObject: {fileID: 1931322981459594}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.36294687, y: 0.33261085, z: 0.7845873}
   m_Center: {x: 0.005055964, y: 0.18201506, z: -0.0065870583}
@@ -972,6 +973,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorRight: {fileID: 4088355274117388}
   sensorLeft: {fileID: 4881894449707532}
+--- !u!136 &136442272071322924
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1931322981459594}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.17136395
+  m_Height: 0.73134613
+  m_Direction: 2
+  m_Center: {x: 0, y: 0.19106758, z: 0.0010948181}
 --- !u!137 &137899555894888772
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

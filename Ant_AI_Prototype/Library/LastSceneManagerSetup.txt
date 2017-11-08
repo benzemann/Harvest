@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/King of the hill.unity
-  isLoaded: 1
-  isActive: 1
